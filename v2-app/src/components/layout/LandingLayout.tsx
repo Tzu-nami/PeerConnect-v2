@@ -3,9 +3,9 @@ import Footer from "@/components/layout/Footer";
 
 export default function LandingLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             <LandingNavbar/>
-            <main>
+            <main className="flex-1">
                 {children}
             </main>
             <Footer/>
