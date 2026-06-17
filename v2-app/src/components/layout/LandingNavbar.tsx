@@ -11,6 +11,7 @@ export default function LandingNavbar() {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const logoHref = router.pathname === '/' ? '#' : '/';
+    const isLoggedIn = false;
     const navLinks = [
         {name: 'Mentors', href: '/mentors'},
         {name: 'Staff', href: '/staff'},
@@ -18,7 +19,6 @@ export default function LandingNavbar() {
         {name: 'About Us', href: '/about-us'},
         {name: 'Contact Us', href: '/contact-us'},
     ];
-    const isLoggedIn = false;
 
     return (
         <>
@@ -34,7 +34,6 @@ export default function LandingNavbar() {
                                    alt="UPB LRC Logo" width={60} height={60} priority
                                    className="w-[50px] md:w-[75px] h-[50px] md:h-[75px] object-contain"/>
                         </div>
-
                         <div className="leading-tight">
                             <span className="block text-[13px] md:text-[20px] font-body font-medium text-cream/70 tracking-widest uppercase">UPB LRC</span>
                             <span className="block text-[8px] md:text-[15px] font-semibold text-up-yellow-light tracking-wider">PeerConnect</span>
@@ -46,7 +45,6 @@ export default function LandingNavbar() {
                 <ul className="hidden lg:flex flex-1 gap-6 xl:gap-14 2xl:gap-20 list-none justify-center min-w-0">
                     {navLinks.map((link) => {
                         const isActive = router.pathname === link.href
-
                         return (
                             <li key={link.name}>
                                 <Link href={link.href}
@@ -83,7 +81,6 @@ export default function LandingNavbar() {
                     <ul className="flex flex-col gap-2 px-6 md:px-7 py-2 md:py-4 list-none">
                         {navLinks.map((link) => {
                             const isActive = router.pathname === link.href
-
                             return (
                                 <li key={link.name}>
                                     <Link href={link.href} onClick={() => setOpen(false)}
