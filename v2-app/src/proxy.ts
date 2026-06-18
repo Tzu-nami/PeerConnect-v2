@@ -8,7 +8,7 @@ const roleRoutes: Record<string, string> = {
     '/admin': 'admin',
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     // Initialize response so cookies can be modifies
     let supabaseResponse = NextResponse.next({ request })
 
