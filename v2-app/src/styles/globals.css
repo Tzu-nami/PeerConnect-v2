@@ -6,7 +6,7 @@
     --foreground: #554444;
 }
 
-@theme: {
+@theme {
   /* Fonts */
   --font-heading: 'Marcellus', serif;
   --font-body: 'Nunito', sans-serif;
