@@ -1,5 +1,10 @@
-export default function Home() {
+import Logout from '@/components/Logout';
+
+export default function AdminDashboard() {
     return (
-            <h1>Hello Admin</h1>
+        <div>
+        <h1>Hello Admin</h1>
+        <Logout />
+        </div>
     );
 };
