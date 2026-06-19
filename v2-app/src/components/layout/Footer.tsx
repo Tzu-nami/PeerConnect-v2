@@ -59,7 +59,7 @@ export default function Footer() {
                                 return (
                                     <li key={link.name}>
                                         <Link href={link.href}
-                                              className={`hover:text-cream transition-colors ${isActive ? 'text-up-yellow-light font-bold' : ''}`}>
+                                              className={`hover:text-cream transition-colors ${isActive ? 'text-up-yellow-light' : ''}`}>
                                             {link.name}
                                         </Link>
                                     </li>

@@ -28,7 +28,7 @@ export default function ServicesSection() {
             href: "/services",
             img: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/services/review_classes.jpg",
             alt: "Review Classes",
-            border: "border-b sm:border-b-0",
+            border: "border-b sm:border-b-0 border-cream-dark",
         },
 
     ]
@@ -37,7 +37,7 @@ export default function ServicesSection() {
         <section id="services" className="w-full px-4 sm:px-10 md:px-12 lg:px-20 xl:px-32 py-6 sm:py-12 md:py-16 xl:py-24 scroll-mt-20">
             <div className="flex flex-col gap-1 sm:gap-2 md:gap-4 mb-4 sm:mb-6 md:mb-8">
                 {/* Section title */}
-                <div className="flex items-center gap-3 pb-4 sm:pb-5 border-b border-b-cream-dark">
+                <div className="flex items-center gap-3 pb-4 sm:pb-5">
                     <h1 className="font-heading text-up-maroon text-2xl sm:text-4xl md:text-5xl font-semibold tracking-wider">What We Offer</h1>
                     <span className="block w-8 h-px bg-up-green"></span>
                 </div>

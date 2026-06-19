@@ -29,7 +29,7 @@ export default function ActivitiesSection() {
     const [activeSlide, setActiveSlide] = useState(0);
 
     return (
-        <section className="w-full py-10 sm:py-16 md:py-20 bg-white overflow-hidden">
+        <section className="w-full py-10 sm:py-16 md:py-20 overflow-hidden">
             <div className="px-4 sm:px-10 md:px-16 lg:px-28 xl:px-52 flex flex-col gap-4 mb-8 sm:mb-12">
                 <div className="flex items-center gap-3 pb-4 sm:pb-5 border-b border-b-cream-dark">
                     <h1 className="font-heading text-up-maroon text-2xl sm:text-4xl md:text-5xl font-semibold tracking-wider">
@@ -52,7 +52,7 @@ export default function ActivitiesSection() {
                     initialSlide={2}
                     centeredSlides={true}
                     spaceBetween={16}
-                    slidesPerView={1.1}
+                    slidesPerView={1}
                     onSlideChange={(swiper: SwiperType) => setActiveSlide(swiper.realIndex)}
                     breakpoints={{
                         640: { slidesPerView: 1.2, spaceBetween: 16 },
