@@ -43,6 +43,7 @@ const FAQS: FaqData[] = [
 
 export default function AboutPage({ mentorCount, bookingCount, subjectCount, staff }: Props) {
 
+    // Load the values from the database
     const stats = [
         { value: mentorCount, label: 'Mentors' },
         { value: bookingCount, label: 'Sessions Held' },
@@ -57,7 +58,7 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
             {/* Header and Description */}
             <HeadDesc />
 
-            {/* Image */}
+            {/* Hero Image */}
             <div className="w-full h-64 md:h-96 bg-cream-dark border-b border-cream-border overflow-hidden animate-fade-up [animation-delay:100ms]">
                 <img 
                     src="null" 
@@ -102,6 +103,7 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
     );
 }
 
+// Database connection
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createClient(context);
 
