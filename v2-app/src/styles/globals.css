@@ -44,10 +44,33 @@
   }
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Nunito, sans-serif;
 }
 
+.activities-pagination .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background-color: #d1c7b7;
+    opacity: 1;
+    transition: background-color 0.2s ease;
+}
 
+.activities-pagination .swiper-pagination-bullet-active {
+    background-color: var(--color-up-maroon);
+}
+
+.activities-swiper .swiper-slide {
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.activities-swiper .swiper-slide-active {
+    opacity: 1;
+}
