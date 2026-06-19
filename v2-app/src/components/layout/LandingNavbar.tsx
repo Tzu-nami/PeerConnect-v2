@@ -67,7 +67,7 @@ export default function LandingNavbar() {
 
                 {/* Hamburger button */}
                 <div className="flex lg:hidden items-center justify-end flex-1">
-                    <button onClick={() => setOpen(!open)} className="group flex flex-col justify-center items-center w-10 h-10 gap-[6px] focus:outline-none">
+                    <button onClick={() => setOpen(!open)} className="group flex flex-col justify-center items-center w-10 h-10 gap-[6px] focus:outline-none cursor-pointer">
                         <HamburgerLine className={open ? "rotate-45 translate-y-[7px] md:translate-y-[8px]" : ""}/>
                         <HamburgerLine className={open ? "opacity-0" : ""}/>
                         <HamburgerLine className={open ? "-rotate-45 -translate-y-[7px] md:-translate-y-[8px]" : ""}/>
