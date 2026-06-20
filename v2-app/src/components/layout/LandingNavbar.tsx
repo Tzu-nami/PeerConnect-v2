@@ -44,7 +44,7 @@ export default function LandingNavbar() {
                 {/* Nav links */}
                 <ul className="hidden lg:flex flex-1 gap-6 xl:gap-14 2xl:gap-20 list-none justify-center min-w-0">
                     {navLinks.map((link) => {
-                        const isActive = router.pathname === link.href
+                        const isActive = router.pathname === link.href;
                         return (
                             <li key={link.name}>
                                 <Link href={link.href}
@@ -80,7 +80,7 @@ export default function LandingNavbar() {
                 <div className="lg:hidden fixed top-[60px] md:top-[83px] left-0 right-0 z-40 bg-up-maroon-dark border-t border-cream/10">
                     <ul className="flex flex-col gap-2 px-6 md:px-7 py-2 md:py-4 list-none">
                         {navLinks.map((link) => {
-                            const isActive = router.pathname === link.href
+                            const isActive = router.pathname === link.href;
                             return (
                                 <li key={link.name}>
                                     <Link href={link.href} onClick={() => setOpen(false)}
