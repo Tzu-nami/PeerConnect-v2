@@ -15,7 +15,7 @@ export default function LandingNavbar() {
     const navLinks = [
         {name: 'Mentors', href: '/mentors'},
         {name: 'Staff', href: '/staff'},
-        {name: 'Services', href: '/#services'},
+        {name: 'Services', href: '/services'},
         {name: 'About Us', href: '/about-us'},
         {name: 'Contact Us', href: '/contact-us'},
     ];
