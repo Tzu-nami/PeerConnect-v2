@@ -9,7 +9,7 @@ export default function ServicesSection() {
         {
             title: "One-on-One Sessions",
             description: "Get personalized support from one of our experienced mentors. Work through challenging concepts, review course materials, and build confidence at your own pace.",
-            href: "/services",
+            href: "/services#one-on-one",
             img: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/services/one-on-one.jpeg",
             alt: "One on One Sessions",
             border: "border-b sm:border-b-0 sm:border-r border-cream-dark",
@@ -17,7 +17,7 @@ export default function ServicesSection() {
         {
             title: "Group Sessions",
             description: "Gather with a group of friends in a guided session led by a peer mentor. Ideal for tackling challenging subjects together and learning from one another.",
-            href: "/services",
+            href: "/services#group-session",
             img: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/services/group-session.jpg",
             alt: "Group Sessions",
             border: "border-b sm:border-b-0 sm:border-r border-cream-dark",
@@ -25,7 +25,7 @@ export default function ServicesSection() {
         {
             title: "Review Classes",
             description: "Prepare for major exams through review sessions led by experienced peer mentors. Review key topics and build effective exam strategies.",
-            href: "/services",
+            href: "/services#review-classes",
             img: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/services/review_classes.jpg",
             alt: "Review Classes",
             border: "border-b sm:border-b-0 border-cream-dark",
