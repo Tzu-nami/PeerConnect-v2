@@ -2,14 +2,14 @@ import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 
-import HeadDesc from "@/components/landing/about/HeadDesc";
-import StatsDisplay from "@/components/landing/about/StatsDisplay";
-import Mission from "@/components/landing/about/Mission";
-import Quote from "@/components/landing/about/Quote";
-import HowItWorks from "@/components/landing/about/HowItWorks";
-import MentorQualities from "@/components/landing/about/MentorQualities";
+import HeadDesc from "@/components/about/HeadDesc";
+import StatsDisplay from "@/components/about/StatsDisplay";
+import Mission from "@/components/about/Mission";
+import Quote from "@/components/about/Quote";
+import HowItWorks from "@/components/about/HowItWorks";
+import MentorQualities from "@/components/about/MentorQualities";
 import FaqAccordion, { FaqData } from "@/components/landing/FaqAccordion";
-import DeveloperGrid from "@/components/landing/about/DeveloperGrid";
+import DeveloperGrid from "@/components/about/DeveloperGrid";
 
 import LandingLayout from "@/components/layout/LandingLayout";
 
@@ -114,7 +114,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         supabase.from('mentor_profiles').select('*', { count: 'exact', head: true }),
         supabase.from('bookings').select('*', { count: 'exact', head: true }),
         supabase.from('subjects').select('*', { count: 'exact', head: true }),
-        supabase.from('staff_profiles').select('firstName, lastName, middleInitial').eq('role', 'LRC Head').single(),
+        supabase.from('staff_profiles').select('firstName, lastName, middleInitial').eq('role', 'lrc_head').single(),
     ]);
 
     return {
