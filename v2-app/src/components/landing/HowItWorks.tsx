@@ -1,20 +1,20 @@
-import Link from "next/link";
-import { Fragment } from "react";
+import Link from "next/link"
+import { Fragment } from "react"
 
 // Icons
-import { FiLogIn } from "react-icons/fi";
-import { MdOutlineSchedule } from "react-icons/md";
-import { FaUsers } from "react-icons/fa";
-import { FaArrowRight } from "react-icons/fa";
+import { FiLogIn } from "react-icons/fi"
+import { MdOutlineSchedule } from "react-icons/md"
+import { FaUsers } from "react-icons/fa"
+import { FaArrowRight } from "react-icons/fa"
 
 
-type HowItWorksProps = {
-    dashboardURL: string;
-    bookURL: string;
-    historyURL: string;
+interface HowItWorksProps {
+    dashboardURL: string
+    bookURL: string
+    historyURL: string
 }
 
-export default  function HowItWorks({ dashboardURL, bookURL, historyURL} : HowItWorksProps ) {
+export default  function HowItWorks({ dashboardURL, bookURL, historyURL }: HowItWorksProps ) {
     const steps = [
         {
             step: "Step 1",
@@ -56,7 +56,7 @@ export default  function HowItWorks({ dashboardURL, bookURL, historyURL} : HowIt
             {/* Steps */}
             <div className="flex flex-col sm:flex-row items-stretch justify-center gap-3 sm:gap-4 md:gap-6 text-white">
                 {steps.map((step, index) => {
-                    const Icon = step.icon;
+                    const Icon = step.icon
                     return(
                         <Fragment key={step.step}>
                             <Link href={step.href}

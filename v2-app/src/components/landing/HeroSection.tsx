@@ -1,12 +1,12 @@
-import Link from "next/link";
-import { FaChevronDown } from "react-icons/fa";
+import Link from "next/link"
+import { FaChevronDown } from "react-icons/fa"
 
-type HeroSectionProps = {
-    shouldShowBookNow: boolean;
-    bookURL: string;
-};
+interface HeroSectionProps {
+    shouldShowBookNow: boolean
+    bookURL: string
+}
 
-export default function HeroSection({ shouldShowBookNow, bookURL } : HeroSectionProps) {
+export default function HeroSection({ shouldShowBookNow, bookURL }: HeroSectionProps) {
     const heroOverlay = {
         background: `linear-gradient(
             110deg,
@@ -16,8 +16,9 @@ export default function HeroSection({ shouldShowBookNow, bookURL } : HeroSection
             rgba(78,10,12,0.15) 100%)`
     }
     return (
-        <section className="relative w-full min-h-[520px] sm:min-h-[600px] xl:h-[calc(100vh-83px)] flex flex-col justify-between overflow-hidden bg-cover bg-[center_30%]"
-                 style={{ backgroundImage: "url('https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/hero/library.jpeg')" }}>
+        <section
+            className="relative w-full min-h-[520px] sm:min-h-[600px] xl:h-[calc(100vh-83px)] flex flex-col justify-between overflow-hidden bg-cover bg-[center_30%]"
+            style={{backgroundImage: "url('https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/hero/library.jpeg')"}}>
             {/* Background image overlay */}
             <div className="absolute inset-0 z-0" style={heroOverlay}></div>
 
@@ -43,8 +44,10 @@ export default function HeroSection({ shouldShowBookNow, bookURL } : HeroSection
                               text-[11px] sm:text-sm md:text-sm lg:text-base xl:text-lg
                               max-w-[95%] sm:max-w-[380px] md:max-w-[440px] lg:max-w-[500px]
                               mb-4 sm:mb-6 md:mb-8">
-                    The UPB Learning Resource Center connects you with dedicated peer mentors ready to support your academic journey.
-                    Whether you&apos;re keeping up, catching up, or getting ahead, our mentors are here to guide you every step of the way.
+                    The UPB Learning Resource Center connects you with dedicated peer mentors ready to support your
+                    academic journey.
+                    Whether you&apos;re keeping up, catching up, or getting ahead, our mentors are here to guide you
+                    every step of the way.
                 </p>
 
                 {shouldShowBookNow && (
@@ -58,7 +61,8 @@ export default function HeroSection({ shouldShowBookNow, bookURL } : HeroSection
                 )}
             </div>
 
-            <Link href="#services" className="hidden md:flex flex-col gap-1 items-center text-center justify-center z-20 pb-4 cursor-pointer text-up-yellow self-center animate-fade-up">
+            <Link href="#services"
+                  className="hidden md:flex flex-col gap-1 items-center text-center justify-center z-20 pb-4 cursor-pointer text-up-yellow self-center animate-fade-up">
                 <p className="tracking-[0.2rem] text-xs md:text-sm xl:text-lg font-bold opacity-90 mb-1">SCROLL</p>
                 <div className="animate-bounce">
                     <FaChevronDown className="leading-none text-base md:text-lg xl:text-2xl"/>
@@ -66,4 +70,4 @@ export default function HeroSection({ shouldShowBookNow, bookURL } : HeroSection
             </Link>
         </section>
     )
-};
+}
