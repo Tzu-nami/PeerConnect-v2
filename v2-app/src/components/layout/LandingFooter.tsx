@@ -10,7 +10,7 @@ import { IoMailOutline } from "react-icons/io5";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { LuClock4 } from "react-icons/lu";
 
-export default function Footer() {
+export default function LandingFooter() {
     const router = useRouter();
     const logoHref = router.pathname === '/' ? '#' : '/';
     const isLoggedIn = false;
