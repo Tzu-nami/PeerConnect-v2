@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react"
-import { createClient } from "@/utils/supabase/client"
-import { useClickOutside } from "@/hooks/useClickOutside"
-import { logoutUser } from "@/utils/supabase/auth"
+import { useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
@@ -9,32 +6,37 @@ import Image from "next/image"
 // Components
 import HamburgerButton from "@/components/ui/HamburgerButton"
 
+// Utilities
+import { logoutUser } from "@/utils/supabase/auth"
+
+// Hooks
+import { useClickOutside } from "@/hooks/useClickOutside"
+
+// Configs
+import { moduleNavLinks } from "@/config/moduleNavLinks"
+
 // Icons
 import { IoNotificationsSharp } from "react-icons/io5"
 import { IoChevronDownOutline } from "react-icons/io5"
 import { FiLogOut } from "react-icons/fi"
-import { MdDashboard } from "react-icons/md"
-import { FaChalkboardTeacher } from "react-icons/fa"
-import { FaCalendarCheck } from "react-icons/fa6"
-import { FaUserTie } from "react-icons/fa";
-import { FaClockRotateLeft } from "react-icons/fa6";
-import { FaClock } from "react-icons/fa6";
-import { FaComments } from "react-icons/fa";
-import { FaBookOpen } from "react-icons/fa";
 
-export default function ModuleNavbar() {
-    // User info
-    const [userName, setUserName] = useState<string | null>(null)
-    const [userFullName, setUserFullName] = useState<string | null>(null)
-    const [userEmail, setUserEmail] = useState<string | null>(null)
-    const [userAvatar, setUserAvatar] = useState<string | null>(null)
-    const [userRole, setUserRole] = useState<string | null>(null)
+interface ModuleNavbarProps {
+    userName: string | null
+    userFullName: string | null
+    userEmail: string | null
+    userAvatar: string | null
+    userRole: string | null
+}
 
+export default function ModuleNavbar({ userName, userFullName, userEmail, userAvatar, userRole }: ModuleNavbarProps) {
     // Button states
     const [menuOpen, setMenuOpen] = useState(false)
     const menuRef = useClickOutside(menuOpen, () => setMenuOpen(false))
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const dropdownRef = useClickOutside(dropdownOpen, () => setDropdownOpen(false))
+
+    // Nav links
+    const links = userRole ? moduleNavLinks[userRole] ?? [] : []
 
     // Logout
     const router = useRouter()
@@ -43,55 +45,8 @@ export default function ModuleNavbar() {
         await router.push('/')
     }
 
-    // Nav links
-    const navLinks: Record<string, { href: string; icon: React.ReactNode; label: string }[]> = {
-        admin: [
-            { href: '/admin/dashboard',   icon: <MdDashboard />,            label: 'Dashboard' },
-            { href: '/admin/mentors',     icon: <FaChalkboardTeacher />,    label: 'Mentor Management' },
-            { href: '/admin/staff',       icon: <FaUserTie />,              label: 'Staff Management' },
-            { href: '/admin/courses',     icon: <FaBookOpen />,             label: 'Course Management' },
-            { href: '/admin/sessions',    icon: <FaCalendarCheck />,        label: 'Session Management' },
-            { href: '/admin/feedbacks',   icon: <FaComments />,             label: 'Student Feedback' },
-        ],
-        mentor: [
-            { href: '/mentor/dashboard',  icon: <MdDashboard />,            label: 'Dashboard' },
-            { href: '/mentor/bookings',   icon: <FaCalendarCheck />,        label: 'Booking Form' },
-            { href: '/mentor/history',    icon: <FaClockRotateLeft />,      label: 'Booking History' },
-            { href: '/mentor/mentors',    icon: <FaChalkboardTeacher />,    label: 'Mentors' },
-            { href: '/mentor/sessions',   icon: <FaClock />,                label: 'Tutorial Sessions' },
-            { href: '/mentor/feedbacks',  icon: <FaComments />,             label: 'Student Feedbacks' },
-        ],
-        student: [
-            { href: '/student/dashboard', icon: <MdDashboard />,            label: 'Dashboard' },
-            { href: '/student/bookings',  icon: <FaCalendarCheck />,        label: 'Booking Form' },
-            { href: '/student/history',   icon: <FaClockRotateLeft />,      label: 'Booking History' },
-            { href: '/student/mentors',   icon: <FaChalkboardTeacher />,    label: 'Mentors' },
-        ],
-    }
-    const links = userRole ? navLinks[userRole] ?? [] : []
-
-    useEffect(() => {
-        const supabase = createClient()
-        supabase.auth.getUser().then(async (result) => {
-            const user = result.data.user
-            if(!user) return
-
-            // Fetch profile data
-            const result2 = await supabase.from('user_profiles').select('firstName, middleInitial, lastName, email, avatar, role').eq('id', user.id).single()
-            const profile = result2.data
-            const mi = profile?.middleInitial
-
-            // Set state
-            setUserName(profile?.firstName ?? null)
-            setUserFullName(`${profile?.firstName} ${mi ? mi + '. ' : ''}${profile?.lastName}`)
-            setUserEmail(profile?.email ?? null)
-            setUserAvatar(profile?.avatar ?? null)
-            setUserRole(profile?.role ?? null)
-        })
-    }, []);
-
     return(
-        <nav className="flex fixed top-0 left-0 right-0 z-50 items-center justify-between h-[60px] md:h-[83px] px-7 bg-up-maroon-dark">
+        <nav className="flex items-center justify-between h-[60px] md:h-[83px] px-7 bg-up-maroon">
             {/* Left Side */}
             <div className="flex items-center">
                 {/* Hamburger button: mobile only */}
@@ -100,7 +55,7 @@ export default function ModuleNavbar() {
                     <Link href="/" className="text-white font-semibold">LRC <span className="text-up-yellow">PeerConnect</span></Link>
 
                     {menuOpen && (
-                        <div className="fixed top-[60px] md:top-[83px] left-0 right-0 z-40 bg-up-maroon-dark border-t border-cream/10">
+                        <div className="fixed top-[60px] md:top-[83px] left-0 right-0 z-40 bg-up-maroon border-t border-cream/10">
                             <ul className="flex flex-col px-6 py-2 list-none">
                                 {links.map((link) => (
                                     <li key={link.href}>
@@ -155,7 +110,7 @@ export default function ModuleNavbar() {
                             {/* Logout button */}
                             <button onClick={handleLogout} className="text-[13px] font-semibold flex items-center gap-[10px] px-4 py-3 w-full text-slate-600 hover:text-red-600 cursor-pointer">
                                 <FiLogOut />
-                                <span>Logout</span>
+                                Logout
                             </button>
                         </div>
                     )}
