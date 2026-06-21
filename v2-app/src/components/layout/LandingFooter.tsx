@@ -10,11 +10,12 @@ import { IoMailOutline } from "react-icons/io5";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { LuClock4 } from "react-icons/lu";
 
-export default function LandingFooter() {
+export default function LandingFooter({ userRole }: { userRole: string | null }) {
     const router = useRouter();
     const logoHref = router.pathname === '/' ? '#' : '/';
-    const isLoggedIn = false;
-    const shouldShowBookNow = isLoggedIn && true;
+    const isLoggedIn = !!userRole
+    const shouldShowBookNow = userRole !== 'admin'
+
     const footerLinks = [
         {name: 'Home', href: '/'},
         {name: 'Mentors', href: '/mentors'},
@@ -83,7 +84,7 @@ export default function LandingFooter() {
                                         </Link>
                                     </>
                                 )}
-                                <Link href="/dashboard" className="hover:text-cream transition-colors">
+                                <Link href={`/${userRole}/dashboard`} className="hover:text-cream transition-colors">
                                     Dashboard
                                 </Link>
                             </>

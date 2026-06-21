@@ -1,24 +1,33 @@
-import {useState} from "react";
-import {useRouter} from "next/router";
-import Link from "next/link";
-import Image from "next/image";
+import {  useState } from "react"
+import { useRouter } from "next/router"
+import { useClickOutside } from "@/hooks/useClickOutside"
+import Link from "next/link"
+import Image from "next/image"
 
-function HamburgerLine({ className } : { className ?: string }) {
-    return <span className={`block w-6 h-[1px] md:h-[2px] bg-cream/70 transition-all duration-300 ${className ?? ''}`}/>
-}
+// Components
+import HamburgerButton from "@/components/ui/HamburgerButton"
 
-export default function LandingNavbar() {
-    const [open, setOpen] = useState(false);
-    const router = useRouter();
-    const logoHref = router.pathname === '/' ? '#' : '/';
-    const isLoggedIn = false;
+
+export default function LandingNavbar({ userRole }: { userRole: string | null }) {
+    // States
+    const [open, setOpen] = useState(false)
+    const isLoggedIn = !!userRole
+
+    // Routing
+    const router = useRouter()
+    const logoHref = router.pathname === '/' ? '#' : '/'
+
+    // Outside click hook
+    const menuRef = useClickOutside(open, () => setOpen(false))
+
+    // Nav links
     const navLinks = [
         {name: 'Mentors', href: '/mentors'},
         {name: 'Staff', href: '/staff'},
         {name: 'Services', href: '/services'},
         {name: 'About Us', href: '/about-us'},
         {name: 'Contact Us', href: '/contact-us'},
-    ];
+    ]
 
     return (
         <>
@@ -59,47 +68,43 @@ export default function LandingNavbar() {
 
                 {/* User action */}
                 <div className="hidden lg:flex items-center justify-end gap-3.5 min-w-fit xl:w-1/4">
-                    <Link href={isLoggedIn ? "/dashboard" : "/login"}
+                    <Link href={isLoggedIn ? `/${userRole}/dashboard` : "/login"}
                           className="bg-up-yellow text-up-maroon-dark px-7 py-2.5 text-[14px] font-semibold tracking-widest uppercase rounded-sm transition-colors duration-200 hover:bg-up-yellow-light no-underline">
                         {isLoggedIn ? "Dashboard" : "Log In"}
                     </Link>
                 </div>
 
                 {/* Hamburger button */}
-                <div className="flex lg:hidden items-center justify-end flex-1">
-                    <button onClick={() => setOpen(!open)} className="group flex flex-col justify-center items-center w-10 h-10 gap-[6px] focus:outline-none cursor-pointer">
-                        <HamburgerLine className={open ? "rotate-45 translate-y-[7px] md:translate-y-[8px]" : ""}/>
-                        <HamburgerLine className={open ? "opacity-0" : ""}/>
-                        <HamburgerLine className={open ? "-rotate-45 -translate-y-[7px] md:-translate-y-[8px]" : ""}/>
-                    </button>
-                </div>
-            </nav>
+                <div ref={menuRef} className="flex lg:hidden items-center justify-end flex-1">
+                    <HamburgerButton open={open} onClick={() => setOpen(!open)} />
 
-            {/* Hamburger menu dropdown */}
-            {open && (
-                <div className="lg:hidden fixed top-[60px] md:top-[83px] left-0 right-0 z-40 bg-up-maroon-dark border-t border-cream/10">
-                    <ul className="flex flex-col gap-2 px-6 md:px-7 py-2 md:py-4 list-none">
-                        {navLinks.map((link) => {
-                            const isActive = router.pathname === link.href;
-                            return (
-                                <li key={link.name}>
-                                    <Link href={link.href} onClick={() => setOpen(false)}
-                                          className={`block text-[10px] md:text-[15px] py-0.5 md:py-3 font-medium tracking-widest uppercase transition-colors duration-200 no-underline border-b border-cream/10
+                    {/* Hamburger menu dropdown */}
+                    {open && (
+                        <div className="lg:hidden fixed top-[60px] md:top-[83px] left-0 right-0 z-40 bg-up-maroon-dark border-t border-cream/10">
+                            <ul className="flex flex-col gap-2 px-6 md:px-7 py-2 md:py-4 list-none">
+                                {navLinks.map((link) => {
+                                    const isActive = router.pathname === link.href;
+                                    return (
+                                        <li key={link.name}>
+                                            <Link href={link.href} onClick={() => setOpen(false)}
+                                                  className={`block text-[10px] md:text-[15px] py-0.5 md:py-3 font-medium tracking-widest uppercase transition-colors duration-200 no-underline border-b border-cream/10
                                             ${isActive ? 'text-up-yellow-light font-bold' : 'text-cream/75 hover:text-up-yellow-light'}`}>
-                                        {link.name}
+                                                {link.name}
+                                            </Link>
+                                        </li>
+                                    )
+                                })}
+                                <li className="md:pt-4 pb-1 md:pb-2">
+                                    <Link href={isLoggedIn ? `/${userRole}/dashboard` : "/login"}
+                                          className="bg-up-yellow text-up-maroon-dark px-3 md:px-7 py-1 md:py-2.5 text-[10px] md:text-[14px] font-semibold tracking-widest uppercase transition-colors duration-200 hover:bg-up-yellow-light no-underline">
+                                        {isLoggedIn ? "Dashboard" : "Log In"}
                                     </Link>
                                 </li>
-                            )
-                        })}
-                        <li className="md:pt-4 pb-1 md:pb-2">
-                            <Link href={isLoggedIn ? "/dashboard" : "/login"}
-                                  className="bg-up-yellow text-up-maroon-dark px-3 md:px-7 py-1 md:py-2.5 text-[10px] md:text-[14px] font-semibold tracking-widest uppercase transition-colors duration-200 hover:bg-up-yellow-light no-underline">
-                                {isLoggedIn ? "Dashboard" : "Log In"}
-                            </Link>
-                        </li>
-                    </ul>
+                            </ul>
+                        </div>
+                    )}
                 </div>
-            )}
+            </nav>
         </>
-    );
-};
+    )
+}

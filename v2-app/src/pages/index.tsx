@@ -1,38 +1,47 @@
-import { createClient } from "@/utils/supabase/client";
-import type { User } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import { GetServerSideProps } from "next"
 
-// Sections
-import LandingLayout from "@/components/layout/LandingLayout";
-import HeroSection from "@/components/landing/HeroSection";
-import ServicesSection from "@/components/landing/ServicesSection";
-import HowItWorks from "@/components/landing/HowItWorks";
-import ActivitiesSection from "@/components/landing/ActivitiesSection";
+// Components
+import LandingLayout from "@/components/layout/LandingLayout"
+import HeroSection from "@/components/landing/HeroSection"
+import ServicesSection from "@/components/landing/ServicesSection"
+import HowItWorks from "@/components/landing/HowItWorks"
+import ActivitiesSection from "@/components/landing/ActivitiesSection"
 
-export default function Home() {
-    const [user, setUser] = useState<User | null>(null);
+// Utilities
+import { getServerSideUserRole } from "@/utils/getServerSideUserRole"
 
-    useEffect(() => {
-        const supabase = createClient();
-        supabase.auth.getUser().then((result) => {
-            setUser(result.data.user);
-        });
-    }, []);
+// Types
+type UserRole = "student" | "mentor" | "admin" | null
 
-    const isLoggedIn = !!user;
-    const userRole = user?.user_metadata?.role;
-    const shouldShowBookNow = userRole !== 'admin';
-    const bookURL = '/book';
-    const dashboardURL = `/${userRole}/dashboard`;
-    const historyURL = `/${userRole}/history`;
+const ROLE_URLS: Record<Exclude<UserRole, null>, { book: string; dashboard: string; history: string }> = {
+    student: { book: "/student/bookings", dashboard: "/student/dashboard", history: "/student/history" },
+    mentor:  { book: "/mentor/bookings",  dashboard: "/mentor/dashboard",  history: "/mentor/history"  },
+    admin:   { book: "/login",            dashboard: "/admin/dashboard",   history: "/login"           },
+}
 
+const DEFAULT_URLS = { book: "/login", dashboard: "/login", history: "/login" }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const userRole = await getServerSideUserRole(context)
+    return { props: { userRole } }
+}
+
+export default function Home({ userRole }: { userRole: UserRole }) {
+    const shouldShowBookNow = userRole !== "admin"
+    const urls = userRole ? ROLE_URLS[userRole] ?? DEFAULT_URLS : DEFAULT_URLS
+
+    const bookURL = !userRole
+        ? `/login?redirectTo=/bookings`
+        : userRole === "admin"
+            ? urls.dashboard
+            : urls.book
 
     return (
-        <LandingLayout>
+        <LandingLayout userRole={userRole}>
             <HeroSection shouldShowBookNow={shouldShowBookNow} bookURL={bookURL} />
             <ServicesSection />
-            <HowItWorks bookURL={bookURL} dashboardURL={dashboardURL} historyURL={historyURL}/>
+            <HowItWorks bookURL={bookURL} dashboardURL={urls.dashboard} historyURL={urls.history} />
             <ActivitiesSection />
         </LandingLayout>
-    );
+    )
 }
