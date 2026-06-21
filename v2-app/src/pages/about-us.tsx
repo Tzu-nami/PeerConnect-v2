@@ -13,17 +13,21 @@ import DeveloperGrid from "@/components/landing/about/DeveloperGrid";
 
 import LandingLayout from "@/components/layout/LandingLayout";
 
-interface Staff {
+type StaffProfile = {
+    id: string;
     firstName: string;
-    lastName: string;
     middleInitial: string | null;
+    lastName: string;
+    role: string;
+    email: string;
+    avatar: string | null;
 }
 
 interface Props {
     mentorCount: number;
     bookingCount: number;
     subjectCount: number;
-    staff: Staff | null;
+    staff: StaffProfile | null;
 }
 
 const FAQS: FaqData[] = [
@@ -50,7 +54,7 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
         { value: subjectCount, label: 'Subjects Covered' },
     ];
 
-    const lrcHead = staff ? `${staff.firstName} ${staff.middleInitial ? staff.middleInitial + '. ' : ''}${staff.lastName}` :
+    const lrcHead = staff ? `${staff.firstName} ${staff.middleInitial ? staff.middleInitial + ' ' : ''}${staff.lastName}` :
     'LRC Head';
 
     return (
@@ -99,7 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         supabase.from('mentor_profiles').select('*', { count: 'exact', head: true }),
         supabase.from('bookings').select('*', { count: 'exact', head: true }),
         supabase.from('subjects').select('*', { count: 'exact', head: true }),
-        supabase.from('staff_profiles').select('firstName, lastName, middleInitial').eq('role', 'LRC Head').single(),
+        supabase.from('staff_profiles').select('firstName, lastName, middleInitial').eq('role', 'lrc_head').single(),
     ]);
 
     return {
