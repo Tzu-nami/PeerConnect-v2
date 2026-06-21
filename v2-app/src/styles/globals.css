@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @plugin "@tailwindcss/forms";
 
 :root {
@@ -27,6 +28,9 @@
   --color-text-brown:           #554444;
   --color-text-brown-light:     #998888;
   --color-sidebar-green:        #1A3C2F;
+  --color-day-available:        #D1FAE5;
+  --color-day-unavailable:      #F8FAFC;
+  --color-book-hover:           #2D5C47;
 
   /* Animations */
   --animate-fade-up: fadeUp 0.6s ease both;
@@ -73,4 +77,87 @@ body {
 
 .activities-swiper .swiper-slide-active {
     opacity: 1;
+}
+
+/* ─────────────────────────────────────────────
+   MODALS
+   ───────────────────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 24px;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal-box-crud {
+    background-color: #ffffff;
+    width: 100%;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────
+   MENTOR CARDS
+   ───────────────────────────────────────────── */
+.mentor-card {
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.mentor-card:hover {
+    border-color: #aeaeae;
+    box-shadow: 0 4px 12px #797979;
+    transform: translateY(-3px);
+}
+
+.day-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+/* Mentor availability grid */
+.avail-grid { display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+}
+
+.avail-day-col {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.avail-slot {
+    background: #d1fae5;
+    color: #065f46;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 4px;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 1.3;
+}
+
+.avail-empty {
+    background: #f8fafc;
+    border: 1px dashed #e2e8f0;
+    border-radius: 4px;
+    height: 28px;
 }
