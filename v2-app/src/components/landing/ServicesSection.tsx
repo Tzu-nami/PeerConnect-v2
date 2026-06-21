@@ -34,7 +34,7 @@ export default function ServicesSection() {
     ]
 
     return(
-        <section id="services" className="w-full px-4 sm:px-10 md:px-12 lg:px-20 xl:px-32 py-6 sm:py-12 md:py-16 xl:py-24 scroll-mt-20">
+        <section id="services" className="w-full px-4 sm:px-10 md:px-12 lg:px-20 xl:px-32 py-10 sm:py-16 md:py-20 scroll-mt-20">
             <div className="flex flex-col gap-1 sm:gap-2 md:gap-4 mb-4 sm:mb-6 md:mb-8">
                 {/* Section title */}
                 <div className="flex items-center gap-3 pb-4 sm:pb-5">

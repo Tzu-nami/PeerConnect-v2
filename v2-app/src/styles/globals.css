@@ -8,44 +8,45 @@
 }
 
 @theme {
-  /* Fonts */
-  --font-heading: 'Marcellus', serif;
-  --font-body: 'Nunito', sans-serif;
+    /* Fonts */
+    --font-heading: 'Marcellus', serif;
+    --font-body: 'Nunito', sans-serif;
+    --font-module: 'Inter', sans-serif;
 
-  /* Up Color Palette */
-  --color-up-maroon:            #7B1113;
-  --color-up-maroon-dark:       #5A0D0F;
-  --color-up-green:             #014421;
-  --color-up-yellow:            #F3AA2C;
-  --color-up-yellow-light:      #F8CB72;
-  --color-up-yellow-dark:       #C28212;
-  --color-up-black:             #000000;
+    /* Up Color Palette */
+    --color-up-maroon:            #7B1113;
+    --color-up-maroon-dark:       #5A0D0F;
+    --color-up-green:             #014421;
+    --color-up-yellow:            #F3AA2C;
+    --color-up-yellow-light:      #F8CB72;
+    --color-up-yellow-dark:       #C28212;
+    --color-up-black:             #000000;
 
-  /* Others */
-  --color-cream:                #FAF8F2;
-  --color-cream-dark:           #EEE8DA;
-  --color-cream-border:         #D6CFC0;
-  --color-text-brown:           #554444;
-  --color-text-brown-light:     #998888;
-  --color-sidebar-green:        #1A3C2F;
+    /* Others */
+    --color-cream:                #FAF8F2;
+    --color-cream-dark:           #EEE8DA;
+    --color-cream-border:         #D6CFC0;
+    --color-text-brown:           #554444;
+    --color-text-brown-light:     #998888;
+    --color-sidebar-green:        #1A3C2F;
   --color-day-available:        #D1FAE5;
   --color-day-unavailable:      #F8FAFC;
   --color-book-hover:           #2D5C47;
 
-  /* Animations */
-  --animate-fade-up: fadeUp 0.6s ease both;
+    /* Animations */
+    --animate-fade-up: fadeUp 0.6s ease both;
 }
 
 /* Keyframes */
 @keyframes fadeUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 html {
@@ -53,9 +54,9 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Nunito, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Nunito, sans-serif;
 }
 
 .activities-pagination .swiper-pagination-bullet {
