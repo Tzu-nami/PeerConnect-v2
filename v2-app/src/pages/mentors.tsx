@@ -1,13 +1,16 @@
 import type { GetServerSideProps } from 'next';
 import { createClient } from '@/utils/supabase/server';
 import LandingLayout from '@/components/layout/LandingLayout';
-import MentorHeader from '@/components/landing/MentorHeader';
-import MentorDirectory from '@/components/student/mentors/MentorDirectory';
+import MentorHeader from '@/components/mentors/MentorHeader';
+import MentorDirectory from '@/components/mentors/MentorDirectory';
 import type { Mentor, Subject } from '@/types/mentor';
 
+// Utilities
+import { getServerSideUserRole } from '@/utils/getServerSideUserRole';
+
 const DAY_ORDER: Record<string, number> = {
-  monday: 1, tuesday: 2, wednesday: 3,
-  thursday: 4, friday: 5, saturday: 6,
+    monday: 1, tuesday: 2, wednesday: 3,
+    thursday: 4, friday: 5, saturday: 6,
 };
 
 function avatarPlaceholder(name: string): string {
@@ -26,30 +29,27 @@ interface Props {
     mentors: Mentor[];
     subjects: Subject[];
     isAuthenticated: boolean;
+    userRole: string | null;
 }
 
-export default function MentorsPage({ mentors, subjects, isAuthenticated }: Props) {
-  return (
-    <LandingLayout>
-        <MentorHeader />
-        <section className="px-6 md:px-20 pb-20">
-            <MentorDirectory mentors={mentors} subjects={subjects} isAuthenticated={isAuthenticated} />
-        </section>
-    </LandingLayout>
-  );
+export default function MentorsPage({ mentors, subjects, isAuthenticated, userRole }: Props) {
+    return (
+        <LandingLayout userRole={userRole}>
+            <MentorHeader />
+            <section className="px-6 md:px-20 pb-20">
+                <MentorDirectory mentors={mentors} subjects={subjects} isAuthenticated={isAuthenticated} />
+            </section>
+        </LandingLayout>
+    );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createClient(context);
 
-    // Check if authenticated
-    const { data: { session } } = await supabase.auth.getSession();
-    const isAuthenticated = !!session;
-
-    // Fetch all mentor profiles
-    const { data: mentorRows } = await supabase
-        .from('mentor_profiles')
-        .select(`
+    const [userRole, { data: { session } }, { data: mentorRows }, { data: subjectRows }] = await Promise.all([
+        getServerSideUserRole(context),
+        supabase.auth.getSession(),
+        supabase.from('mentor_profiles').select(`
             id,
             user_id,
             users (
@@ -72,51 +72,46 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 start_time,
                 end_time
             )
-        `);
+        `),
+        supabase.from('subjects').select('id, code, name').order('code'),
+    ]);
 
-    const { data: subjectRows } = await supabase
-        .from('subjects')
-        .select('id, code, name')
-        .order('code');
+    const isAuthenticated = !!session;
 
     const mentors: Mentor[] = (mentorRows ?? [])
         .map((mp: any) => {
             const user = mp.users;
             const studentProfile = user?.student_profiles?.[0];
 
-            // Days available
             const rawDays: string[] = (mp.mentor_availabilities ?? [])
                 .map((a: any) => a.day_of_week as string);
             const scheduleDays = [...new Set(rawDays)]
                 .sort((a, b) => (DAY_ORDER[a.toLowerCase()] ?? 99) - (DAY_ORDER[b.toLowerCase()] ?? 99))
                 .map((d) => d.charAt(0).toUpperCase() + d.slice(1, 3));
 
-            // Day and time availability
             const schedule: Record<string, { slots: { start: string; end: string }[] }> = {};
             for (const avail of (mp.mentor_availabilities ?? [])) {
                 const key = avail.day_of_week.toLowerCase();
                 if (!schedule[key]) schedule[key] = { slots: [] };
                 schedule[key].slots.push({
-                start: formatTime(avail.start_time),
-                end: formatTime(avail.end_time),
+                    start: formatTime(avail.start_time),
+                    end: formatTime(avail.end_time),
                 });
             }
 
-            // Sort time slots by start time
             for (const key of Object.keys(schedule)) {
                 schedule[key].slots.sort((a, b) => {
-                const toMinutes = (t: string) => {
-                    const [time, period] = t.split(' ');
-                    const [h, m] = time.split(':').map(Number);
-                    return (period === 'PM' && h !== 12 ? h + 12 : h) * 60 + m;
-                };
-                return toMinutes(a.start) - toMinutes(b.start);
+                    const toMinutes = (t: string) => {
+                        const [time, period] = t.split(' ');
+                        const [h, m] = time.split(':').map(Number);
+                        return (period === 'PM' && h !== 12 ? h + 12 : h) * 60 + m;
+                    };
+                    return toMinutes(a.start) - toMinutes(b.start);
                 });
             }
 
             const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim();
 
-            // Fetch
             return {
                 id: mp.id,
                 user_id: mp.user_id,
@@ -126,10 +121,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 email: user?.email ?? '',
                 avatar: user?.avatar ?? avatarPlaceholder(fullName),
                 subjects: (mp.mentor_subjects ?? [])
-                .map((ms: any) => ms.subjects)
-                .filter(Boolean)
-                .filter((s: any, i: number, arr: any[]) => arr.findIndex((x) => x.id === s.id) === i)
-                .sort((a: any, b: any) => a.code.localeCompare(b.code)),
+                    .map((ms: any) => ms.subjects)
+                    .filter(Boolean)
+                    .filter((s: any, i: number, arr: any[]) => arr.findIndex((x) => x.id === s.id) === i)
+                    .sort((a: any, b: any) => a.code.localeCompare(b.code)),
                 days: scheduleDays,
                 schedule,
                 yearLevel: studentProfile?.year_levels?.name ?? '',
@@ -141,9 +136,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-        mentors,
-        subjects: subjectRows ?? [],
-        isAuthenticated,
+            mentors,
+            subjects: subjectRows ?? [],
+            isAuthenticated,
+            userRole,
         },
     };
 };

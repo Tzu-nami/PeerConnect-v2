@@ -2,32 +2,32 @@ import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 
+// Components
 import HeadDesc from "@/components/about/HeadDesc";
 import StatsDisplay from "@/components/about/StatsDisplay";
 import Mission from "@/components/about/Mission";
 import Quote from "@/components/about/Quote";
 import HowItWorks from "@/components/about/HowItWorks";
 import MentorQualities from "@/components/about/MentorQualities";
-import FaqAccordion, { FaqData } from "@/components/landing/FaqAccordion";
+import FaqAccordion, { FaqData } from "@/components/about/FaqAccordion";
 import DeveloperGrid from "@/components/about/DeveloperGrid";
-
 import LandingLayout from "@/components/layout/LandingLayout";
 
-type StaffProfile = {
-    id: string;
+// Utilities
+import { getServerSideUserRole } from "@/utils/getServerSideUserRole";
+
+interface Staff {
     firstName: string;
-    middleInitial: string | null;
     lastName: string;
-    role: string;
-    email: string;
-    avatar: string | null;
+    middleInitial: string | null;
 }
 
 interface Props {
     mentorCount: number;
     bookingCount: number;
     subjectCount: number;
-    staff: StaffProfile | null;
+    staff: Staff | null;
+    userRole: string | null;
 }
 
 const FAQS: FaqData[] = [
@@ -45,45 +45,62 @@ const FAQS: FaqData[] = [
     },
 ];
 
-export default function AboutPage({ mentorCount, bookingCount, subjectCount, staff }: Props) {
+export default function AboutPage({ mentorCount, bookingCount, subjectCount, staff, userRole }: Props) {
 
-    // Load the values from the database
     const stats = [
         { value: mentorCount, label: 'Mentors' },
         { value: bookingCount, label: 'Sessions Held' },
-        { value: subjectCount, label: 'Subjects Covered' },
+        { value: subjectCount, label: 'Subject Covered' },
     ];
 
-    const lrcHead = staff ? `${staff.firstName} ${staff.middleInitial ? staff.middleInitial + ' ' : ''}${staff.lastName}` :
-    'LRC Head';
+    const lrcHead = staff
+        ? `${staff.firstName} ${staff.middleInitial ? staff.middleInitial + ' ' : ''}${staff.lastName}`
+        : 'LRC Head'
 
     return (
-        <LandingLayout>
+        <LandingLayout userRole={userRole}>
+            {/* Header and Description */}
             <HeadDesc />
+
+            {/* Image */}
             <div className="w-full h-64 md:h-96 bg-cream-dark border-b border-cream-border overflow-hidden animate-fade-up [animation-delay:100ms]">
-                <img 
-                    src="null" 
+                <img
+                    src="null"
                     alt="LRC PeerConnect"
-                    className="w-full h-full object-cover brightness-125" 
+                    className="w-full h-full object-cover brightness-125"
                 />
             </div>
+
+            {/* Stats Display */}
             <StatsDisplay stats={stats} />
+
+            {/* Mission and Quote */}
             <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <Mission />
-                <Quote author={lrcHead}/>
+                <Quote author={lrcHead} />
+
+                {/* How it works */}
                 <HowItWorks />
+
+                {/* Who are mentors */}
                 <MentorQualities />
+
+                {/* FAQs */}
                 <section className="py-10 border-b border-cream-border animate-fade-up [animation-delay:300ms]">
                     <div className="text-up-yellow text-xs font-bold tracking-widest uppercase mb-4">
                         Common Questions
                     </div>
+
                     <FaqAccordion faqs={FAQS} />
+
                     <div className="mt-3 text-right">
                         <Link href="/services#faqs" className="text-xs text-up-maroon font-bold tracking-widest uppercase hover:underline">
                             See all FAQs →
                         </Link>
                     </div>
                 </section>
+
+                {/* Developers */}
                 <DeveloperGrid />
             </div>
         </LandingLayout>
@@ -95,11 +112,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createClient(context);
 
     const [
+        userRole,
         { count: mentorCount },
         { count: bookingCount },
         { count: subjectCount },
         { data: staffData },
     ] = await Promise.all([
+        getServerSideUserRole(context),
         supabase.from('mentor_profiles').select('*', { count: 'exact', head: true }),
         supabase.from('bookings').select('*', { count: 'exact', head: true }),
         supabase.from('subjects').select('*', { count: 'exact', head: true }),
@@ -108,10 +127,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-        mentorCount: mentorCount ?? 0,
-        bookingCount: bookingCount ?? 0,
-        subjectCount: subjectCount ?? 0,
-        staff: staffData ?? null,
+            userRole,
+            mentorCount: mentorCount ?? 0,
+            bookingCount: bookingCount ?? 0,
+            subjectCount: subjectCount ?? 0,
+            staff: staffData ?? null,
         },
     };
 };

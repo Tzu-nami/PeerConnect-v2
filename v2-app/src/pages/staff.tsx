@@ -1,31 +1,41 @@
-import { useEffect, useState} from "react"
-import { createClient} from "@/utils/supabase/client"
-import type {StaffProfile} from "@/types/staff"
+import { GetServerSideProps } from "next"
+
+// Components
 import LandingLayout from "@/components/layout/LandingLayout"
 import StaffHeader from "@/components/staff/StaffHeader"
-import StaffGrid from "@/components/staff/StaffGrid";
+import StaffGrid from "@/components/staff/StaffGrid"
 
-export default function Staff() {
-    const [staffList, setStaffList] = useState<StaffProfile[]>([])
-    const [loading, setLoading] = useState(true)
+// Utilities
+import { getServerSideUserRole } from "@/utils/getServerSideUserRole"
+import { createClient } from "@/utils/supabase/server"
+
+// Types
+import type { StaffProfile } from "@/types/staff"
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const supabase = createClient(context)
+
+    const [userRole, { data: staffList }] = await Promise.all([
+        getServerSideUserRole(context),
+        supabase.from('staff_profiles').select('*')
+    ])
+
+    return {
+        props: { userRole, staffList: staffList ?? [] }
+    }
+}
+
+export default function Staff({ staffList, userRole }: { staffList: StaffProfile[], userRole: string | null }) {
     const roleLabels: Record<string, string> = {
         lrc_head: 'LRC Head',
         lrc_assistant: 'LRC Assistant',
         student_assistant: 'Student Assistant',
     }
 
-    useEffect(() => {
-        const supabase = createClient()
-        supabase.from('staff_profiles').select('*').then((result) => {
-            setStaffList(result.data ?? [])
-            setLoading(false)
-        })
-    }, [])
-
-    return(
-        <LandingLayout>
+    return (
+        <LandingLayout userRole={userRole}>
             <StaffHeader />
-            <StaffGrid loading={loading} staffList={staffList} roleLabels={roleLabels} />
+            <StaffGrid staffList={staffList} roleLabels={roleLabels} />
         </LandingLayout>
     )
 }
