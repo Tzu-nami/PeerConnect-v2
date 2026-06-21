@@ -1,0 +1,109 @@
+import { useState, useMemo } from 'react';
+import type { Mentor, Subject } from '@/types/mentor';
+import MentorFilters from './MentorFilters';
+import MentorCard from './MentorCard';
+import MentorModal from './MentorModal';
+import Pagination from '@/components/ui/Pagination';
+
+const PAGE_SIZE = 8;
+
+interface Props {
+    mentors: Mentor[];
+    subjects: Subject[];
+    isAuthenticated: boolean;
+}
+
+export default function MentorDirectory({ mentors, subjects, isAuthenticated }: Props) {
+    const [searchQuery, setSearchQuery]         = useState('');
+    const [selectedDay, setSelectedDay]         = useState('');
+    const [selectedSubject, setSelectedSubject] = useState('');
+    const [currentPage, setCurrentPage]         = useState(1);
+    const [selectedMentor, setSelectedMentor]   = useState<Mentor | null>(null);
+
+    // Filter logic
+    const filteredMentors = useMemo(() => {
+        return mentors.filter((m) => {
+        const q = searchQuery.toLowerCase();
+        const matchesSearch =
+            !q ||
+            m.firstName.toLowerCase().includes(q) ||
+            m.lastName.toLowerCase().includes(q);
+
+        const matchesDay =
+            !selectedDay ||
+            m.days.includes(selectedDay);
+
+        const matchesSubject =
+            !selectedSubject ||
+            m.subjects.some((s) => s.id === selectedSubject);
+
+        return matchesSearch && matchesDay && matchesSubject;
+        });
+    }, [mentors, searchQuery, selectedDay, selectedSubject]);
+
+    const totalPages = Math.max(1, Math.ceil(filteredMentors.length / PAGE_SIZE));
+
+    // Pagination logic
+    const paginatedMentors = useMemo(() => {
+        const start = (currentPage - 1) * PAGE_SIZE;
+        return filteredMentors.slice(start, start + PAGE_SIZE);
+    }, [filteredMentors, currentPage]);
+
+    const handleSearch = (q: string) => { setSearchQuery(q); setCurrentPage(1); };
+    const handleDay = (d: string) => { setSelectedDay(d); setCurrentPage(1); };
+    const handleSubject = (s: string) => { setSelectedSubject(s); setCurrentPage(1); };
+
+    return (
+        <div>
+        <MentorFilters
+            subjects={subjects}
+            searchQuery={searchQuery}
+            selectedDay={selectedDay}
+            selectedSubject={selectedSubject}
+            resultCount={filteredMentors.length}
+            onSearch={handleSearch}
+            onDayChange={handleDay}
+            onSubjectChange={handleSubject}
+        />
+
+        {/* Empty state */}
+        {filteredMentors.length === 0 && (
+            <div className="bg-white rounded-xl border border-gray-100 py-20 text-center shadow-sm">
+            <i className="fa-solid fa-chalkboard-user text-4xl text-gray-300 mb-4 block"></i>
+            <p className="font-medium text-gray-500">No mentors found.</p>
+            <p className="text-xs mt-1 text-gray-400">Try adjusting your search or filter.</p>
+            </div>
+        )}
+
+        {/* Mentor grid */}
+        {filteredMentors.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 justify-items-center animate-fade-up"
+            style={{ animationDelay: '250ms' }}>
+            {paginatedMentors.map((mentor) => (
+                <MentorCard
+                key={mentor.id}
+                mentor={mentor}
+                onClick={() => setSelectedMentor(mentor)}
+                />
+            ))}
+            </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+            <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
+        )}
+
+        {/* Modal */}
+        <MentorModal
+            mentor={selectedMentor}
+            onClose={() => setSelectedMentor(null)}
+            isAuthenticated={isAuthenticated}
+        />
+        </div>
+    );
+}

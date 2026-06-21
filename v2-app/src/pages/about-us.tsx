@@ -13,17 +13,21 @@ import DeveloperGrid from "@/components/about/DeveloperGrid";
 
 import LandingLayout from "@/components/layout/LandingLayout";
 
-interface Staff {
+type StaffProfile = {
+    id: string;
     firstName: string;
-    lastName: string;
     middleInitial: string | null;
+    lastName: string;
+    role: string;
+    email: string;
+    avatar: string | null;
 }
 
 interface Props {
     mentorCount: number;
     bookingCount: number;
     subjectCount: number;
-    staff: Staff | null;
+    staff: StaffProfile | null;
 }
 
 const FAQS: FaqData[] = [
@@ -43,21 +47,19 @@ const FAQS: FaqData[] = [
 
 export default function AboutPage({ mentorCount, bookingCount, subjectCount, staff }: Props) {
 
+    // Load the values from the database
     const stats = [
         { value: mentorCount, label: 'Mentors' },
         { value: bookingCount, label: 'Sessions Held' },
-        { value: subjectCount, label: 'Subject Covered' },
+        { value: subjectCount, label: 'Subjects Covered' },
     ];
 
-    const lrcHead = staff ? `${staff.firstName} ${staff.middleInitial ? staff.middleInitial + '. ' : ''}${staff.lastName}` :
+    const lrcHead = staff ? `${staff.firstName} ${staff.middleInitial ? staff.middleInitial + ' ' : ''}${staff.lastName}` :
     'LRC Head';
 
     return (
         <LandingLayout>
-            {/* Header and Description */}
             <HeadDesc />
-
-            {/* Image */}
             <div className="w-full h-64 md:h-96 bg-cream-dark border-b border-cream-border overflow-hidden animate-fade-up [animation-delay:100ms]">
                 <img 
                     src="null" 
@@ -65,43 +67,30 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
                     className="w-full h-full object-cover brightness-125" 
                 />
             </div>
-
-            {/* Stats Display */}
             <StatsDisplay stats={stats} />
-
-            {/* Mission and Quote */}
             <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <Mission />
                 <Quote author={lrcHead}/>
-
-                {/* How it works */}
                 <HowItWorks />
-
-                {/* Who are mentors */}
                 <MentorQualities />
-                            
-                {/* FAQs */}
                 <section className="py-10 border-b border-cream-border animate-fade-up [animation-delay:300ms]">
                     <div className="text-up-yellow text-xs font-bold tracking-widest uppercase mb-4">
                         Common Questions
                     </div>
-
                     <FaqAccordion faqs={FAQS} />
-                    
                     <div className="mt-3 text-right">
                         <Link href="/services#faqs" className="text-xs text-up-maroon font-bold tracking-widest uppercase hover:underline">
                             See all FAQs →
                         </Link>
                     </div>
                 </section>
-
-                {/* Developers */}
                 <DeveloperGrid />
             </div>
         </LandingLayout>
     );
 }
 
+// Database connection
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createClient(context);
 
