@@ -12,8 +12,8 @@ export default function SearchBar({
     className = "w-56"
 }: SearchBarProps) {
     return (
-        <div className={`relative shadow-sm ${className}`}>
-            <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
+        <div className={`relative shadow-sm rounded-lg ${className}`}>
+            <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
             <input 
                 type="text"
                 value={value}
