@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 export interface FaqData {
     question: string;
@@ -28,10 +29,9 @@ function FaqItem({ faq, theme }: { faq: FaqData, theme: 'about' | 'services'}) {
             <button className={buttonClasses}
             onClick={() => setOpen(!open)}>
                 <span>{faq.question}</span>
-                <span className="material-symbols-outlined transition-transform duration-300"
-                style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                    keyboard_arrow_down
-                </span>
+                <MdKeyboardArrowDown className="transition-transform duration-300"
+                    style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                />
             </button>
             <div className={`grid transition-all duration-300 ease-in-out ${
                 open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"

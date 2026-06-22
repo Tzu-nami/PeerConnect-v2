@@ -160,7 +160,7 @@ function FaqItem({
     <div className="py-5">
       <button
         type="button"
-        className="w-full flex justify-between items-center text-left text-white font-semibold text-lg"
+        className="w-full flex justify-between items-center text-left text-white font-semibold text-lg cursor-pointer"
         onClick={() => setOpen((current) => !current)}
       >
         <span>{question}</span>

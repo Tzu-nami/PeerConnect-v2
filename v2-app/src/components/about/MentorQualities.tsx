@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { MdOutlineVerified, MdOutlineSchool, MdOutlineMenuBook, MdOutlineFavoriteBorder, MdOutlineArrowRightAlt } from "react-icons/md";
 
 const QUALITIES = [
-    { icon: 'verified', text: 'Trained and screened by LRC staff' },
-    { icon: 'school', text: 'Currently enrolled UPB students' },
-    { icon: 'menu_book', text: 'Experts in their own fields of study' },
-    { icon: 'favorite', text: 'Committed to peer-driven learning' },
+    { icon: <MdOutlineVerified />,       text: 'Trained and screened by LRC staff' },
+    { icon: <MdOutlineSchool />,         text: 'Currently enrolled UPB students' },
+    { icon: <MdOutlineMenuBook />,       text: 'Experts in their own fields of study' },
+    { icon: <MdOutlineFavoriteBorder />, text: 'Committed to peer-driven learning' },
 ];
 
 export default function MentorQualities() {
@@ -31,8 +32,8 @@ export default function MentorQualities() {
 
                     <div className="flex flex-col gap-4">
                         {QUALITIES.map((item) => (
-                            <div key={item.icon} className="flex items-center gap-3">
-                                <span className="material-symbols-outlined text-up-maroon text-xl flex-shrink-0">
+                            <div key={item.text} className="flex items-center gap-3">
+                                <span className="text-up-maroon text-2xl flex-shrink-0">
                                     {item.icon}
                                 </span>
                                 <div className="text-sm text-text-brown">{item.text}</div>
@@ -47,7 +48,7 @@ export default function MentorQualities() {
                             className="text-up-maroon font-bold text-xs inline-flex items-center gap-1 tracking-widest uppercase border-b border-up-maroon pt-2 hover:text-up-maroon/70 w-max"
                         >
                             Meet our Mentors
-                            <span className="material-symbols-outlined text-lg">arrow_right_alt</span>
+                            <MdOutlineArrowRightAlt className="text-2xl" />
                         </Link>
                     </div>
                 </div>
