@@ -14,7 +14,7 @@ export default function Mission() {
                 </div>
                 <div className="aspect-[4/3] bg-cream-dark border border-cream-border overflow-hidden">
                     <img
-                        src="null"
+                        src="https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/about-us/mission.jpg"
                         alt="Our Mission"
                         className="w-full h-full object-cover"
                     />

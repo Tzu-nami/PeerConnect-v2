@@ -72,7 +72,7 @@ export default function LoginPage() {
 
                         <div className="relative bg-white/5 backdrop-blur-sm p-3 rounded-2xl border border-white/20 shadow-2xl transform transition-all duration-700 group-hover:rotate-1 group-hover:scale-[1.03]">
                             <img
-                                src="null"
+                                src="https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/about-us/mission.jpg"
                                 alt="Student Peer Session"
                                 className="rounded-xl w-full h-80 object-cover grayscale-[20%] group-hover:grayscale-0 transition duration-700 shadow-inner"
                             />

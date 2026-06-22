@@ -65,7 +65,7 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
             {/* Image */}
             <div className="w-full h-64 md:h-96 bg-cream-dark border-b border-cream-border overflow-hidden animate-fade-up [animation-delay:100ms]">
                 <img
-                    src="null"
+                    src="https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/hero/library.jpeg"
                     alt="LRC PeerConnect"
                     className="w-full h-full object-cover brightness-125"
                 />

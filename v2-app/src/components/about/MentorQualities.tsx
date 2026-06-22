@@ -14,7 +14,7 @@ export default function MentorQualities() {
                 {/* Image */}
                 <div className="aspect-[4/3] bg-cream-dark border border-cream-border overflow-hidden order-last lg:order-first">
                     <img
-                        src="null"
+                        src="https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/about-us/mentors.jpg"
                         alt="Our Mentors"
                         className="w-full h-full object-cover brightness-110"
                     />
