@@ -41,7 +41,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer">
                     <i className="fa-solid fa-chevron-left text-[10px]"></i>
             </button>
 
@@ -64,7 +64,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
                         onClick={() => onPageChange(page as number)}
                         className={`w-8 h-8 text-xs font-bold rounded-lg transition ${
                             currentPage === page ? 'bg-sidebar-green text-white shadow-sm'
-                            : 'bg-white border border-gray-200 text-slate-500 hover:bg-gray-100'
+                            : 'bg-white border border-gray-200 text-slate-500 hover:bg-gray-100 cursor-pointer'
                         }`}
                         >
                             {page}
@@ -76,7 +76,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
             <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer">
                     <i className="fa-solid fa-chevron-right text-[10px]"></i>
             </button>
         </div>

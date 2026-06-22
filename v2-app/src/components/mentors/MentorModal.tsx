@@ -63,7 +63,7 @@ export default function MentorModal({ mentor, onClose, isAuthenticated }: Props)
 
                 {/* Availability */}
                 <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ">
                         Weekly Availability
                     </p>
                     <MentorAvailGrid schedule={mentor.schedule} />
