@@ -35,7 +35,7 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated }: 
 
         const matchesSubject =
             !selectedSubject ||
-            m.subjects.some((s) => s.id === selectedSubject);
+            m.subjects.some((s) => String(s.id) === String(selectedSubject));
 
         return matchesSearch && matchesDay && matchesSubject;
         });
