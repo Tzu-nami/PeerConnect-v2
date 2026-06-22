@@ -26,10 +26,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
 
         // Get session cookie code
-        const { error } = await supabase.auth.exchangeCodeForSession(String(code));
+        const { data, error } = await supabase.auth.exchangeCodeForSession(String(code));
 
-        if (!error) {
-            res.redirect('/');
+        if (!error && data?.user) {
+            const userRole = data.user.user_metadata?.role || 'student';
+
+            res.redirect(`/${userRole}/dashboard`);
             return;
         }
     }
