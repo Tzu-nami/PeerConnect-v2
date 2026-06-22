@@ -46,22 +46,23 @@ export default function MentorsPage({ mentors, subjects, isAuthenticated, userRo
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createClient(context);
 
+    // Database fetching
     const [userRole, { data: { session } }, { data: mentorRows }, { data: subjectRows }] = await Promise.all([
         getServerSideUserRole(context),
         supabase.auth.getSession(),
         supabase.from('mentor_profiles').select(`
             id,
             user_id,
-            users (
+            user_profiles (
                 firstName,
                 lastName,
                 middleInitial,
                 email,
                 avatar,
                 student_profiles (
-                year_levels ( name ),
-                degree_programs ( name ),
-                colleges ( name )
+                    year_levels ( name ),
+                    degree_programs ( name ),
+                    colleges ( name )
                 )
             ),
             mentor_subjects (
@@ -78,17 +79,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const isAuthenticated = !!session;
 
+    // Mentors data
     const mentors: Mentor[] = (mentorRows ?? [])
         .map((mp: any) => {
-            const user = mp.users;
-            const studentProfile = user?.student_profiles?.[0];
+            const user = mp.user_profiles;
+            const rawStudentProfile = user?.student_profiles;
+            const studentProfile = Array.isArray(rawStudentProfile) 
+                ? rawStudentProfile[0] 
+                : rawStudentProfile;
 
+            // Get mentor available days
             const rawDays: string[] = (mp.mentor_availabilities ?? [])
                 .map((a: any) => a.day_of_week as string);
             const scheduleDays = [...new Set(rawDays)]
                 .sort((a, b) => (DAY_ORDER[a.toLowerCase()] ?? 99) - (DAY_ORDER[b.toLowerCase()] ?? 99))
                 .map((d) => d.charAt(0).toUpperCase() + d.slice(1, 3));
 
+            // Map mentor availability in an array
             const schedule: Record<string, { slots: { start: string; end: string }[] }> = {};
             for (const avail of (mp.mentor_availabilities ?? [])) {
                 const key = avail.day_of_week.toLowerCase();
@@ -99,6 +106,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 });
             }
 
+            // Cleaner time formatting
             for (const key of Object.keys(schedule)) {
                 schedule[key].slots.sort((a, b) => {
                     const toMinutes = (t: string) => {
@@ -112,6 +120,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
             const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim();
 
+            // Mapped data
             return {
                 id: mp.id,
                 user_id: mp.user_id,
