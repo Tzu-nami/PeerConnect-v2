@@ -76,10 +76,10 @@ export default function LandingFooter({ userRole }: { userRole: string | null })
                             <>
                                 {shouldShowBookNow && (
                                     <>
-                                        <Link href="/book" className="hover:text-cream transition-colors">
+                                        <Link href={`/${userRole}/bookings`} className="hover:text-cream transition-colors">
                                             Book a Session
                                         </Link>
-                                        <Link href="/bookings" className="hover:text-cream transition-colors">
+                                        <Link href={`/${userRole}/history`} className="hover:text-cream transition-colors">
                                             View bookings
                                         </Link>
                                     </>
