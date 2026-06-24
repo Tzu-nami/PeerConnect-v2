@@ -1,8 +1,7 @@
 import type { GetServerSideProps } from "next"
 
 // Components
-import LandingLayout from "@/components/layout/LandingLayout"
-import ContactSection from "@/components/contact/ContactSection"
+import ContactSection from "@/components/landing/contact/ContactSection"
 
 // Utilities
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole"
@@ -15,10 +14,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 }
 
-export default function ContactUsPage({ userRole }: { userRole: string | null }) {
+export default function ContactUsPage() {
     return (
-        <LandingLayout userRole={userRole}>
-            <ContactSection />
-        </LandingLayout>
+        <ContactSection />
     )
 }

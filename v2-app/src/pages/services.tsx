@@ -1,8 +1,7 @@
 import type { GetServerSideProps } from "next"
 
 // Components
-import LandingLayout from "@/components/layout/LandingLayout"
-import ServicesDetail from "@/components/services/ServicesDetail"
+import ServicesDetail from "@/components/landing/services/ServicesDetail"
 
 // Utilities
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole"
@@ -15,10 +14,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 }
 
-export default function ServicesPage({ userRole }: { userRole: string | null }) {
+export default function ServicesPage() {
     return (
-        <LandingLayout userRole={userRole}>
-            <ServicesDetail />
-        </LandingLayout>
+        <ServicesDetail />
     )
 }

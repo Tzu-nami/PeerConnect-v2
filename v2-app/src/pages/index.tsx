@@ -1,11 +1,10 @@
 import { GetServerSideProps } from "next"
 
 // Components
-import LandingLayout from "@/components/layout/LandingLayout"
-import HeroSection from "@/components/landing/HeroSection"
-import ServicesSection from "@/components/landing/ServicesSection"
-import HowItWorks from "@/components/landing/HowItWorks"
-import ActivitiesSection from "@/components/landing/ActivitiesSection"
+import HeroSection from "@/components/landing/home/HeroSection"
+import ServicesSection from "@/components/landing/home/ServicesSection"
+import HowItWorks from "@/components/landing/home/HowItWorks"
+import ActivitiesSection from "@/components/landing/home/ActivitiesSection"
 
 // Utilities
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole"
@@ -27,8 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 export default function Home({ userRole }: { userRole: UserRole }) {
-    const shouldShowBookNow = userRole !== "admin"
-    const urls = userRole ? ROLE_URLS[userRole] ?? DEFAULT_URLS : DEFAULT_URLS
+    const urls = userRole ? ROLE_URLS[userRole] : DEFAULT_URLS
 
     const bookURL = !userRole
         ? `/login?redirectTo=/bookings`
@@ -37,11 +35,11 @@ export default function Home({ userRole }: { userRole: UserRole }) {
             : urls.book
 
     return (
-        <LandingLayout userRole={userRole}>
-            <HeroSection shouldShowBookNow={shouldShowBookNow} bookURL={bookURL} />
+        <>
+            <HeroSection shouldShowBookNow={userRole !== "admin"} bookURL={bookURL} />
             <ServicesSection />
             <HowItWorks bookURL={bookURL} dashboardURL={urls.dashboard} historyURL={urls.history} />
             <ActivitiesSection />
-        </LandingLayout>
+        </>
     )
 }

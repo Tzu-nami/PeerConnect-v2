@@ -1,9 +1,8 @@
 import { GetServerSideProps } from "next"
 
 // Components
-import LandingLayout from "@/components/layout/LandingLayout"
-import StaffHeader from "@/components/staff/StaffHeader"
-import StaffGrid from "@/components/staff/StaffGrid"
+import StaffHeader from "@/components/landing/staff/StaffHeader"
+import StaffGrid from "@/components/landing/staff/StaffGrid"
 
 // Utilities
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole"
@@ -25,17 +24,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 }
 
-export default function Staff({ staffList, userRole }: { staffList: StaffProfile[], userRole: string | null }) {
-    const roleLabels: Record<string, string> = {
-        lrc_head: 'LRC Head',
-        lrc_assistant: 'LRC Assistant',
-        student_assistant: 'Student Assistant',
-    }
-
+export default function Staff({ staffList }: { staffList: StaffProfile[] }) {
     return (
-        <LandingLayout userRole={userRole}>
+        <>
             <StaffHeader />
-            <StaffGrid staffList={staffList} roleLabels={roleLabels} />
-        </LandingLayout>
+            <StaffGrid staffList={staffList} />
+        </>
     )
 }
