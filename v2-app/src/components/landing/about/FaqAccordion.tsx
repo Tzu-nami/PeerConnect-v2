@@ -49,7 +49,7 @@ function FaqItem({ faq, theme }: { faq: FaqData, theme: 'about' | 'services'}) {
 export default function FaqAccordion({ faqs, theme = 'about' }: FaqAccordionProps) {
     const isServices = theme === 'services'
 
-    // Border based on landing tab
+    // Border based on home tab
     const containerClasses = isServices ? "flex flex-col divide-y divide-white/20" :
     "border border-cream-border divide-y divide-cream-border";
     return (

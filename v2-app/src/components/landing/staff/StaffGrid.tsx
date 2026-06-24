@@ -1,25 +1,23 @@
 import Image from "next/image"
 import Link from "next/link"
 
-// Components
+// Types
 import type {StaffProfile} from "@/types/staff"
+
+// Constants
+import { ROLE_LABELS } from "@/constants/roleLabels"
 
 // Icons
 import {FaUser} from "react-icons/fa"
 import {IoMailOutline} from "react-icons/io5"
 
-interface StaffGridProps {
-    staffList: StaffProfile[]
-    roleLabels: Record<string, string>
-}
-
-export default function StaffGrid({ staffList, roleLabels }: StaffGridProps) {
+export default function StaffGrid({ staffList }: {  staffList: StaffProfile[] }) {
     return (
         <section
             className="px-6 md:px-20 lg:px-40 xl:px-64 pb-20 border-t border-cream-border pt-12 animate-fade-up [animation-delay:150ms]">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 items-stretch">
                 {staffList.map((staff, index) => {
-                    const role = roleLabels[staff.role];
+                    const role = ROLE_LABELS[staff.role];
                     const isLastOdd = staffList.length % 2 !== 0;
                     const isLastItem = index === staffList.length - 1;
 
