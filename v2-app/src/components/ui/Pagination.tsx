@@ -5,7 +5,7 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
-    // if (totalPages <= 1) return null;
+    if (totalPages <= 1) return null;
 
     const getPages = () => {
         const pages: (number | string)[] = [];
