@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 // Components
 import ModuleNavbar from "@/components/layout/ModuleNavbar"
 import ModuleSidebar from "@/components/layout/ModuleSidebar"
-import {createClient} from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client"
 
 export default function ModuleLayout({ children }: { children: React.ReactNode }) {
     // User info
@@ -41,7 +41,7 @@ export default function ModuleLayout({ children }: { children: React.ReactNode }
         <div className="flex min-h-screen font-module">
             <ModuleSidebar userRole={userRole} collapsed={collapsed} setCollapsed={setCollapsed} />
             <div className="flex flex-col flex-1">
-                <ModuleNavbar userName={userName} userFullName={userFullName} userEmail={userEmail} userRole={userRole} userAvatar={userAvatar}/>
+                <ModuleNavbar userName={userName} userFullName={userFullName} userEmail={userEmail} userRole={userRole} userAvatar={userAvatar} />
                 <main className="flex-1 p-7">
                     {children}
                 </main>

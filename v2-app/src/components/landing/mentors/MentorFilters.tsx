@@ -26,6 +26,7 @@ export default function MentorFilters({
                     value={searchQuery}
                     onChange={onSearch}
                     placeholder="Search name..."
+                    className="w-56 shadow-sm [&_input]:focus:border-up-maroon [&_input]:focus:ring-up-maroon"
                 />
 
                 {/* Day filters */}
