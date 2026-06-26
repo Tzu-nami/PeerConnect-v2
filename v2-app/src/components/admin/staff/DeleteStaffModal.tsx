@@ -81,8 +81,8 @@ export default function DeleteStaffModal({ isOpen, onClose, onSuccess, staff }: 
                     <MdWarning className="text-3xl text-red-700" />
                 </div>
                 <div>
-                    <p className="text-lg font-semibold text-slate-700">Are you sure you want to delete</p>
-                    <p className="text-base font-extrabold text-up-maroon mt-1">{fullName}?</p>
+                    <p className="text-base font-semibold text-slate-700">Are you sure you want to delete</p>
+                    <p className="text-lg font-extrabold text-up-maroon mt-1">{fullName}?</p>
                 </div>
                 <p className="text-sm text-slate-400">This will permanently remove their profile and cannot be recovered.</p>
             </div>

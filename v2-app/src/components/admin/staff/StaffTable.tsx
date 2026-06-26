@@ -35,7 +35,7 @@ export default function StaffTable({ staffList, searchQuery, onSearch, onAdd, on
     const sorted = sortData(staffList, sortCol as keyof StaffProfile, sortDir)
 
     return(
-        <div className="rounded-xl shadow-md border border-cream-border mt-5">
+        <div className="rounded-xl bg-white shadow-md border border-cream-border mt-5">
             <div className="flex justify-between items-center p-5">
                 <div>
                     <h2 className="font-bold text-lg">All Staff</h2>
@@ -56,7 +56,7 @@ export default function StaffTable({ staffList, searchQuery, onSearch, onAdd, on
 
             <div className="border-t border-cream-border">
                 <table className="w-full text-left text-sm table-fixed">
-                    <thead className="border-b border-cream-border bg-cream-dark">
+                    <thead className="border-b border-cream-border bg-stone-100">
                     <tr>
                         <th className="px-5 py-3 w-[30%]">
                             <button onClick={() => onSort('lastName')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'lastName' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
