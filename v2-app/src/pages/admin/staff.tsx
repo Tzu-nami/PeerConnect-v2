@@ -6,8 +6,8 @@ import { useRouter } from "next/router"
 import StaffTable from "@/components/admin/staff/StaffTable"
 import AddStaffModal from "@/components/admin/staff/AddStaffModal"
 import ViewStaffModal from "@/components/admin/staff/ViewStaffModal"
-import EditStaffModal from "@/components/admin/staff/EditStaffModal";
-import Pagination from "@/components/ui/Pagination";
+import EditStaffModal from "@/components/admin/staff/EditStaffModal"
+import Pagination from "@/components/ui/Pagination"
 
 
 // Utilities
@@ -15,8 +15,8 @@ import { createClient } from "@/utils/supabase/server"
 
 // Types
 import { StaffProfile } from "@/types/staff"
-import {toast} from "sonner";
-import DeleteStaffModal from "@/components/admin/staff/DeleteStaffModal";
+import { toast } from "sonner"
+import DeleteStaffModal from "@/components/admin/staff/DeleteStaffModal"
 
 // Database connection
 export const getServerSideProps: GetServerSideProps = async(context) => {
