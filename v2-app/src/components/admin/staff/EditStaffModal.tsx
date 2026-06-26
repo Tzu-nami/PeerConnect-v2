@@ -132,7 +132,11 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
         // Update the row instead of insert
         const { error: updateError } = await supabase
             .from('staff_profiles')
-            .update({ ...cleanedForm, avatar: avatarUrl })
+            .update({
+                ...cleanedForm,
+                ...(avatarUrl && { avatar: avatarUrl }),
+                updated_at: new Date().toISOString(),
+            })
             .eq('id', staff!.id)
 
         setLoading(false)
