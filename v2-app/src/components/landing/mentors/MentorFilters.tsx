@@ -1,5 +1,6 @@
 import type { Subject } from "@/types/mentor";
 import SearchBar from "@/components/ui/SearchBar";
+import { FaFilter } from "react-icons/fa6";
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -57,7 +58,7 @@ export default function MentorFilters({
 
                 {/* Subjects filter */}
                 <div className="relative shadow-sm rounded-lg">
-                    <i className="fa-solid fa-filter absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                    <FaFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
                     <select 
                         value={selectedSubject} 
                         onChange={(e) => onSubjectChange(e.target.value)}

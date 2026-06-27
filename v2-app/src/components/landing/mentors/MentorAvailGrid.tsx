@@ -9,6 +9,16 @@ interface Props {
 export default function MentorAvailGrid({ schedule }: Props) {
     return (
         <div>
+            <p className="text-[12px] mt-3 flex items-center justify-left gap-4">
+                <span>
+                    <span className="inline-block w-3 h-3 rounded bg-day-available mr-1 align-middle"></span>
+                    Available
+                </span>
+                <span>
+                    <span className="inline-block w-3 h-3 rounded border border-dashed border-gray-200 bg-day-unavailable mr-1 align-middle"></span>
+                    Unavailable
+                </span>
+            </p>
             <div className="avail-grid">
                 {DAYS.map((day) => (
                     <div key={day}>
@@ -32,17 +42,6 @@ export default function MentorAvailGrid({ schedule }: Props) {
                     </div>
                 ))}
             </div>
-
-            <p className="text-[12px] mt-3 flex items-center justify-center gap-4">
-                <span>
-                    <span className="inline-block w-3 h-3 rounded bg-day-available mr-1 align-middle"></span>
-                    Available
-                </span>
-                <span>
-                    <span className="inline-block w-3 h-3 rounded border border-dashed border-gray-200 bg-day-unavailable mr-1 align-middle"></span>
-                    Unavailable
-                </span>
-            </p>
         </div>
     );
 }

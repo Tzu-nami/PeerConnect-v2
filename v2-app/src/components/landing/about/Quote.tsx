@@ -1,3 +1,4 @@
+import { FaQuoteLeft } from "react-icons/fa6";
 interface QuoteProps {
     author: string;
 }
@@ -6,7 +7,7 @@ export default function Quote({ author }: QuoteProps) {
     return (
         <section className="py-16 border-b border-cream-border animate-fade-up [animation-delay:250ms]">
             <div className="max-w-3xl mx-auto text-center">
-                <i className="fa-solid fa-quote-left text-4xl text-cream-border block mb-6"></i>
+                <FaQuoteLeft className="text-4xl text-cream-border block mb-6" />
                 <p className="italic text-text-brown leading-9 text-xl md:text-2xl mb-6">
                 "At the LRC, we believe that every student has the capacity to succeed.
                 Sometimes, all they need is the right peer beside them."

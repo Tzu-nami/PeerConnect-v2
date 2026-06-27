@@ -1,0 +1,142 @@
+import { useState } from 'react';
+import CrudModal from '@/components/ui/CrudModal';
+import ConfirmModal from '@/components/ui/ConfirmModal';
+import { FaBook } from 'react-icons/fa6';
+
+interface CreateSubjectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition";
+
+export default function CreateSubjectModal({ isOpen, onClose, onSuccess }: CreateSubjectModalProps) {
+  const [form, setForm] = useState({ code: '', name: '' });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Check if there is input
+  const hasInput = Boolean(form.code || form.name);
+  const isFormComplete = Boolean(form.code.trim() && form.name.trim());
+
+  const handleReset = () => {
+    setForm({ code: '', name: '' });
+    setErrors({});
+  };
+
+  const handleValidate = () => {
+    const errs: Record<string, string> = {};
+    if (!form.code.trim()) errs.code = 'Subject code is required.';
+    if (!form.name.trim()) errs.name = 'Subject name is required.';
+    setErrors(errs);
+    if (Object.keys(errs).length === 0) setConfirmOpen(true);
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      const r = await fetch('/api/admin/mentors/subjects', {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: form.code.trim(), name: form.name.trim() }),
+      });
+      
+      if (r.ok) {
+        setConfirmOpen(false);
+        handleReset();
+        onClose();
+        onSuccess();
+      } else {
+        const rawText = await r.text();
+        try {
+          const errorData = JSON.parse(rawText);
+          throw new Error(errorData.error || 'Failed to add subject');
+        } catch {
+          throw new Error(`Server Error (${r.status}): Check your network tab!`);
+        }
+      }
+    } catch (error: any) {
+      console.error('Subject Save Error:', error);
+      alert(`Could not save subject: ${error.message}`); 
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <CrudModal
+        open={isOpen && !confirmOpen}
+        title="Add New Subject" 
+        subtitle="This will become available for mentor assignments."
+        onClose={onClose}
+        maxwidth="max-w-md"
+        footer={
+          <div className="flex gap-3">
+            {hasInput ? (
+              <button 
+                onClick={handleReset} 
+                className="flex-1 px-4 py-2 text-sm font-semibold text-text-brown bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer transition"
+              >
+                Reset Form
+              </button>
+            ) : (
+              <button 
+                onClick={onClose} 
+                className="flex-1 px-4 py-2 text-sm font-semibold text-text-brown bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer transition"
+              >
+                Cancel
+              </button>
+            )}
+            <button 
+              onClick={handleValidate} 
+              disabled={loading || !isFormComplete}
+              className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
+            >
+              {loading ? 'Saving...' : 'Add Subject'}
+            </button>
+          </div>
+        }
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-[10px] font-bold text-text-brown-light uppercase mb-1">Subject Code <span className="text-red-500">*</span></label>
+            <input 
+              type="text" 
+              value={form.code} 
+              onChange={(e) => setForm(f => ({ ...f, code: e.target.value }))} 
+              placeholder="e.g. Math 54" 
+              className={inputClass} 
+            />
+            {errors.code && <p className="mt-1 text-xs text-red-600">{errors.code}</p>}
+          </div>
+          <div>
+            <label className="block text-[10px] font-bold text-text-brown-light uppercase mb-1">Subject Name <span className="text-red-500">*</span></label>
+            <input 
+              type="text" 
+              value={form.name} 
+              onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} 
+              placeholder="e.g. Elementary Analysis II" 
+              className={inputClass} 
+            />
+            {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+          </div>
+        </div>
+      </CrudModal>
+
+      <ConfirmModal
+        isOpen={confirmOpen} 
+        title="Confirm New Subject" 
+        message="This will be added to the list of available subjects."
+        confirmLabel="Save" 
+        confirmClassName="bg-sidebar-green hover:bg-up-green"
+        icon={<div className="w-16 h-16 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center"><FaBook className="text-3xl" /></div>}
+        loading={loading} 
+        onConfirm={handleSave} 
+        onCancel={() => setConfirmOpen(false)}
+      />
+    </>
+  );
+}

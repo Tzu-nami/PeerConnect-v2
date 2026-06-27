@@ -28,14 +28,15 @@ interface Props {
     mentors: Mentor[];
     subjects: Subject[];
     isAuthenticated: boolean;
+    userRole?: string;
 }
 
-export default function MentorsPage({ mentors, subjects, isAuthenticated }: Props) {
+export default function MentorsPage({ mentors, subjects, isAuthenticated, userRole }: Props) {
     return (
         <>
             <MentorHeader />
             <section className="px-6 md:px-20 pb-20">
-                <MentorDirectory mentors={mentors} subjects={subjects} isAuthenticated={isAuthenticated} />
+                <MentorDirectory mentors={mentors} subjects={subjects} isAuthenticated={isAuthenticated} userRole={userRole} />
             </section>
         </>
     );
@@ -71,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 start_time,
                 end_time
             )
-        `),
+        `).eq('is_active', true),
         supabase.from('subjects').select('id, code, name').order('code'),
     ]);
 
