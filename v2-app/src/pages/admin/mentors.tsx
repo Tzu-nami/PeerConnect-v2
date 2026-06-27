@@ -9,6 +9,7 @@ import Pagination from '@/components/ui/Pagination';
 import MentorTable from '@/components/admin/mentors/MentorTable';
 import MentorModal from '@/components/landing/mentors/MentorModal';
 import { FaChalkboardUser, FaCircleCheck, FaHourglass, FaTrophy } from 'react-icons/fa6';
+import { toast } from 'sonner';
 
 // Modals
 import CreateMentorModal from '@/components/admin/mentors/CreateMentorModal';
@@ -150,7 +151,11 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
       <CreateMentorModal 
         isOpen={showCreate} 
         onClose={() => setShowCreate(false)} 
-        onSuccess={handleRefresh} 
+        onSuccess={() => {
+          handleRefresh()
+          setShowCreate(false);
+          toast.success("Mentor registered successfully.");
+        }} 
         subjects={subjects} 
       />
 
@@ -158,20 +163,32 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
         isOpen={!!editMentor} 
         mentor={editMentor} 
         onClose={() => setEditMentor(null)} 
-        onSuccess={handleRefresh} 
+        onSuccess={() => {
+          handleRefresh()
+          setEditMentor(null);
+          toast.success("Mentor updated successfully.");
+        }}  
         subjects={subjects} 
       />
 
       <CreateSubjectModal 
         isOpen={showSubject} 
         onClose={() => setShowSubject(false)} 
-        onSuccess={handleRefresh} 
+        onSuccess={() => {
+          handleRefresh()
+          setShowSubject(false);
+          toast.success("Subject added successfully.");
+        }} 
       />
 
       <DeleteMentorModal 
         mentor={deleteMentor} 
         onClose={() => setDeleteMentor(null)} 
-        onSuccess={handleRefresh} 
+        onSuccess={() => {
+          handleRefresh()
+          setDeleteMentor(null);
+          toast.success("Mentor deleted successfully.");
+        }} 
       />
     </div>
   );
