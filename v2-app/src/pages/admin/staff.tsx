@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next"
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import { useRouter } from "next/router"
 
 // Components
@@ -61,6 +61,20 @@ export default function Staff({ staffList }: { staffList: StaffProfile[] }) {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
     const [selectedStaff, setSelectedStaff] = useState<StaffProfile | null>(null)
 
+    // Open staff modal from URL query
+    useEffect(() => {
+        const staffId = router.query.staffId
+
+        if(staffId && typeof staffId === 'string' && staffList.length > 0) {
+            const found = staffList.find((staff) => staff.id === staffId)
+
+            if(found) {
+                setSelectedStaff(found)
+                setViewModalOpen(true)
+            }
+        }
+    }, [router.query, staffList])
+
     return(
         <>
             {/* Page title */}
@@ -69,58 +83,55 @@ export default function Staff({ staffList }: { staffList: StaffProfile[] }) {
                 <p className="text-xs md:text-sm xl:text-base font-medium text-slate-500 mt-1 mb-3">LRC Registry Staff</p>
             </div>
 
-            <StaffTable staffList={paginated} searchQuery={searchQuery}
-                        onSearch={(q) => { setSearchQuery(q); setCurrentPage(1) }}
-                        onAdd={() => setAddModalOpen(true)}
-                        onView={(staff) => {
-                            setSelectedStaff(staff)
-                            setViewModalOpen(true)
-                        }}
-                        onEdit={(staff) => {
-                            setSelectedStaff(staff)
-                            setEditModalOpen(true)
-                        }}
-                        onDelete={(staff) => {
-                            setSelectedStaff(staff)
-                            setDeleteModalOpen(true)
-                        }}
-                        sortCol={sortCol}
-                        sortDir={sortDir}
-                        onSort={handleSort}
-            />
+            <StaffTable staffList={paginated} searchQuery={searchQuery} sortCol={sortCol} sortDir={sortDir} onSort={handleSort}
+                onSearch={(q) => { setSearchQuery(q); setCurrentPage(1) }}
+                onAdd={() => setAddModalOpen(true)}
+                onView={(staff) => {
+                    setSelectedStaff(staff)
+                    setViewModalOpen(true)
+                }}
+                onEdit={(staff) => {
+                    setSelectedStaff(staff)
+                    setEditModalOpen(true)
+                }}
+                onDelete={(staff) => {
+                    setSelectedStaff(staff)
+                    setDeleteModalOpen(true)
+                }} />
+
             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+
             <AddStaffModal isOpen={addModalOpen} onClose={() => setAddModalOpen(false)}
-                           onSuccess={() => {
-                               router.replace(router.asPath)
-                               toast.success("Staff member added successfully.")
-                           }}
-            />
+               onSuccess={() => {
+                   router.replace(router.asPath)
+                   toast.success("Staff member added successfully.")
+               }} />
+
             <ViewStaffModal isOpen={viewModalOpen} staff={selectedStaff}
-                            onClose={() => {
-                                setViewModalOpen(false)
-                                setSelectedStaff(null)
-                            }}
-            />
+                onClose={() => {
+                    setViewModalOpen(false)
+                    setSelectedStaff(null)
+                }} />
+
             <EditStaffModal isOpen={editModalOpen} staff={selectedStaff}
-                            onSuccess={() => {
-                                router.replace(router.asPath)
-                                toast.success("Staff member updated successfully.")
-                            }}
-                            onClose={() => {
-                                setEditModalOpen(false)
-                                setSelectedStaff(null)
-                            }}
-            />
+                onSuccess={() => {
+                    router.replace(router.asPath)
+                    toast.success("Staff member updated successfully.")
+                }}
+                onClose={() => {
+                    setEditModalOpen(false)
+                    setSelectedStaff(null)
+                }} />
+
             <DeleteStaffModal isOpen={deleteModalOpen} staff={selectedStaff}
-                              onClose={() => {
-                                  setDeleteModalOpen(false)
-                                  setSelectedStaff(null)
-                              }}
-                              onSuccess={() => {
-                                  router.replace(router.asPath)
-                                  toast.success("Staff member deleted successfully.")
-                              }}
-            />
+                onClose={() => {
+                  setDeleteModalOpen(false)
+                  setSelectedStaff(null)
+                }}
+                onSuccess={() => {
+                  router.replace(router.asPath)
+                  toast.success("Staff member deleted successfully.")
+                }} />
         </>
     )
 }
