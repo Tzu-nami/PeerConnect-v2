@@ -1,9 +1,16 @@
 import { GetServerSideProps } from "next"
 
+// Configs
+import { statCardsConfig } from "@/config/statCardsConfig"
+
+// Components
+import StatCard from "@/components/ui/StatCard";
+import GlobalSearch from "@/components/ui/GlobalSearch";
+
 // Types
-import { SessionInfo } from "@/types/session"
-import { Subject } from "@/types/subject"
-import { MentorSearchResult } from "@/types/mentorSearchResult"
+import { SessionList } from "@/types/sessionList"
+import { MentorList } from "@/types/mentorList"
+import { StaffList } from "@/types/staffList"
 import { TopMentor } from "@/types/topMentor"
 import { TopSubject } from "@/types/topSubject"
 import { CollegeActivity } from "@/types/collegeActivity"
@@ -51,10 +58,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .from('booking_details')
             .select('*'),
 
-        // Subject list
+        // Staff details
         supabase
-            .from('subjects')
-            .select('id, code, name'),
+            .from('staff_details')
+            .select('*'),
 
         // Mentor details
         supabase
@@ -78,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const totalSessionsToday = result2.count
     const totalPendingSessions = result3.count
     const totalStudents = result5.count
-    const subjectList = result7.data ?? []
+    const staffList = result7.data ?? []
     const topMentors = result9.data ?? []
     const topSubjects = result10.data ?? []
     const collegeActivity = result11.data ?? []
@@ -95,7 +102,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         : 0
 
     // Booking data
-    const allSessions = (result6.data ?? []).map((booking) => ({
+    const sessionList = (result6.data ?? []).map((booking) => ({
         id: booking.id,
         topic: booking.topic,
         date: booking.date,
@@ -109,7 +116,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }))
 
     // Mentor data
-    const allMentors = (result8.data ?? []).map((mentor) => ({
+    const mentorList = (result8.data ?? []).map((mentor) => ({
         id: mentor.id,
         mentorName: mentor.mentor_name,
         email: mentor.email,
@@ -124,9 +131,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             totalPendingSessions: totalPendingSessions ?? 0,
             totalFeedbackAverage: isNaN(totalFeedbackAverage) ? 0 : totalFeedbackAverage,
             totalStudents: totalStudents ?? 0,
-            subjectList,
-            allSessions,
-            allMentors,
+            staffList,
+            sessionList,
+            mentorList,
             topMentors,
             topSubjects,
             collegeActivity,
@@ -141,24 +148,49 @@ interface AdminDashboardProps {
     totalPendingSessions: number
     totalStudents: number
     totalFeedbackAverage: number
-    subjectList: Subject[]
-    allSessions: SessionInfo[]
-    allMentors: MentorSearchResult[]
+    staffList: StaffList[]
+    sessionList: SessionList[]
+    mentorList: MentorList[]
     topMentors: TopMentor[]
     topSubjects: TopSubject[]
     collegeActivity: CollegeActivity[]
     monthlyTrends: MonthlyTrend[]
 }
 
-export default function AdminDashboard({ totalMentors, totalSessionsToday, totalPendingSessions, totalFeedbackAverage, totalStudents, subjectList, allSessions, allMentors, topMentors, topSubjects, collegeActivity, monthlyTrends }: AdminDashboardProps) {
+export default function AdminDashboard({ totalMentors, totalSessionsToday, totalPendingSessions, totalFeedbackAverage, totalStudents, staffList, sessionList, mentorList, topMentors, topSubjects, collegeActivity, monthlyTrends }: AdminDashboardProps) {
+    const cards = statCardsConfig['admin'].cards
+    const gridCols = statCardsConfig['admin'].gridCols
+    const data: Record<string, number | string> = {
+        totalMentors,
+        totalStudents,
+        totalSessionsToday,
+        totalPendingSessions,
+        totalFeedbackAverage: totalFeedbackAverage.toFixed(2) }
+
     return (
-        <div>
-            <h1>Hello Admin</h1>
-            <p>Total Mentors: {totalMentors}</p>
-            <p>Total Sessions Today: {totalSessionsToday}</p>
-            <p>Total Pending Sessions: {totalPendingSessions}</p>
-            <p>Total Feedback Average: {totalFeedbackAverage.toFixed(2)}</p>
-            <p>Total Students: {totalStudents}</p>
-        </div>
+        <>
+            <GlobalSearch mentorList={mentorList} sessionList={sessionList} staffList={staffList} />
+            <div className={`grid ${gridCols} gap-4 w-full`}>
+                {cards.map((card) => {
+                    return (
+                        <StatCard key={card.dataKey} label={card.label} value={data[card.dataKey]} href={card.href} color={card.color} icon={card.icon} />
+
+                    )
+                })}
+            </div>
+            <div>
+                <h1>Hello Admin</h1>
+                <p>Total Mentors: {totalMentors}</p>
+                <p>Total Sessions Today: {totalSessionsToday}</p>
+                <p>Total Pending Sessions: {totalPendingSessions}</p>
+                <p>Total Feedback Average: {totalFeedbackAverage.toFixed(2)}</p>
+                <p>Total Students: {totalStudents}</p>
+
+
+
+
+
+            </div>
+        </>
     )
 }
