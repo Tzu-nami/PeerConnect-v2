@@ -1,4 +1,4 @@
-export interface SessionInfo {
+export interface SessionList {
     id: string
     topic: string
     date: string

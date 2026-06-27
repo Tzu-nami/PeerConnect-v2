@@ -1,4 +1,4 @@
-export interface Subject {
+export interface SubjectList {
     id: number
     code: string
     name: string

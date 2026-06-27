@@ -1,4 +1,4 @@
-export interface MentorSearchResult {
+export interface MentorList {
     id: string
     mentor_name: string
     email: string
