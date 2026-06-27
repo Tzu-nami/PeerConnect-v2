@@ -25,6 +25,8 @@
     /* Others */
     --color-cream:                #FAF8F2;
     --color-cream-dark:           #F0EDE4;
+    --color-cream-complement:     #F2FAF8;
+    --color-cream-triadic:        #F8F2FA;
     --color-cream-border:         #D6CFC0;
     --color-cream-hover:          #F5F2EB;
     --color-cream-dot:            #C4BDB0;
@@ -107,6 +109,7 @@ body {
     border-radius: 1rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     overflow: hidden;
+    max-width: 42rem;
 }
 
 /* ─────────────────────────────────────────────
@@ -181,4 +184,27 @@ body {
     border: 1px dashed #e2e8f0;
     border-radius: 4px;
     height: 28px;
+}
+
+.no-spinners::-webkit-inner-spin-button,
+.no-spinners::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.no-spinners {
+    -moz-appearance: textfield;
+}
+
+/* Modal scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-up-maroon rounded-full;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-up-maroon-dark;
 }
