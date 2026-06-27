@@ -169,7 +169,8 @@ export default function AdminDashboard({ totalMentors, totalSessionsToday, total
 
     return (
         <>
-            <GlobalSearch mentorList={mentorList} sessionList={sessionList} staffList={staffList} />
+            <GlobalSearch mentorList={mentorList} sessionList={sessionList} staffList={staffList}
+                          role="admin" placeholder="Search mentors, staff, or sessions..." />
             <div className={`grid ${gridCols} gap-4 w-full`}>
                 {cards.map((card) => {
                     return (
