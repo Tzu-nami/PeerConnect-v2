@@ -22,7 +22,7 @@ export default function StaffTableRow({ staff, onView, onEdit, onDelete }: Staff
     const fullName = `${staff.lastName}, ${staff.firstName} ${mi ? `${mi}.` : ''}`
 
     return(
-        <tr onClick={() => onView(staff)} className="border-b border-cream-border hover:bg-stone-50 transition cursor-pointer group">
+        <tr onClick={() => onView(staff)} className="border-b border-cream-border hover:bg-cream-hover transition cursor-pointer group">
             <td className="px-5 py-6 text-sm font-bold text-text-brown">{fullName}</td>
             <td className="px-5 py-6 text-sm text-text-brown-light">{role}</td>
             <td className="px-5 py-6 text-sm text-text-brown-light">{staff.email}</td>
