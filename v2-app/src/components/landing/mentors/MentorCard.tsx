@@ -1,4 +1,5 @@
 import type { Mentor } from "@/types/mentor";
+import { FaChevronRight } from "react-icons/fa6";
 
 interface Props {
     mentor: Mentor;
@@ -78,7 +79,7 @@ export default function MentorCard({ mentor, onClick }: Props) {
                 </div>
                 <span className="text-[11px] font-bold text-slate-400 group-hover:text-sidebar-green transition-colors flex items-center gap-1 tracking-widest whitespace-nowrap">
                     View
-                    <i className="fa-solid fa-chevron-right text-[9px] transition-transform group-hover:translate-x-1"></i>
+                    <FaChevronRight className="text-[9px] transition-transform group-hover:translate-x-1" />
                 </span>
             </div>
         </div>

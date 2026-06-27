@@ -2,7 +2,7 @@ import type { Mentor } from "@/types/mentor";
 import MentorAvailGrid from "./MentorAvailGrid";
 import ModalBase from "@/components/ui/ModalBase";
 import Link from "next/link";
-import { FaXmark } from "react-icons/fa6";
+import { FaCalendarCheck, FaRightToBracket, FaXmark } from "react-icons/fa6";
 
 interface Props {
     mentor: Mentor | null;
@@ -80,7 +80,7 @@ export default function MentorModal({ mentor, onClose, isAuthenticated = false, 
                             href={mentor.bookingUrl || '/bookings'}
                             className="block w-full text-center bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
                         >
-                            <i className="fa-solid fa-calendar-check mr-2"></i>
+                            <FaCalendarCheck className="mr-2" />
                                 Book a Session
                         </Link>
                     ) : (
@@ -88,7 +88,7 @@ export default function MentorModal({ mentor, onClose, isAuthenticated = false, 
                             href="/login" 
                             className="block w-full text-center bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
                         >
-                            <i className="fa-solid fa-right-to-bracket mr-2"></i>
+                            <FaRightToBracket className="mr-2" />
                                 Log in to Book a Session
                         </Link>
                     )}

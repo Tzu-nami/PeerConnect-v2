@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 import { createClient as createBrowserClient } from '@/utils/supabase/client';
+import { FaPenToSquare } from 'react-icons/fa6';
 
 import CrudModal from '@/components/ui/CrudModal';
 import ConfirmModal from '@/components/ui/ConfirmModal';
@@ -198,7 +199,7 @@ export default function EditMentorModal({ isOpen, onClose, onSuccess, subjects, 
       <ConfirmModal
         isOpen={confirmOpen} title="Confirm Changes" message="This will update the mentor's profile information."
         confirmLabel="Save" confirmClassName="bg-blue-600 hover:bg-blue-700"
-        icon={<div className="w-16 h-16 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center"><i className="fa-solid fa-pen-to-square text-3xl"></i></div>}
+        icon={<div className="w-16 h-16 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center"><FaPenToSquare className="text-3xl" /></div>}
         loading={loading} onConfirm={handleSave} onCancel={() => setConfirmOpen(false)}
       />
     </>

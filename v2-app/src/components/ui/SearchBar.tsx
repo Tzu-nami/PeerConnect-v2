@@ -1,3 +1,5 @@
+import { FaSearch } from "react-icons/fa";
+
 interface SearchBarProps {
     value: string;
     onChange: (query: string) => void;
@@ -13,7 +15,7 @@ export default function SearchBar({
 }: SearchBarProps) {
     return (
         <div className={`relative rounded-lg ${className}`}>
-            <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
             <input
                 type="text"
                 value={value}

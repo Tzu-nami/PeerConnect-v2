@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { createClient as createBrowserClient } from '@/utils/supabase/client';
+import { FaUserPlus } from 'react-icons/fa6';
 
 import CrudModal from '@/components/ui/CrudModal';
 import ConfirmModal from '@/components/ui/ConfirmModal';
@@ -119,7 +120,7 @@ export default function CreateMentorModal({ isOpen, onClose, onSuccess, subjects
       if (formState.avatarFile) {
         avatarUrl = await uploadAvatar(formState.avatarFile, formState.verifiedUser.id);
       }
-      const r = await fetch('/api/admin/mentors', { 
+      const r = await fetch('/api/admin/mentors/mentors', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -178,8 +179,8 @@ export default function CreateMentorModal({ isOpen, onClose, onSuccess, subjects
 
       <ConfirmModal
         isOpen={confirmOpen} title="Confirm Mentor Registration" message="This will register the student as a peer mentor and allow them access to the mentor module."
-        confirmLabel="Save" confirmClassName="bg-sidebar-green hover:bg-up-green"
-        icon={<div className="w-16 h-16 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center"><i className="fa-solid fa-user-plus text-3xl"></i></div>}
+        confirmLabel="Save" confirmClassName="bg-green-700 hover:bg-sidebar-green"
+        icon={<div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center"><FaUserPlus className="text-3xl" /></div>}
         loading={loading} onConfirm={handleSave} onCancel={() => setConfirmOpen(false)}
       />
     </>
