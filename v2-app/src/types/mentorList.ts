@@ -1,7 +1,7 @@
 export interface MentorList {
     id: string
-    mentor_name: string
+    mentorName: string
     email: string
-    year_level: string
-    program: string
+    yearLevel: string
+    degreeProgram: string
 }
