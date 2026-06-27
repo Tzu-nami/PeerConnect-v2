@@ -11,9 +11,10 @@ interface Props {
     mentors: Mentor[];
     subjects: Subject[];
     isAuthenticated: boolean;
+    userRole?: string;
 }
 
-export default function MentorDirectory({ mentors, subjects, isAuthenticated }: Props) {
+export default function MentorDirectory({ mentors, subjects, isAuthenticated, userRole }: Props) {
     const [searchQuery, setSearchQuery]         = useState('');
     const [selectedDay, setSelectedDay]         = useState('');
     const [selectedSubject, setSelectedSubject] = useState('');
@@ -103,6 +104,7 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated }: 
             mentor={selectedMentor}
             onClose={() => setSelectedMentor(null)}
             isAuthenticated={isAuthenticated}
+            hideFooter={userRole === 'admin'}
         />
         </div>
     );

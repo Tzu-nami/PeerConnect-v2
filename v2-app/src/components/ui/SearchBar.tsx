@@ -20,7 +20,7 @@ export default function SearchBar({
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
                 autoComplete="off"
-                className="pl-8 pr-3 py-1.5 text-xs font-medium text-text-brown placeholder-gray-400 border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 w-full h-[36px] transition-shadow"
+                className="pl-8 pr-3 py-1.5 text-xs font-medium text-text-brown placeholder-gray-500 border border-cream-border rounded-lg bg-cream-complement outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 w-full h-[36px] transition-shadow"
             />
         </div>
     );
