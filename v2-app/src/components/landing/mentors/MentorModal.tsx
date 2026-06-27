@@ -2,14 +2,16 @@ import type { Mentor } from "@/types/mentor";
 import MentorAvailGrid from "./MentorAvailGrid";
 import ModalBase from "@/components/ui/ModalBase";
 import Link from "next/link";
+import { FaXmark } from "react-icons/fa6";
 
 interface Props {
     mentor: Mentor | null;
     onClose: () => void;
-    isAuthenticated: boolean;
+    isAuthenticated?: boolean;
+    hideFooter?: boolean;
 }
 
-export default function MentorModal({ mentor, onClose, isAuthenticated }: Props) {
+export default function MentorModal({ mentor, onClose, isAuthenticated = false, hideFooter = false }: Props) {
     if (!mentor) return null;
 
     const fullName = `${mentor.lastName}, ${mentor.firstName} ${mentor.middleInitial || ''}`.trim();
@@ -37,7 +39,7 @@ export default function MentorModal({ mentor, onClose, isAuthenticated }: Props)
                     <p className="text-white/60 text-xs mt-1">{mentor.email}</p>
                 </div>
                 <button onClick={onClose} className="text-white/50 hover:text-white transition flex-shrink-0 mt-1">
-                    <i className="fa-solid fa-xmark text-xl"></i>
+                    <FaXmark className="text-xl" />
                 </button>
             </div>
 
@@ -71,25 +73,27 @@ export default function MentorModal({ mentor, onClose, isAuthenticated }: Props)
             </div>
 
             {/* Footer */}
-            <div className="flex-shrink-0 px-6 py-4 bg-white border-t border-gray-100">
-                {isAuthenticated ? (
-                    <Link
-                        href={mentor.bookingUrl || '/bookings'}
-                        className="block w-full text-center bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
-                    >
-                        <i className="fa-solid fa-calendar-check mr-2"></i>
-                            Book a Session
-                    </Link>
-                ) : (
-                    <Link
-                        href="/login" 
-                        className="block w-full text-center bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
-                    >
-                        <i className="fa-solid fa-right-to-bracket mr-2"></i>
-                            Log in to Book a Session
-                    </Link>
-                )}
-            </div>
+            {!hideFooter && (
+                <div className="flex-shrink-0 px-6 py-4 bg-white border-t border-gray-100">
+                    {isAuthenticated ? (
+                        <Link
+                            href={mentor.bookingUrl || '/bookings'}
+                            className="block w-full text-center bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
+                        >
+                            <i className="fa-solid fa-calendar-check mr-2"></i>
+                                Book a Session
+                        </Link>
+                    ) : (
+                        <Link
+                            href="/login" 
+                            className="block w-full text-center bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
+                        >
+                            <i className="fa-solid fa-right-to-bracket mr-2"></i>
+                                Log in to Book a Session
+                        </Link>
+                    )}
+                </div>
+            )}
         </ModalBase>
     );
 }
