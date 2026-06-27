@@ -42,7 +42,7 @@ export default function ModuleLayout({ children }: { children: React.ReactNode }
             <ModuleSidebar userRole={userRole} collapsed={collapsed} setCollapsed={setCollapsed} />
             <div className="flex flex-col flex-1">
                 <ModuleNavbar userName={userName} userFullName={userFullName} userEmail={userEmail} userRole={userRole} userAvatar={userAvatar} />
-                <main className="flex-1 p-7">
+                <main className="flex-1 px-7 py-5">
                     {children}
                 </main>
             </div>
