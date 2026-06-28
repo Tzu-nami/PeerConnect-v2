@@ -8,7 +8,7 @@ export interface StatCardProps {
 
 export default function StatCard({ label, value, icon, color, iconColor }: StatCardProps) {
     return (
-        <div className={`bg-cream-complement p-5 rounded-xl shadow-md border border-cream-border border-l-4 ${color} flex items-center gap-4`}>
+        <div className={`bg-white p-5 rounded-xl shadow-md border border-cream-border border-l-4 ${color} flex items-center gap-4`}>
             <div className={`text-2xl flex-shrink-0 ${iconColor}`}>{icon}</div>
 
             <div className="min-w-0 flex-1">

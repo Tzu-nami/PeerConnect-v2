@@ -82,45 +82,43 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
   return (
     <div>
       {/* Header and stat cards */}
-      <div className="border-b border-cream-border mb-6 pb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div className="flex-shrink-0">
-          <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">
-            Mentor Management
-          </h1>
-          <p className="text-xs md:text-sm xl:text-base font-medium text-slate-500 mt-1">
-            LRC Registry of Peer Mentors
-          </p>
+      <div className="border-cream-border">
+        <div>
+          <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">Mentor Management</h1>
+          <p className="text-xs md:text-sm xl:text-base font-medium text-slate-500 mt-1 mb-3">LRC Registry of Peer Mentors</p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full lg:w-auto flex-grow lg:max-w-4xl">
-          <StatCard 
-            label="Total Mentors" 
-            value={stats.total} 
-            icon={<FaChalkboardUser />} 
-            color="border-slate-400" 
-            iconColor="text-slate-500" 
-          />
-          <StatCard 
-            label="Accepted This Week" 
-            value={stats.acceptedThisWeek} 
-            icon={<FaCircleCheck />} 
-            color="border-green-600" 
-            iconColor="text-green-600" 
-          />
-          <StatCard 
-            label="Pending This Week" 
-            value={stats.pendingThisWeek} 
-            icon={<FaHourglass />}
-            color="border-yellow-500" 
-            iconColor="text-yellow-500" 
-          />
-          <StatCard 
-            label="Most Active" 
-            value={stats.mostActive} 
-            icon={<FaTrophy />} 
-            color="border-purple-600" 
-            iconColor="text-purple-600" 
-          />
-        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full">
+        <StatCard 
+          label="Total Mentors" 
+          value={stats.total} 
+          icon={<FaChalkboardUser />} 
+          color="border-slate-400" 
+          iconColor="text-slate-500" 
+        />
+        <StatCard 
+          label="Accepted This Week" 
+          value={stats.acceptedThisWeek} 
+          icon={<FaCircleCheck />} 
+          color="border-green-600" 
+          iconColor="text-green-600" 
+        />
+        <StatCard 
+          label="Pending This Week" 
+          value={stats.pendingThisWeek} 
+          icon={<FaHourglass />}
+          color="border-yellow-500" 
+          iconColor="text-yellow-500" 
+        />
+        <StatCard 
+          label="Most Active" 
+          value={stats.mostActive} 
+          icon={<FaTrophy />} 
+          color="border-purple-600" 
+          iconColor="text-purple-600" 
+        />
       </div>
 
       {/* Table */}

@@ -80,7 +80,7 @@ export default function AvailabilityScheduler({ rows, onChange, errors = [] }: P
                                 <button
                                     type="button"
                                     onClick={() => removeRow(index)}
-                                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition"
+                                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition cursor-pointer"
                                     title="Remove time slot"
                                 >
                                     <FaXmark className="text-xs" />
