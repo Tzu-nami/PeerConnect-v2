@@ -56,7 +56,10 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
         `${m.firstName} ${m.lastName}`.toLowerCase().includes(q) ||
         m.email.toLowerCase().includes(q) ||
         m.student_num.includes(q) ||
-        m.degreeProgram.toLowerCase().includes(q)
+        m.degreeProgram.toLowerCase().includes(q) ||
+        m.subjects?.some((sub) => 
+          sub.code.toLowerCase().includes(q)
+        )
       )
       .sort((a, b) => {
         const va = sortCol === 'name' ? `${a.lastName}${a.firstName}` : (a as any)[sortCol] ?? '';
