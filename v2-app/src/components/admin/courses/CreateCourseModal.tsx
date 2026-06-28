@@ -3,7 +3,7 @@ import CrudModal from '@/components/ui/CrudModal';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { FaBook } from 'react-icons/fa6';
 
-interface CreateSubjectModalProps {
+interface CreateCourseModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
@@ -11,7 +11,7 @@ interface CreateSubjectModalProps {
 
 const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition";
 
-export default function CreateSubjectModal({ isOpen, onClose, onSuccess }: CreateSubjectModalProps) {
+export default function CreateCourseModal({ isOpen, onClose, onSuccess }: CreateCourseModalProps) {
   const [form, setForm] = useState({ code: '', name: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [confirmOpen, setConfirmOpen] = useState(false);

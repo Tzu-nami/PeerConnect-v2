@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 // Modals
 import CreateMentorModal from '@/components/admin/mentors/CreateMentorModal';
 import EditMentorModal from '@/components/admin/mentors/EditMentorModal';
-import CreateSubjectModal from '@/components/admin/courses/CreateSubjectModal';
+import CreateCourseModal from '@/components/admin/courses/CreateCourseModal';
 import DeleteMentorModal from '@/components/admin/mentors/DeleteMentorModal';
 
 // Data fetch
@@ -172,7 +172,7 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
         subjects={subjects} 
       />
 
-      <CreateSubjectModal 
+      <CreateCourseModal 
         isOpen={showSubject} 
         onClose={() => setShowSubject(false)} 
         onSuccess={() => {
