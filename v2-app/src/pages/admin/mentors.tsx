@@ -90,7 +90,7 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full mt-5">
         <StatCard 
           label="Total Mentors" 
           value={stats.total} 
