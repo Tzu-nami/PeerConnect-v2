@@ -10,7 +10,7 @@ interface MentorTableRowProps {
 
 export default function MentorTableRow({ mentor, onView, onEdit, onDelete }: MentorTableRowProps) {
     return (
-        <tr onClick={() => onView(mentor)} className="border-b border-cream-border hover:bg-cream-hover transition cursor-pointer group">
+        <tr onClick={() => onView(mentor)} className="border-t border-cream-border hover:bg-cream-hover transition cursor-pointer group">
             {/* Info */}
             <td className="px-5 py-4 align-middle">
                 <p className="font-bold text-text-brown text-sm truncate">
