@@ -35,12 +35,12 @@ export default function MentorTableRow({ mentor, onView, onEdit, onDelete }: Men
             <td className="px-5 py-4 align-middle">
                 <div className="flex items-center flex-wrap gap-1">
                     {mentor.subjects.slice(0, 3).map(s => (
-                        <span key={s.id} className="bg-cream-complement text-text-brown px-2 py-0.5 rounded text-[10px] font-bold border border-cream-border w-17 truncate text-center">
+                        <span key={s.id} className="bg-cream-complement text-text-complement px-2 py-0.5 rounded text-[10px] font-bold border border-cream-border w-17 truncate text-center">
                             {s.code}
                         </span>
                     ))}
                     {mentor.subjects.length > 3 && (
-                        <span className="bg-cream-complement text-text-brown px-2 py-0.5 rounded text-[10px] font-bold border border-cream-border" title={mentor.subjects.slice(3).map(s => s.code).join(', ')}>
+                        <span className="bg-cream-complement text-text-complement px-2 py-0.5 rounded text-[10px] font-bold border border-cream-border" title={mentor.subjects.slice(3).map(s => s.code).join(', ')}>
                             +{mentor.subjects.length - 3}
                         </span>
                     )}
