@@ -25,13 +25,14 @@
     /* Others */
     --color-cream:                #FAF8F2;
     --color-cream-dark:           #F0EDE4;
-    --color-cream-complement:     #F2FAF8;
+    --color-cream-complement:     #E6FEFF;
     --color-cream-triadic:        #F8F2FA;
     --color-cream-border:         #D6CFC0;
     --color-cream-hover:          #F5F2EB;
     --color-cream-dot:            #C4BDB0;
     --color-text-brown:           #554444;
     --color-text-brown-light:     #998888;
+    --color-text-complement:      #006F75;
     --color-btn-brown:            #3D2B2B;
     --color-btn-brown-hover:      #2A1E1E;
     --color-sidebar-green:        #1A3C2F;

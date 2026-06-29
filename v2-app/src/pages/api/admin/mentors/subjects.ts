@@ -7,25 +7,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const supabase = createServerClient({ req, res } as any);
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return res.status(401).json({ error: 'Unauthorized' });
-    
-    if (!session) {
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
 
     if (req.method === 'POST') {
         try {
             const { code, name } = req.body;
 
-            const { error } = await supabase
-            .from('subjects')
-            .insert([{ code: code.trim(), name: name.trim() }]);
+            const { data: existing } = await supabase
+            .from('subjects').select('id').eq('code', code.trim()).single();
 
-            if (error) {
-            // Check if subject already exists
-            if (error.code === '23505') {
-                throw new Error(`The subject "${code}" already exists in the registry.`);
-            }
-            throw error;
+            if (existing) {
+            return res.status(409).json({ error: 'Subject code already exists.' });
             }
             return res.status(200).json({ ok: true });
             

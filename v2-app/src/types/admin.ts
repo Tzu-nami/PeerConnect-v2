@@ -29,3 +29,20 @@ export interface AdminMentor {
     degreeProgram: string;
     college: string;
 }
+
+export interface CoursesMentor {
+    name: string;
+    email: string;
+    avatar: string | null;
+    yearLevel: string;
+    degreeProgram: string;
+}
+
+export interface AdminCourse {
+    id: string;
+    code: string;
+    name: string;
+    mentors: CoursesMentor[];
+    mentorCount: number;
+}
+
