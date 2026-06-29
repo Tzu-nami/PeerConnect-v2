@@ -88,12 +88,12 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
     const hasResults = filteredMentors.length > 0 || filteredSessions.length > 0 || filteredStaff.length > 0 || filteredSubjects.length > 0
 
     return(
-        <div className="relative bg-white rounded-xl shadow-sm border border-stone-100 mb-4">
+        <div className="relative rounded-xl shadow-sm border border-cream-border mb-4">
             <div className="relative p-3">
                 <FaSearch className="absolute text-stone-400 left-[24px] top-1/2 -translate-y-1/2" />
                 <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onFocus={() => setShowDropdown(true)}
                        type="text" placeholder={placeholder} autoComplete="off"
-                       className="w-full pl-[34px] rounded-lg border placeholder-stone-400 border-cream-border text-sm font-medium focus:ring-1 focus:ring-text-brown"/>
+                       className=" w-full pl-[34px] rounded-lg border placeholder-stone-400 border-cream-border text-sm font-medium focus:ring-1 focus:ring-text-brown"/>
 
                 {searchQuery && (
                     <button onClick={() => { setSearchQuery(''); setShowDropdown(false)}}

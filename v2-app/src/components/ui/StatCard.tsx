@@ -11,7 +11,7 @@ export interface StatCardProps {
 
 export default function StatCard({ label, value, icon, borderColor, iconColor, href }: StatCardProps) {
     const content = (
-        <div className={`bg-white p-5 rounded-xl shadow-sm border-l-4 ${borderColor} flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer`}>
+        <div className={`p-5 rounded-xl shadow-sm border border-cream-border border-l-4 ${borderColor} flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer`}>
             <div className={`text-3xl flex-shrink-0 ${iconColor}`}>{icon}</div>
             <div className="min-w-0 flex-1">
                 <h3 className="text-xs font-bold text-text-brown-light uppercase leading-none truncate" title={label}>

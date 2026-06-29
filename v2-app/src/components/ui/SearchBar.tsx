@@ -14,7 +14,7 @@ export default function SearchBar({
     className = "w-56"
 }: SearchBarProps) {
     return (
-        <div className={`relative rounded-lg ${className}`}>
+        <div className={`relative rounded-lg ${className} flex items-center`}>
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
             <input
                 type="text"
