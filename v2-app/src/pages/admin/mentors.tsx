@@ -95,29 +95,29 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
           label="Total Mentors" 
           value={stats.total} 
           icon={<FaChalkboardUser />} 
-          color="border-slate-400" 
-          iconColor="text-slate-500" 
+          borderColor="border-green-600"
+          iconColor="text-green-600"
         />
         <StatCard 
           label="Accepted This Week" 
           value={stats.acceptedThisWeek} 
-          icon={<FaCircleCheck />} 
-          color="border-green-600" 
-          iconColor="text-green-600" 
+          icon={<FaCircleCheck />}
+          borderColor="border-blue-600"
+          iconColor="text-blue-600"
         />
         <StatCard 
           label="Pending This Week" 
           value={stats.pendingThisWeek} 
           icon={<FaHourglass />}
-          color="border-yellow-500" 
+          borderColor="border-yellow-500"
           iconColor="text-yellow-500" 
         />
         <StatCard 
           label="Most Active" 
           value={stats.mostActive} 
-          icon={<FaTrophy />} 
-          color="border-purple-600" 
-          iconColor="text-purple-600" 
+          icon={<FaTrophy />}
+          borderColor="border-red-600"
+          iconColor="text-red-600"
         />
       </div>
 
