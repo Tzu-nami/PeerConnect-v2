@@ -4,6 +4,7 @@ import MentorFilters from './MentorFilters';
 import MentorCard from './MentorCard';
 import MentorModal from './MentorModal';
 import Pagination from '@/components/ui/Pagination';
+import { FaChalkboardUser } from 'react-icons/fa6';
 
 const PAGE_SIZE = 8;
 
@@ -11,9 +12,10 @@ interface Props {
     mentors: Mentor[];
     subjects: Subject[];
     isAuthenticated: boolean;
+    userRole?: string;
 }
 
-export default function MentorDirectory({ mentors, subjects, isAuthenticated }: Props) {
+export default function MentorDirectory({ mentors, subjects, isAuthenticated, userRole }: Props) {
     const [searchQuery, setSearchQuery]         = useState('');
     const [selectedDay, setSelectedDay]         = useState('');
     const [selectedSubject, setSelectedSubject] = useState('');
@@ -69,7 +71,7 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated }: 
         {/* Empty state */}
         {filteredMentors.length === 0 && (
             <div className="bg-white rounded-xl border border-gray-100 py-20 text-center shadow-sm">
-            <i className="fa-solid fa-chalkboard-user text-4xl text-gray-300 mb-4 block"></i>
+            <FaChalkboardUser className="text-4xl text-gray-300 mb-4 block" />
             <p className="font-medium text-gray-500">No mentors found.</p>
             <p className="text-xs mt-1 text-gray-400">Try adjusting your search or filter.</p>
             </div>
@@ -103,6 +105,7 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated }: 
             mentor={selectedMentor}
             onClose={() => setSelectedMentor(null)}
             isAuthenticated={isAuthenticated}
+            hideFooter={userRole === 'admin'}
         />
         </div>
     );

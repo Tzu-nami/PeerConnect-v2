@@ -9,6 +9,7 @@ interface ModalBaseProps {
     children: React.ReactNode
     closeOnOutsideClick?: boolean
     closeOnEscape?: boolean
+    maxWidth?: 'max-w-xl' | 'max-w-4xl' | 'max-w-md'
 }
 
 export default function ModalBase({
@@ -16,7 +17,8 @@ export default function ModalBase({
     onClose,
     children,
     closeOnOutsideClick = true,
-    closeOnEscape = true
+    closeOnEscape = true,
+    maxWidth = 'max-w-4xl'
 }: ModalBaseProps) {
 
     const mountedRef = useRef(false)
@@ -50,7 +52,7 @@ export default function ModalBase({
             onClick={() => { if (closeOnOutsideClick) onClose() }}
         >
             <div
-                className="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+                className={`bg-white ${maxWidth} w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col`}
                 style={{ maxHeight: '90vh' }}
                 onClick={(e) => e.stopPropagation()}
             >

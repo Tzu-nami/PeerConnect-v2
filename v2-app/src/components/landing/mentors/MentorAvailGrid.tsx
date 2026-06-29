@@ -6,9 +6,32 @@ interface Props {
     schedule: WeekSchedule;
 }
 
+const parseTime = (timeStr: string) => {
+    const [time, period] = timeStr.trim().split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+    
+    if (period?.toUpperCase() === 'PM' && hours !== 12) {
+        hours += 12;
+    } else if (period?.toUpperCase() === 'AM' && hours === 12) {
+        hours = 0;
+    }
+    
+    return hours * 60 + (minutes || 0);
+};
+
 export default function MentorAvailGrid({ schedule }: Props) {
     return (
         <div>
+            <p className="text-[12px] mt-3 flex items-center justify-left gap-4">
+                <span>
+                    <span className="inline-block w-3 h-3 rounded bg-day-available mr-1 align-middle"></span>
+                    Available
+                </span>
+                <span>
+                    <span className="inline-block w-3 h-3 rounded border border-dashed border-gray-200 bg-day-unavailable mr-1 align-middle"></span>
+                    Unavailable
+                </span>
+            </p>
             <div className="avail-grid">
                 {DAYS.map((day) => (
                     <div key={day}>
@@ -19,7 +42,7 @@ export default function MentorAvailGrid({ schedule }: Props) {
                         {/* Slots */}
                         <div className="avail-day-col">
                             {schedule[day] ? (
-                                schedule[day]!.slots.map((slot, i) => (
+                                schedule[day]!.slots.sort((a, b) => parseTime(a.start) - parseTime(b.start)).map((slot, i) => (
                                     <div key={i}
                                         className="avail-slot">
                                             {slot.start}<br />{slot.end}
@@ -32,17 +55,6 @@ export default function MentorAvailGrid({ schedule }: Props) {
                     </div>
                 ))}
             </div>
-
-            <p className="text-[12px] mt-3 flex items-center justify-center gap-4">
-                <span>
-                    <span className="inline-block w-3 h-3 rounded bg-day-available mr-1 align-middle"></span>
-                    Available
-                </span>
-                <span>
-                    <span className="inline-block w-3 h-3 rounded border border-dashed border-gray-200 bg-day-unavailable mr-1 align-middle"></span>
-                    Unavailable
-                </span>
-            </p>
         </div>
     );
 }

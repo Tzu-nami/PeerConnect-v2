@@ -23,7 +23,7 @@ export default function FeedbackTableRow({
   return (
     <tr
       onClick={() => onView(feedback)}
-      className="border-b border-cream-border hover:bg-cream-hover transition cursor-pointer group"
+      className="border-t border-cream-border hover:bg-cream-hover transition cursor-pointer group"
     >
       <td className="px-5 py-6 text-xs font-semibold text-text-brown">
         {feedback.date_formatted}

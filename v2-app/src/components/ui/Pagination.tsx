@@ -1,3 +1,5 @@
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+
 interface PaginationProps {
     currentPage: number;
     totalPages: number;
@@ -42,7 +44,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer">
-                    <i className="fa-solid fa-chevron-left text-[10px]"></i>
+                    <FaChevronLeft className="text-[10px]" />
             </button>
 
             {/* Pages */}
@@ -77,7 +79,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer">
-                    <i className="fa-solid fa-chevron-right text-[10px]"></i>
+                    <FaChevronRight className="text-[10px]" />
             </button>
         </div>
     );
