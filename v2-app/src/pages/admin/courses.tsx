@@ -32,6 +32,7 @@ export default function AdminCoursesPage({ initialSubjects }: CourseProps) {
     const [sortCol, setSortCol] = useState('code');
     const [sortDir, setSortDir] = useState<'asc'|'desc'>('asc');
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedMentor, setSelectedMentor] = useState('');
 
     // Modal
     const [showCreate, setShowCreate] = useState(false);
@@ -40,10 +41,23 @@ export default function AdminCoursesPage({ initialSubjects }: CourseProps) {
     const [viewSubject, setViewSubject] = useState<AdminCourse | null>(null);
 
     // Filters
+    const uniqueMentors = useMemo(() => {
+        const mentorsSet = new Set<string>();
+        initialSubjects.forEach(sub => {
+            sub.mentors.forEach(m => mentorsSet.add(m.name));
+        });
+        return Array.from(mentorsSet).sort();
+    }, [initialSubjects]);
+
     const filtered = useMemo(() => {
         const q = search.toLowerCase();
         return initialSubjects
-        .filter((s) => !q || s.code.toLowerCase().includes(q) || s.name.toLowerCase().includes(q))
+        .filter((s) => {
+            const matchesSearch = !q || s.code.toLowerCase().includes(q) || s.name.toLowerCase().includes(q);
+            const matchesMentor = !selectedMentor || s.mentors.some(m => m.name === selectedMentor);
+
+            return matchesSearch && matchesMentor;
+        })
         .sort((a, b) => {
             let va: any = a[sortCol as keyof AdminCourse];
             let vb: any = b[sortCol as keyof AdminCourse];
@@ -54,7 +68,7 @@ export default function AdminCoursesPage({ initialSubjects }: CourseProps) {
             if (va > vb) return sortDir === 'asc' ? 1 : -1;
             return 0;
         });
-    }, [initialSubjects, search, sortCol, sortDir]);
+    }, [initialSubjects, search, selectedMentor, sortCol, sortDir]);
 
     // Pagination
     const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
@@ -86,6 +100,9 @@ export default function AdminCoursesPage({ initialSubjects }: CourseProps) {
                 totalCount={filtered.length}
                 searchQuery={search}
                 onSearch={(q) => { setSearch(q); setCurrentPage(1); }}
+                selectedMentor={selectedMentor}
+                availableMentors={uniqueMentors}
+                onMentorSelect={(mentorName) => { setSelectedMentor(mentorName); setCurrentPage(1); }}
                 onAddSubject={() => setShowCreate(true)}
                 onView={(sub) => setViewSubject(sub)}
                 onEdit={(sub) => setEditSubject(sub)}

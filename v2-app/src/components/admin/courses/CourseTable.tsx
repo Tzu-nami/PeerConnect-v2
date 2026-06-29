@@ -11,6 +11,9 @@ interface CourseTableProps {
     totalCount: number;
     searchQuery: string;
     onSearch: (q: string) => void;
+    selectedMentor: string;
+    availableMentors: string[];
+    onMentorSelect: (mentor: string) => void;
     onAddSubject: () => void;
     onView: (s: AdminCourse) => void;
     onEdit: (s: AdminCourse) => void;
@@ -26,7 +29,7 @@ function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sor
 }
 
 export default function CourseTable({ 
-    subjects, totalCount, searchQuery, onSearch, onAddSubject, onView, onEdit, onDelete, sortCol, sortDir, onSort 
+    subjects, totalCount, searchQuery, onSearch, selectedMentor, availableMentors, onMentorSelect, onAddSubject, onView, onEdit, onDelete, sortCol, sortDir, onSort
 }: CourseTableProps) {
     return (
         <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
@@ -39,13 +42,25 @@ export default function CourseTable({
                     </p>
                 </div>
 
-                <div className="flex gap-2 items-center flex-wrap">
+                <div className="flex gap-3 items-center flex-wrap">
                     <SearchBar 
                         value={searchQuery} 
                         onChange={onSearch} 
                         placeholder="Search subjects..." 
                         className="w-56"
                     />
+                    <select
+                        value={selectedMentor}
+                        onChange={(e) => onMentorSelect(e.target.value)}
+                        className="pr-3 py-1.5 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 h-[36px] transition-shadow truncate cursor-pointer"
+                    >
+                        <option value="">All Mentors</option>
+                        {availableMentors.map(mentorName => (
+                            <option key={mentorName} value={mentorName}>
+                                {mentorName}
+                            </option>
+                        ))}
+                    </select>
                     <button onClick={onAddSubject} 
                         className="flex gap-2 items-center text-cream text-sm font-semibold px-4 py-2 rounded-lg bg-btn-brown hover:bg-btn-brown-hover shadow-md cursor-pointer transition">
                         <MdLibraryAdd />
