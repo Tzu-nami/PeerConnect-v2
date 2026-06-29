@@ -2,6 +2,8 @@ import { useState } from 'react';
 import CrudModal from '@/components/ui/CrudModal';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { FaBook } from 'react-icons/fa6';
+import { createClient } from '@/utils/supabase/client';
+import { checkSubjectExists } from '@/utils/services/courseService';
 
 interface CreateCourseModalProps {
   isOpen: boolean;
@@ -12,9 +14,12 @@ interface CreateCourseModalProps {
 const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition";
 
 export default function CreateCourseModal({ isOpen, onClose, onSuccess }: CreateCourseModalProps) {
+  const supabase = createClient();
   const [form, setForm] = useState({ code: '', name: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const [isValidating, setIsValidating] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // Check if there is input
@@ -26,12 +31,28 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
     setErrors({});
   };
 
-  const handleValidate = () => {
+  const handleValidate = async () => {
     const errs: Record<string, string> = {};
     if (!form.code.trim()) errs.code = 'Subject code is required.';
     if (!form.name.trim()) errs.name = 'Subject name is required.';
-    setErrors(errs);
-    if (Object.keys(errs).length === 0) setConfirmOpen(true);
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+
+    setIsValidating(true);
+    // Check duplicate subjects
+    const isDuplicate = await checkSubjectExists(supabase, form.code);
+
+    if (isDuplicate) {
+      setErrors({ code: `The subject already exists.` });
+      setIsValidating(false);
+      return; 
+    }
+
+    setErrors({});
+    setConfirmOpen(true);
+    setIsValidating(false);
   };
 
   const handleSave = async () => {
@@ -49,17 +70,14 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
         onClose();
         onSuccess();
       } else {
-        const rawText = await r.text();
-        try {
-          const errorData = JSON.parse(rawText);
-          throw new Error(errorData.error || 'Failed to add subject');
-        } catch {
-          throw new Error(`Server Error (${r.status}): Check your network tab!`);
-        }
+        const errorData = await r.json();
+        throw new Error(errorData.error || 'Failed to add subject');
       }
     } catch (error: any) {
       console.error('Subject Save Error:', error);
-      alert(`Could not save subject: ${error.message}`); 
+
+      setConfirmOpen(false);
+      setErrors({ code: error.message });
     } finally {
       setLoading(false);
     }
@@ -92,10 +110,10 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
             )}
             <button 
               onClick={handleValidate} 
-              disabled={loading || !isFormComplete}
+              disabled={loading || !isFormComplete || isValidating}
               className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
             >
-              {loading ? 'Saving...' : 'Add Subject'}
+              {isValidating ? 'Validating...' : 'Add Subject'}
             </button>
           </div>
         }
@@ -109,6 +127,7 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
               onChange={(e) => setForm(f => ({ ...f, code: e.target.value }))} 
               placeholder="e.g. Math 54" 
               className={inputClass} 
+              maxLength={20}
             />
             {errors.code && <p className="mt-1 text-xs text-red-600">{errors.code}</p>}
           </div>
@@ -119,7 +138,8 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
               value={form.name} 
               onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} 
               placeholder="e.g. Elementary Analysis II" 
-              className={inputClass} 
+              className={inputClass}
+              maxLength={255}
             />
             {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
           </div>
