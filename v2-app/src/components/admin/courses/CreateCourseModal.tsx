@@ -151,8 +151,8 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
         title="Confirm New Subject" 
         message="This will be added to the list of available subjects."
         confirmLabel="Save" 
-        confirmClassName="bg-sidebar-green hover:bg-up-green"
-        icon={<div className="w-16 h-16 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center"><FaBook className="text-3xl" /></div>}
+        confirmClassName="bg-green-700 hover:bg-sidebar-green"
+        icon={<div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center"><FaBook className="text-3xl" /></div>}
         loading={loading} 
         onConfirm={handleSave} 
         onCancel={() => setConfirmOpen(false)}
