@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 // Modals
 import CreateMentorModal from '@/components/admin/mentors/CreateMentorModal';
 import EditMentorModal from '@/components/admin/mentors/EditMentorModal';
-import CreateSubjectModal from '@/components/admin/courses/CreateSubjectModal';
+import CreateCourseModal from '@/components/admin/courses/CreateCourseModal';
 import DeleteMentorModal from '@/components/admin/mentors/DeleteMentorModal';
 
 // Data fetch
@@ -56,7 +56,10 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
         `${m.firstName} ${m.lastName}`.toLowerCase().includes(q) ||
         m.email.toLowerCase().includes(q) ||
         m.student_num.includes(q) ||
-        m.degreeProgram.toLowerCase().includes(q)
+        m.degreeProgram.toLowerCase().includes(q) ||
+        m.subjects?.some((sub) => 
+          sub.code.toLowerCase().includes(q)
+        )
       )
       .sort((a, b) => {
         const va = sortCol === 'name' ? `${a.lastName}${a.firstName}` : (a as any)[sortCol] ?? '';
@@ -169,7 +172,7 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
         subjects={subjects} 
       />
 
-      <CreateSubjectModal 
+      <CreateCourseModal 
         isOpen={showSubject} 
         onClose={() => setShowSubject(false)} 
         onSuccess={() => {

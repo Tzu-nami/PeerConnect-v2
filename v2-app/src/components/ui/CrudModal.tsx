@@ -3,7 +3,7 @@ import ModalBase from "./ModalBase";
 
 interface Props {
     open: boolean;
-    title: string;
+    title: React.ReactNode;
     subtitle?: string;
     onClose: () => void;
     footer?: React.ReactNode;

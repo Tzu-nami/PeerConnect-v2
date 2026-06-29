@@ -2,8 +2,7 @@ import MentorTableRow from "@/components/admin/mentors/MentorTableRow";
 import SearchBar from "@/components/ui/SearchBar";
 
 // Icons
-import { MdPersonAddAlt1, MdLibraryAdd } from "react-icons/md";
-import { MdArrowUpward, MdArrowDownward, MdUnfoldMore } from "react-icons/md";
+import { MdPersonAddAlt1, MdLibraryAdd, MdArrowUpward, MdArrowDownward, MdUnfoldMore } from "react-icons/md";
 
 import type { AdminMentor } from "@/types/admin";
 
@@ -28,8 +27,7 @@ function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sor
 }
 
 export default function MentorTable({
-    mentors, totalCount, searchQuery, onSearch, onAddMentor, onAddSubject,
-    onView, onEdit, onDelete, sortCol, sortDir, onSort
+    mentors, totalCount, searchQuery, onSearch, onAddMentor, onAddSubject, onView, onEdit, onDelete, sortCol, sortDir, onSort
 }: MentorTableProps) {
     return (
         <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
