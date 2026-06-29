@@ -1,28 +1,29 @@
 import Link from "next/link"
-interface StatCardProps {
+
+export interface StatCardProps {
     label: string
-    value: number | string | null
-    href: string
-    color: string
+    value: React.ReactNode
     icon: React.ReactNode
+    borderColor: string
+    iconColor: string
+    href?: string
 }
 
-const colorScheme: Record<string, { border: string; text: string }> = {
-    green:  { border: 'border-green-500',  text: 'text-green-500'  },
-    blue:   { border: 'border-blue-500',   text: 'text-blue-500'   },
-    yellow: { border: 'border-yellow-500', text: 'text-yellow-500' },
-    red:    { border: 'border-red-500',    text: 'text-red-500'    },
-    purple: { border: 'border-purple-500', text: 'text-purple-500' },
-}
-
-export default function StatCard({ label, value, href, color, icon }: StatCardProps) {
-    return(
-        <Link href={href} className={`flex items-center gap-5 p-5 rounded-xl shadow-sm bg-white border-l-4 ${colorScheme[color].border} hover:shadow-md hover:-translate-y-0.5 transition-transform duration-200 cursor-pointer`}>
-            <div className={`text-3xl ${colorScheme[color].text}`}>{icon}</div>
-            <div>
-                <h1 className="text-xs text-text-brown-light uppercase font-bold tracking-wide">{label}</h1>
-                <h2 className="text-3xl font-extrabold">{value}</h2>
+export default function StatCard({ label, value, icon, borderColor, iconColor, href }: StatCardProps) {
+    const content = (
+        <div className={`bg-white p-5 rounded-xl shadow-sm border-l-4 ${borderColor} flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer`}>
+            <div className={`text-3xl flex-shrink-0 ${iconColor}`}>{icon}</div>
+            <div className="min-w-0 flex-1">
+                <h3 className="text-xs font-bold text-text-brown-light uppercase leading-none truncate" title={label}>
+                    {label}
+                </h3>
+                <p className="text-3xl font-black text-text-brown truncate mt-1"
+                   title={typeof value === 'string' ? value : undefined}>
+                    {value}
+                </p>
             </div>
-        </Link>
+        </div>
     )
+
+    return href ? <Link href={href}>{content}</Link> : content
 }
