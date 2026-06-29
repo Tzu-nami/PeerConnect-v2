@@ -46,3 +46,37 @@ export interface AdminCourse {
     mentorCount: number;
 }
 
+export type SessionStatus = | 'pending' | 'accepted' | 'completed' | 'unavailable' | 'cancelled' | 'no_show';
+
+export interface AdminSession {
+    id: string;
+    group_ids: string[];
+    student: string;
+    studentNames: string;
+    email: string;
+    emails: string;
+    mentor: string;
+    subject: string;
+    subjectName: string;
+    topic: string;
+    date: string;
+    time: string;
+    start: string;
+    end: string;
+    durationText: string;
+    durationHours: number;
+    mode: string;
+    yearLevel: string;
+    degreeProgram: string;
+    status: SessionStatus;
+    is_open: boolean;
+}
+
+export interface SessionCounts {
+    total: number;
+    accepted: number;
+    pending: number;
+    completed: number;
+    totalHours: string;
+    totalRawHours: number;
+}
