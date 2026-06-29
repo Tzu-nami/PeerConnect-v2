@@ -52,7 +52,7 @@ export default function CourseTable({
                     <select
                         value={selectedMentor}
                         onChange={(e) => onMentorSelect(e.target.value)}
-                        className="pr-3 py-1.5 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 h-[36px] transition-shadow truncate cursor-pointer"
+                        className="pr-3 py-1.5 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 h-[36px] transition-shadow truncate w-45 cursor-pointer"
                     >
                         <option value="">All Mentors</option>
                         {availableMentors.map(mentorName => (
