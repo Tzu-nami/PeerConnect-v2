@@ -1,6 +1,6 @@
 import CrudModal from "@/components/ui/CrudModal";
 import { FaBook, FaUserSlash } from "react-icons/fa6";
-import type { AdminCourse } from "@/types/admin";
+import type { AdminCourse, AdminMentor } from "@/types/admin";
 
 interface ViewCourseModalProps {
     isOpen: boolean;
@@ -10,7 +10,7 @@ interface ViewCourseModalProps {
 
 const valueClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-cream-dark text-slate-700"
 
-export default function CourseViewContent({ isOpen, onClose, subject }: ViewCourseModalProps) {
+export default function ViewCourseModal({ isOpen, onClose, subject }: ViewCourseModalProps) {
     if (!subject) return null;
 
     return (
@@ -28,7 +28,7 @@ export default function CourseViewContent({ isOpen, onClose, subject }: ViewCour
                     {/* Mentors teaching */}
                     {subject.mentors.length > 0 ? (
                         subject.mentors.map((mentor, i) => (
-                            <div key={i} className={valueClass}>
+                            <div key={i} className={`${valueClass} flex items-center gap-4`}>
                                 {mentor.avatar ? (
                                     <img src={mentor.avatar} alt={mentor.name} className="w-12 h-12 rounded-full object-cover shadow-sm bg-gray-100 border border-gray-200" />
                                 ) : (
@@ -42,10 +42,10 @@ export default function CourseViewContent({ isOpen, onClose, subject }: ViewCour
                         ))
                     ) : (
                         <div className="text-center py-8">
-                            <div className="w-12 h-12 text-slate-300 flex items-center justify-center mx-auto mb-3">
-                                <FaUserSlash className="text-xl" />
+                            <div className="w-12 h-12 text-text-brown-light flex items-center justify-center mx-auto mb-3">
+                                <FaUserSlash className="text-4xl" />
                             </div>
-                            <p className="text-sm font-medium text-gray-500">No mentors registered.</p>
+                            <p className="text-sm font-medium text-text-brown-light">No mentors registered.</p>
                         </div>
                     )}
                 </div>
