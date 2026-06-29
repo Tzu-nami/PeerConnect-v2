@@ -34,6 +34,8 @@ export interface CoursesMentor {
     name: string;
     email: string;
     avatar: string | null;
+    yearLevel: string;
+    degreeProgram: string;
 }
 
 export interface AdminCourse {
