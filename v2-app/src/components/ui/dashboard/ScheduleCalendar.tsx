@@ -1,6 +1,10 @@
-import { SessionList } from "@/types/sessionList"
-import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
 import * as React from "react"
+
+// Types
+import { SessionList } from "@/types/sessionList"
+
+// Components
+import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
 
 interface ScheduleCalendarProps {
     sessionsByDate: Record<string, SessionList[]>
@@ -54,7 +58,7 @@ function getDotColor(sessions: SessionList[] | undefined, dateKey: string, today
 
 export default function ScheduleCalendar({ sessionsByDate, today, selectedDate, onDateSelect }: ScheduleCalendarProps) {
     return (
-        <div className="rounded-xl shadow-md border border-cream-border overflow-hidden">
+        <div className="rounded-xl shadow-sm border border-cream-border overflow-hidden">
             <ScheduleHeader />
             <Calendar
                 mode="single"
@@ -74,7 +78,7 @@ export default function ScheduleCalendar({ sessionsByDate, today, selectedDate, 
                                     className="absolute inset-0 w-full h-full"
                                 />
                                 {dotColor && (
-                                    <span className={`pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${dotColor}`} />
+                                    <span className={`pointer-events-none absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${dotColor}`} />
                                 )}
                             </div>
                         )

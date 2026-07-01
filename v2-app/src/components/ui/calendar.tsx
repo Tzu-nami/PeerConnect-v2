@@ -104,7 +104,7 @@ function Calendar({
                     defaultClassNames.week_number
                 ),
                 day: cn(
-                    "group/day relative h-13 w-full rounded-(--cell-radius) p-0 text-center select-none hover:bg-cream-dark [&:last-child[data-selected=true]_button]:rounded-r-(--cell-radius)",
+                    "group/day relative h-10 w-full rounded-(--cell-radius) p-0 text-center select-none hover:bg-cream-dark [&:last-child[data-selected=true]_button]:rounded-r-(--cell-radius)",
                     props.showWeekNumber
                         ? "[&:nth-child(2)[data-selected=true]_button]:rounded-l-(--cell-radius)"
                         : "[&:first-child[data-selected=true]_button]:rounded-l-(--cell-radius)",
@@ -215,7 +215,7 @@ function CalendarDayButton({
             data-range-end={modifiers.range_end}
             data-range-middle={modifiers.range_middle}
             className={cn(
-                "relative isolate z-10 flex h-13 size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 !bg-transparent !shadow-none rounded-(--cell-radius) leading-none font-normal hover:bg-cream-dark data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-up-maroon data-[range-end=true]:text-cream data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-cream-dark data-[range-middle=true]:text-text-brown data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-up-maroon data-[range-start=true]:text-cream [&>span]:text-xs [&>span]:opacity-70",
+                "relative isolate z-10 flex h-10 size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 !bg-transparent !shadow-none rounded-(--cell-radius) leading-none font-normal hover:bg-cream-dark data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-up-maroon data-[range-end=true]:text-cream data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-cream-dark data-[range-middle=true]:text-text-brown data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-up-maroon data-[range-start=true]:text-cream [&>span]:text-xs [&>span]:opacity-70",
                 defaultClassNames.day,
                 className
             )}
