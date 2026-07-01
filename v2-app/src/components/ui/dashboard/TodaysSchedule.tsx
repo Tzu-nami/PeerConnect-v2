@@ -48,7 +48,7 @@ export default function TodaysSchedule({ currentSessions, date }: TodaysSchedule
     }, [searchQuery, selectedStatus, currentSessions])
 
     // Pagination
-    const ITEMS_PER_PAGE = 8
+    const ITEMS_PER_PAGE = 7
     const [currentPage, setCurrentPage] = useState(1)
     const totalPages = Math.ceil(filteredSessions.length / ITEMS_PER_PAGE)
     const paginatedSessions = filteredSessions.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
@@ -57,7 +57,7 @@ export default function TodaysSchedule({ currentSessions, date }: TodaysSchedule
     const colHeader = dashboardDataConfig['admin'].scheduleColumns
 
     return(
-        <div className="rounded-xl shadow-md border border-cream-border h-full flex flex-col">
+        <div className="rounded-xl shadow-sm border border-cream-border h-full flex flex-col">
             {/* Header */}
             <div className="flex justify-between p-5">
                 <div className="flex flex-col">
@@ -86,7 +86,7 @@ export default function TodaysSchedule({ currentSessions, date }: TodaysSchedule
             {/* Table */}
             <div className="flex-1">
                 <table className="w-full table-fixed text-left text-[13px]">
-                    {/* Table headers */}
+                    {/* Table header */}
                     <thead className="text-text-brown-light text-xs bg-cream-dark">
                     <tr>
                         {colHeader.map((column) => (
@@ -101,26 +101,37 @@ export default function TodaysSchedule({ currentSessions, date }: TodaysSchedule
 
                     {/* Table contents */}
                     <tbody>
-                    {paginatedSessions.map((session) => {
-                        const startTime = formatTime(session.scheduleStart)
-                        const endTime = formatTime(session.scheduleEnd)
+                    {paginatedSessions.length === 0 ? (
+                        <tr>
+                            <td colSpan={5} className="text-center py-40 text-text-brown-light">
+                                <div className="flex flex-col items-center gap-2">
+                                    <FaCalendarCheck className="text-3xl opacity-30" />
+                                    <p className="text-sm font-medium">No sessions found for today</p>
+                                </div>
+                            </td>
+                        </tr>
+                    ) : (
+                        paginatedSessions.map((session) => {
+                            const startTime = formatTime(session.scheduleStart)
+                            const endTime = formatTime(session.scheduleEnd)
 
-                        return(
-                            <tr key={session.id} className="border-t border-cream-border">
-                                <td className="px-5 py-4 font-bold truncate" title={session.studentName}>{session.studentName}</td>
-                                <td className="px-5 py-4 truncate"  title={session.mentorName}>{session.mentorName}</td>
-                                <td className="px-5 py-4 truncate">{session.subject}</td>
-                                <td className="px-5 py-4 truncate">{startTime} - {endTime}</td>
-                                <td className="px-5 py-4 truncate"><StatusBadge status={session.bookingStatus}/></td>
-                            </tr>
-                        )
-                    })}
+                            return(
+                                <tr key={session.id} className="border-t border-cream-border">
+                                    <td className="px-5 py-4 font-bold truncate" title={session.studentName}>{session.studentName}</td>
+                                    <td className="px-5 py-4 truncate"  title={session.mentorName}>{session.mentorName}</td>
+                                    <td className="px-5 py-4 truncate">{session.subject}</td>
+                                    <td className="px-5 py-4 truncate">{startTime} - {endTime}</td>
+                                    <td className="px-5 py-4 truncate"><StatusBadge status={session.bookingStatus}/></td>
+                                </tr>
+                            )
+                        })
+                    )}
                     </tbody>
                 </table>
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between px-5 py-4">
+            <div className="flex items-center justify-between px-5 pb-4">
                 <p className="text-xs text-text-brown-light">Showing {paginatedSessions.length} of {filteredSessions.length} session{filteredSessions.length !== 1 ? 's' : ''} </p>
                 <div className="flex items-center gap-2 text-2xl ">
                     <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1 || totalPages <= 1}
