@@ -30,7 +30,7 @@ export default function ModuleSidebar({ userRole, collapsed, setCollapsed }: Mod
     }
 
     return (
-        <aside className={`relative hidden lg:flex lg:flex-col shrink-0 bg-sidebar-green text-white min-h-screen transition-all duration-300
+        <aside className={`hidden lg:flex lg:flex-col shrink-0 bg-sidebar-green text-white h-screen sticky top-0 transition-all duration-300
                     ${collapsed ? 'w-[80px]' : 'w-[270px]'}`}>
             {/* Logo */}
             <div>

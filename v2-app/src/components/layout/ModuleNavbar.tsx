@@ -46,7 +46,7 @@ export default function ModuleNavbar({ userName, userFullName, userEmail, userAv
     }
 
     return(
-        <nav className="flex items-center justify-between h-[60px] md:h-[83px] px-7 bg-up-maroon">
+        <nav className="flex items-center justify-between h-[60px] md:h-[83px] px-7 bg-up-maroon sticky top-0 z-50">
             {/* Left Side */}
             <div className="flex items-center">
                 {/* Hamburger button: mobile only */}
