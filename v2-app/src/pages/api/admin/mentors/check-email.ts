@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         : profiles?.student_num;
 
     if (!isProfileComplete) {
-        return res.status(422).json({ error: 'The student must complete their profile before being registered as a mentor.' });
+        return res.status(422).json({ error: 'The student must complete their profile first.' });
     }
 
     if (user.role === 'mentor') {
