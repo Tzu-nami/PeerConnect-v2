@@ -189,6 +189,7 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
                         </div>
                     )}
 
+                    {/* Subject search result */}
                     {filteredSubjects.length > 0 && (
                         <div>
                             <p className="font-extrabold tracking-widest text-[11px] bg-cream-dark px-5 py-3 uppercase">Subjects</p>
