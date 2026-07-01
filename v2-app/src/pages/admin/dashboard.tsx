@@ -1,11 +1,21 @@
 import { GetServerSideProps } from "next"
+import { useState } from "react"
 
 // Configs
-import { statCardsConfig } from "@/config/statCardsConfig"
+import { dashboardDataConfig } from "@/config/dashboardDataConfig"
 
 // Components
 import StatCard from "@/components/ui/StatCard";
-import GlobalSearch from "@/components/ui/GlobalSearch";
+import GlobalSearch from "@/components/ui/dashboard/GlobalSearch"
+import TodaysSchedule from "@/components/ui/dashboard/TodaysSchedule"
+import ScheduleCalendar from "@/components/ui/dashboard/ScheduleCalendar"
+import QuickActions from "@/components/ui/dashboard/QuickActions"
+import MonthlyTrends from "@/components/ui/charts/MonthlyTrends"
+import TopMentors from "@/components/ui/charts/TopMentors"
+import TopSubjects from "@/components/ui/charts/TopSubjects"
+import CollegeBookings from "@/components/ui/charts/CollegeActivity"
+import SatisfactionRate from "@/components/ui/charts/SatisfactionRate"
+
 
 // Types
 import { SessionList } from "@/types/sessionList"
@@ -14,10 +24,14 @@ import { StaffList } from "@/types/staffList"
 import { TopMentor } from "@/types/topMentor"
 import { TopSubject } from "@/types/topSubject"
 import { CollegeActivity } from "@/types/collegeActivity"
+import { MonthlyTrend } from "@/types/monthlyTrend"
+import { SatisfactionData } from "@/types/satisfactionData"
 
 // Utilities
 import { createClient } from "@/utils/supabase/server"
-import {MonthlyTrend} from "@/types/monthlyTrend";
+import { TODAY } from "@/utils/formatTime"
+import { getRatingLabel } from "@/utils/getRatingLabel"
+
 
 // Database connection
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -35,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .from('bookings')
             .select('*', { count: 'exact', head: true })
             .eq('booking_status', 'accepted')
-            .eq('date', new Date().toISOString().split('T')[0]),
+            .eq('date', TODAY),
 
         // Total pending sessions
         supabase
@@ -56,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         // Booking details
         supabase
             .from('booking_details')
-            .select('*'),
+            .select('*').order('schedule_start', { ascending: true }),
 
         // Staff details
         supabase
@@ -101,6 +115,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         ? rowAverage.reduce((total, sum) => total + sum, 0) / rowAverage.length
         : 0
 
+    // Satisfaction distribution
+    const satisfactionCounts = rowAverage.reduce((acc, avg) => {
+        const label = getRatingLabel(avg)
+        acc[label] = (acc[label] ?? 0) + 1
+        return acc
+    }, {} as Record<string, number>)
+
+    const satisfactionData = Object.entries(satisfactionCounts).map(([name, value]) => ({ name, value }))
+
     // Booking data
     const sessionList = (result6.data ?? []).map((booking) => ({
         id: booking.id,
@@ -124,6 +147,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         degreeProgram: mentor.program
     }))
 
+    // Groups sessions by date
+    const sessionsByDate = sessionList.reduce((groupedByDate, session) => {
+        if(!groupedByDate[session.date]) groupedByDate[session.date] = []
+        groupedByDate[session.date].push(session)
+        return groupedByDate
+    }, {} as Record<string, SessionList[]>)
+
     return {
         props: {
             totalMentors: totalMentors ?? 0,
@@ -137,7 +167,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             topMentors,
             topSubjects,
             collegeActivity,
-            monthlyTrends
+            monthlyTrends,
+            sessionsByDate,
+            satisfactionData
         }
     }
 }
@@ -155,11 +187,14 @@ interface AdminDashboardProps {
     topSubjects: TopSubject[]
     collegeActivity: CollegeActivity[]
     monthlyTrends: MonthlyTrend[]
+    sessionsByDate: Record<string, SessionList[]>
+    satisfactionData: SatisfactionData[]
 }
 
-export default function AdminDashboard({ totalMentors, totalSessionsToday, totalPendingSessions, totalFeedbackAverage, totalStudents, staffList, sessionList, mentorList, topMentors, topSubjects, collegeActivity, monthlyTrends }: AdminDashboardProps) {
-    const cards = statCardsConfig['admin'].cards
-    const gridCols = statCardsConfig['admin'].gridCols
+export default function AdminDashboard({ totalMentors, totalSessionsToday, totalPendingSessions, totalFeedbackAverage, totalStudents, staffList, sessionList, mentorList, topMentors, topSubjects, collegeActivity, monthlyTrends, sessionsByDate, satisfactionData }: AdminDashboardProps) {
+    // Stat cards
+    const cards = dashboardDataConfig['admin'].cards
+    const gridCols = dashboardDataConfig['admin'].gridCols
     const data: Record<string, number | string> = {
         totalMentors,
         totalStudents,
@@ -167,30 +202,64 @@ export default function AdminDashboard({ totalMentors, totalSessionsToday, total
         totalPendingSessions,
         totalFeedbackAverage: totalFeedbackAverage.toFixed(2) }
 
+    // Today's Schedule and calendar
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+    const todaySessions = sessionList.filter((session) => session.date === selectedDate?.toLocaleDateString('en-CA'))
+    const dateFormat = selectedDate?.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'Asia/Manila'})
+
     return (
         <>
+            {/* Global search */}
             <GlobalSearch mentorList={mentorList} sessionList={sessionList} staffList={staffList}
                           role="admin" placeholder="Search mentors, staff, or sessions..." />
+
+            {/* Stat cards */}
             <div className={`grid ${gridCols} gap-4 w-full`}>
                 {cards.map((card) => {
                     return (
-                        <StatCard key={card.dataKey} label={card.label} value={data[card.dataKey]} href={card.href} color={card.color} icon={card.icon} />
+                        <StatCard key={card.dataKey} label={card.label} value={data[card.dataKey]} href={card.href} borderColor={card.borderColor} icon={card.icon} iconColor={card.iconColor} />
 
                     )
                 })}
             </div>
-            <div>
-                <h1>Hello Admin</h1>
-                <p>Total Mentors: {totalMentors}</p>
-                <p>Total Sessions Today: {totalSessionsToday}</p>
-                <p>Total Pending Sessions: {totalPendingSessions}</p>
-                <p>Total Feedback Average: {totalFeedbackAverage.toFixed(2)}</p>
-                <p>Total Students: {totalStudents}</p>
 
+            {/* Grid content */}
+            <div className="grid grid-cols-3 gap-4 mt-4 items-stretch">
+                {/* ROW 1 - Today's schedule table */}
+                <div className="col-span-2">
+                    <TodaysSchedule  currentSessions={todaySessions} date={dateFormat} />
+                </div>
 
+                {/* Calendar  */}
+                <div className="col-span-1 flex flex-col gap-4">
+                    <ScheduleCalendar sessionsByDate={sessionsByDate} today={TODAY} selectedDate={selectedDate} onDateSelect={(date) => {if (date) setSelectedDate(date)}} />
+                    <QuickActions />
+                </div>
 
+                {/* ROW 2 - Monthly trends */}
+                <div className=" col-span-2 h-full">
+                    <MonthlyTrends monthlyTrends={monthlyTrends} />
+                </div>
 
+                {/* Top mentors */}
+                <div className="col-span-1 h-full">
+                    <TopMentors topMentors={topMentors} />
+                </div>
 
+                {/* ROW 3 - Top subjects */}
+                <div className="col-span-1">
+                    <TopSubjects topSubjects={topSubjects} />
+                </div>
+
+                {/* College activity */}
+                <div className=" col-span-1">
+                    <CollegeBookings collegeActivity={collegeActivity} />
+                </div>
+
+                {/* Satisfaction rate */}
+                <div className=" col-span-1">
+                    <SatisfactionRate satisfactionData={satisfactionData} />
+                </div>
             </div>
         </>
     )
