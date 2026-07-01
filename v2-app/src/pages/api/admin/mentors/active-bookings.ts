@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { createClient } from "@/utils/supabase/server";
+import { createClient as createServerClient } from "@/utils/supabase/server";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if(req.method !== 'GET') return res.status(405).end();
 
-    const supabase = createClient({ req, res} as any);
+    const supabase = createServerClient({ req, res} as any);
 
     // Check if admin
     const { data: { session } } = await supabase.auth.getSession();

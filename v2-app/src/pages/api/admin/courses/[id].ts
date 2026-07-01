@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createClient as createServerClient } from '@/utils/supabase/server'; // Matched your import path!
+import { createClient as createServerClient } from '@/utils/supabase/server';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query as { id: string };

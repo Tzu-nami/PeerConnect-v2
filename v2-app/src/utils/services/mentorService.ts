@@ -1,18 +1,12 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import type { AdminMentor, MentorStat } from '@/types/admin';
+import { format12hrTime } from '../formatHours';
 
 const DAY_ORDER: Record<string, number> = { monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
 
 function avatarPlaceholder(name: string) {
   const initial = name.trim().charAt(0).toUpperCase();
   return `https://api.dicebear.com/8.x/initials/svg?seed=${initial}&backgroundColor=1a3c2f&textColor=ffffff`;
-}
-
-function formatTime(timeStr: string) {
-  const [h, m] = timeStr.split(':').map(Number);
-  const p = h >= 12 ? 'PM' : 'AM';
-  const hr = h % 12 || 12;
-  return `${hr}:${String(m).padStart(2, '0')} ${p}`;
 }
 
 export async function getAdminMentorsData(supabase: SupabaseClient) {
@@ -48,7 +42,7 @@ export async function getAdminMentorsData(supabase: SupabaseClient) {
     for (const a of (mp.mentor_availabilities ?? [])) {
       const key = a.day_of_week.toLowerCase();
       if (!schedule[key]) schedule[key] = { slots: [] };
-      schedule[key].slots.push({ start: formatTime(a.start_time), end: formatTime(a.end_time) });
+      schedule[key].slots.push({ start: format12hrTime(a.start_time), end: format12hrTime(a.end_time) });
     }
 
     const validSubjects = (mp.mentor_subjects ?? []).map((ms: any) => ms.subjects).filter(Boolean)
