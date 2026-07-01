@@ -51,6 +51,7 @@ export type SessionStatus = | 'pending' | 'accepted' | 'completed' | 'unavailabl
 export interface AdminSession {
     id: string;
     group_ids: string[];
+    avatar: string | null;
     student: string;
     studentNames: string;
     email: string;

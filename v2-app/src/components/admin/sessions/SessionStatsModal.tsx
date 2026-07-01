@@ -8,10 +8,11 @@ interface SessionStatsModalProps {
   title: string;
   subtitle: string;
   sessions: AdminSession[];
+  showHours?: boolean;
 }
 
 export default function SessionStatsModal({ 
-  isOpen, onClose, title, subtitle, sessions 
+  isOpen, onClose, title, subtitle, sessions, showHours
 }: SessionStatsModalProps) {
   
   return (
@@ -30,7 +31,7 @@ export default function SessionStatsModal({
 
       {/* Body */}
       <div className="overflow-y-auto flex-1 min-h-[200px]">
-        <SessionStatDetails sessions={sessions} />
+        <SessionStatDetails sessions={sessions} showHours={showHours} />
       </div>
 
     </CrudModal>

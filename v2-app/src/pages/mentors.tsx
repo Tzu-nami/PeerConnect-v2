@@ -6,6 +6,7 @@ import type { Mentor, Subject } from '@/types/mentor';
 
 // Utilities
 import { getServerSideUserRole } from '@/utils/getServerSideUserRole';
+import { format12hrTime } from '@/utils/formatHours';
 
 const DAY_ORDER: Record<string, number> = {
     monday: 1, tuesday: 2, wednesday: 3,
@@ -15,13 +16,6 @@ const DAY_ORDER: Record<string, number> = {
 function avatarPlaceholder(name: string): string {
     const initial = name.trim().charAt(0).toUpperCase();
     return `https://api.dicebear.com/8.x/initials/svg?seed=${initial}&backgroundColor=1a3c2f&textColor=ffffff`;
-}
-
-function formatTime(timeStr: string): string {
-    const [h, m] = timeStr.split(':').map(Number);
-    const period = h >= 12 ? 'PM' : 'AM';
-    const hour = h % 12 || 12;
-    return `${hour}:${String(m).padStart(2, '0')} ${period}`;
 }
 
 interface Props {
@@ -100,8 +94,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 const key = avail.day_of_week.toLowerCase();
                 if (!schedule[key]) schedule[key] = { slots: [] };
                 schedule[key].slots.push({
-                    start: formatTime(avail.start_time),
-                    end: formatTime(avail.end_time),
+                    start: format12hrTime(avail.start_time),
+                    end: format12hrTime(avail.end_time),
                 });
             }
 
