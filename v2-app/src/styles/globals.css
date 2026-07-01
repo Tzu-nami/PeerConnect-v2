@@ -1,11 +1,9 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 @plugin "@tailwindcss/forms";
-
-:root {
-    --background: #FAF8F2;
-    --foreground: #554444;
-}
 
 @theme {
     /* Fonts */
@@ -40,6 +38,13 @@
     --color-day-unavailable:      #F8FAFC;
     --color-book-hover:           #2D5C47;
 
+    /* Shadcn-required tokens (minimal, only for Calendar component) */
+    --radius: 0.625rem;
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+
     /* Animations */
     --animate-fade-up: fadeUp 0.6s ease both;
 }
@@ -61,7 +66,7 @@ html {
 }
 
 body {
-    background: var(--background);
+    background: var(--color-cream);
     color: var(--color-text-brown);
     font-family: Nunito, sans-serif;
 }
