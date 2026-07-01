@@ -86,10 +86,10 @@ export default function EditCourseModal({ isOpen, onClose, onSuccess, subject }:
         <div>
             <CrudModal
                 open={isOpen && !confirmOpen} title="Edit Subject" subtitle="Update the course code or the descriptive name."
-                onClose={onClose} maxwidth="max-w-md"
+                onClose={onClose} maxWidth="max-w-md"
                 footer={
                 <div className="flex gap-3">
-                    <button onClick={onClose} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark transition">Cancel</button>
+                    <button onClick={onClose} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark transition cursor-pointer">Cancel</button>
                     <button onClick={handleValidate} disabled={loading || !hasChanges || isValidating} className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition">
                     {isValidating ? 'Validating...' : 'Save Changes'}
                     </button>
