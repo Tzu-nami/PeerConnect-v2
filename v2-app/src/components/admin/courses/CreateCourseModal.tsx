@@ -90,7 +90,7 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
         title="Add New Subject" 
         subtitle="This will become available for mentor assignments."
         onClose={onClose}
-        maxwidth="max-w-md"
+        maxWidth="max-w-md"
         footer={
           <div className="flex gap-3">
             {hasInput ? (

@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 // Components
-import ModalBase from "@/components/ui/ModalBase"
+import CrudModal from "@/components/ui/CrudModal"
 
 // Constants
 import { ROLE_LABELS } from "@/constants/roleLabels"
@@ -19,7 +19,6 @@ interface AddStaffModalProps {
     onSuccess: () => void
 }
 
-// Default state of the form (empty)
 const INITIAL_FORM = {
     firstName: '',
     lastName: '',
@@ -28,20 +27,27 @@ const INITIAL_FORM = {
     role: '',
 }
 
+const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"
+
 export default function AddStaffModal({ isOpen, onClose, onSuccess }: AddStaffModalProps) {
     const [form, setForm] = useState(INITIAL_FORM)
     const [avatarFile, setAvatarFile] = useState<File | null>(null)
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+    const [errors, setErrors] = useState<Record<string, string>>({})
+    const [confirmOpen, setConfirmOpen] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
 
-    
-    // Handler for all input changes
+    // Form status check
+    const hasInput = Boolean(form.firstName || form.lastName || form.email || form.role || form.middleInitial || avatarFile)
+    const isFormComplete = Boolean(form.firstName.trim() && form.lastName.trim() && form.email.trim() && form.role)
+
+    // Handles form changes
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
+        setErrors(prev => ({ ...prev, [e.target.name]: '' }))
     }
 
-    // Handler for avatar uploads
+    // Handles avatar change
     function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0]
         if (!file) return
@@ -49,61 +55,57 @@ export default function AddStaffModal({ isOpen, onClose, onSuccess }: AddStaffMo
         setAvatarPreview(URL.createObjectURL(file))
     }
 
-    // Resets the modal to its default state
-    function handleClose() {
+    // Handles form reset
+    function handleReset() {
         setForm(INITIAL_FORM)
         setAvatarFile(null)
         setAvatarPreview(null)
-        setError(null)
+        setErrors({})
+    }
+
+    // Handles closing the form
+    function handleClose() {
+        handleReset()
         onClose()
     }
 
-    // Handler for submitting the form
+    // Handles validating form inputs
+    async function handleValidate() {
+        const errs: Record<string, string> = {}
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            if (!emailRegex.test(form.email)) errs.email = 'Please enter a valid email address.'
+        if (!form.role) errs.role = 'Role is required.'
+        setErrors(errs)
+        if (Object.keys(errs).length === 0) await handleSubmit()
+    }
+
+    // Handles form submission
     async function handleSubmit() {
-        // Checks if all text fields have input
-        if (!form.firstName || !form.lastName || !form.email || !form.role) {
-            setError('Please fill in all required fields.')
-            return
-        }
-
-        // Checks email input format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        if (!emailRegex.test(form.email)) {
-            setError('Please enter a valid email address.')
-            return
-        }
-
         setLoading(true)
-        setError(null)
 
         const supabase = createClient()
         let avatarUrl: string | null = null
 
-        // Run when the user uploads an image
         if (avatarFile) {
             const { data: { user }, error: userError } = await supabase.auth.getUser()
             if (userError || !user) {
-                setError('Could not get current user. Please log in again.')
+                setErrors({ general: 'Could not get current user. Please log in again.' })
                 setLoading(false)
                 return
             }
 
-            // File path of avatar image
             const fileName = `staffs/${user.id}/${Date.now()}-${avatarFile.name}`
 
-            // Upload actual file to the 'avatars' bucket
             const { error: uploadError } = await supabase.storage
                 .from('avatars')
                 .upload(fileName, avatarFile)
 
-            // Sets error message during avatar upload
             if (uploadError) {
-                setError(uploadError.message)
+                setErrors({ general: uploadError.message })
                 setLoading(false)
                 return
             }
 
-            // Constructs the public URL for the image
             const { data: urlData } = supabase.storage
                 .from('avatars')
                 .getPublicUrl(fileName)
@@ -116,7 +118,6 @@ export default function AddStaffModal({ isOpen, onClose, onSuccess }: AddStaffMo
             middleInitial: form.middleInitial.replace('.', '').toUpperCase()
         }
 
-        // Inserts a new row into the staff_profiles table
         const { error: insertError } = await supabase
             .from('staff_profiles')
             .insert([{
@@ -127,114 +128,126 @@ export default function AddStaffModal({ isOpen, onClose, onSuccess }: AddStaffMo
 
         setLoading(false)
 
-        // Sets error message during row insert
         if (insertError) {
-            setError(insertError.message)
+            setErrors({ general: insertError.message })
+            setConfirmOpen(false)
             return
         }
 
+        setConfirmOpen(false)
         handleClose()
         onSuccess()
     }
 
     return (
-        <ModalBase isOpen={isOpen} onClose={handleClose}>
-            <div className="flex items-center justify-between px-6 py-4 border-b border-cream-border">
-                {/* Modal title */}
-                <div>
-                    <h2 className="text-lg font-extrabold text-up-maroon">Add Staff Member</h2>
-                    <p className="text-sm text-slate-500 mt-0.5">Fill in their information and profile picture.</p>
-                </div>
+        <>
+            <CrudModal
+                open={isOpen && !confirmOpen}
+                title="Add Staff Member"
+                subtitle="Fill in their information and profile picture."
+                onClose={handleClose}
+                maxWidth="max-w-4xl"
+                footer={
+                    <div className="flex gap-3">
+                        {hasInput ? (
+                            <button
+                                onClick={handleReset}
+                                disabled={loading}
+                                className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
+                                Reset Form
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleClose}
+                                disabled={loading}
+                                className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
+                                Cancel
+                            </button>
+                        )}
+                        <button
+                            onClick={handleValidate}
+                            disabled={loading || !isFormComplete}
+                            className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition">
+                            {loading ? 'Adding...' : 'Add Staff Member'}
+                        </button>
+                    </div>
+                }
+            >
+                <div className="grid grid-cols-2 gap-6">
+                    {/* Left - staff information */}
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs font-bold text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">1</span>
+                            Staff Information
+                        </p>
 
-                {/* Exit modal */}
-                <button onClick={handleClose} className="text-slate-400 hover:text-red-700 text-xl font-bold transition cursor-pointer">✕</button>
-            </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <Field label="First Name" required error={errors.firstName}>
+                                <input name="firstName" value={form.firstName} onChange={handleChange} className={inputClass} />
+                            </Field>
+                            <Field label="Last Name" required error={errors.lastName}>
+                                <input name="lastName" value={form.lastName} onChange={handleChange} className={inputClass} />
+                            </Field>
+                        </div>
 
-            {/* Body */}
-            <div className="px-6 py-5 grid grid-cols-2 gap-6 overflow-y-auto">
-                <div className="flex flex-col gap-4">
-                    {/* Left - staff information input */}
-                    <p className="text-xs font-bold text-text-brown-light uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">1</span>
-                        Staff Information
-                    </p>
+                        <div className="grid grid-cols-2 gap-3">
+                            <Field label="M.I.">
+                                <input name="middleInitial" value={form.middleInitial} onChange={handleChange} maxLength={1} className={inputClass} />
+                            </Field>
+                            <Field label="Email" required error={errors.email}>
+                                <input name="email" type="email" value={form.email} onChange={handleChange} className={inputClass} />
+                            </Field>
+                        </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                        <Field label="First Name">
-                            <input name="firstName" value={form.firstName} onChange={handleChange} className={inputClass} />
+                        <Field label="Role / Position" required error={errors.role}>
+                            <select name="role" value={form.role} onChange={handleChange} className={inputClass}>
+                                <option value="" disabled hidden>Select role</option>
+                                {Object.entries(ROLE_LABELS).map(([value, label]) => (
+                                    <option key={value} value={value}>{label as string}</option>
+                                ))}
+                            </select>
                         </Field>
-                        <Field label="Last Name">
-                            <input name="lastName" value={form.lastName} onChange={handleChange} className={inputClass} />
-                        </Field>
+
+                        {errors.general && (
+                            <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2">
+                                {errors.general}
+                            </div>
+                        )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                        <Field label="M.I.">
-                            <input name="middleInitial" value={form.middleInitial} onChange={handleChange} maxLength={1} className={inputClass} />
-                        </Field>
-                        <Field label="Email">
-                            <input name="email" type="email" value={form.email} onChange={handleChange} className={inputClass} />
-                        </Field>
+                    {/* Right - profile picture */}
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs font-bold text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">2</span>
+                            Profile Picture
+                        </p>
+
+                        <div className="w-full aspect-square rounded-xl border-2 border-dashed border-cream-border bg-cream-dark flex items-center justify-center overflow-hidden">
+                            {avatarPreview
+                                ? <img src={avatarPreview} alt="preview" className="w-full h-full object-cover" />
+                                : <MdImage className="text-4xl text-slate-300" />
+                            }
+                        </div>
+
+                        <label className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md cursor-pointer">
+                            Choose File
+                            <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
+                        </label>
                     </div>
-
-                    <Field label="Role / Position">
-                        <select name="role" value={form.role} onChange={handleChange} className={inputClass}>
-                            <option value="" disabled hidden>Select role</option>
-                            {Object.entries(ROLE_LABELS).map(([value, label]) => (
-                                <option key={value} value={value}>{label as string}</option>
-                            ))}
-                        </select>
-                    </Field>
                 </div>
-
-                {/* Right - Profile picture upload */}
-                <div className="flex flex-col gap-4">
-                    <p className="text-xs font-bold text-text-brown-light uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">2</span>
-                        Profile Picture
-                    </p>
-
-                    <div className="w-full aspect-square rounded-xl border-2 border-dashed border-cream-border bg-cream-dark flex items-center justify-center overflow-hidden">
-                        {avatarPreview
-                            ? <img src={avatarPreview} alt="preview" className="w-full h-full object-cover" />
-                            : <MdImage className="text-4xl text-slate-300" />
-                        }
-                    </div>
-
-                    <label className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md cursor-pointer">
-                        Choose File
-                        <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
-                    </label>
-                </div>
-            </div>
-
-            {/* Error display */}
-            {error && (
-                <div className="mx-6 mb-5 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2">
-                    {error}
-                </div>
-            )}
-
-            {/* User action */}
-            <div className="flex gap-3 px-6 py-4 border-t border-cream-border">
-                <button onClick={handleClose} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer">
-                    Cancel
-                </button>
-                <button onClick={handleSubmit} disabled={loading} className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 cursor-pointer">
-                    {loading ? 'Adding...' : 'Add Staff Member'}
-                </button>
-            </div>
-        </ModalBase>
+            </CrudModal>
+        </>
     )
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, required, error, children }: { label: string; required?: boolean; error?: string; children: React.ReactNode }) {
     return (
         <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-text-brown-light uppercase tracking-wider">{label}</label>
+            <label className="text-xs font-bold text-text-brown-light uppercase tracking-wider">
+                {label} {required && <span className="text-red-500">*</span>}
+            </label>
             {children}
+            {error && <p className="text-xs text-red-600">{error}</p>}
         </div>
     )
 }
-
-const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"

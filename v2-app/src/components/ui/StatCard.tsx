@@ -1,27 +1,29 @@
+import Link from "next/link"
+
 export interface StatCardProps {
-  label: string;
-  value: React.ReactNode;
-  icon: React.ReactNode;
-  color: string;
-  iconColor: string;
+    label: string
+    value: React.ReactNode
+    icon: React.ReactNode
+    borderColor: string
+    iconColor: string
+    href?: string
 }
 
-export default function StatCard({ label, value, icon, color, iconColor }: StatCardProps) {
-    return (
-        <div className={`bg-white p-5 rounded-xl shadow-md border border-cream-border border-l-4 ${color} flex items-center gap-4`}>
-            <div className={`text-2xl flex-shrink-0 ${iconColor}`}>{icon}</div>
-
+export default function StatCard({ label, value, icon, borderColor, iconColor, href }: StatCardProps) {
+    const content = (
+        <div className={`p-5 rounded-xl shadow-sm border border-cream-border border-l-4 ${borderColor} flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer`}>
+            <div className={`text-3xl flex-shrink-0 ${iconColor}`}>{icon}</div>
             <div className="min-w-0 flex-1">
-                <h3 className="text-xs font-bold text-text-brown-light uppercase leading-none truncate"
-                title={label}>
-                {label}
+                <h3 className="text-xs font-bold text-text-brown-light uppercase leading-none truncate" title={label}>
+                    {label}
                 </h3>
-
-                <p className="text-xl font-black text-text-brown truncate"
-                title={typeof value === 'string' ? value : undefined}>
-                {value}
+                <p className="text-3xl font-black text-text-brown truncate mt-1"
+                   title={typeof value === 'string' ? value : undefined}>
+                    {value}
                 </p>
             </div>
         </div>
-    );
+    )
+
+    return href ? <Link href={href}>{content}</Link> : content
 }

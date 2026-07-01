@@ -35,7 +35,7 @@ export default function StaffTable({ staffList, searchQuery, onSearch, onAdd, on
     const sorted = sortData(staffList, sortCol as keyof StaffProfile, sortDir)
 
     return(
-        <div className="rounded-xl shadow-md border border-cream-border mt-5">
+        <div className="rounded-xl  shadow-md border border-cream-border mt-5">
             <div className="flex justify-between items-center p-5">
                 <div>
                     <h2 className="font-bold text-lg">All Staff</h2>
