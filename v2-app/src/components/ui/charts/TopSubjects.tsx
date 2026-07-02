@@ -16,7 +16,7 @@ export default function TopSubjects({ topSubjects }: { topSubjects: TopSubject[]
             <div className="flex flex-col gap-5">
                 <div className="flex items-center gap-2">
                     <FaBook className="text-xl" />
-                    <p className="font-bold text-xl">Top Subjects</p>
+                    <p className="font-bold text-xl">Most Booked Subjects</p>
                 </div>
 
                 <BarChart responsive style={{ height: '300px', width: '100%'}} data={topSubjects}>

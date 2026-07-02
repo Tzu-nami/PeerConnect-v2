@@ -15,7 +15,7 @@ export default function SatisfactionRate({ satisfactionData }: { satisfactionDat
                 {/* Chart title */}
                 <div className="flex items-center gap-2">
                     <FaSmile className="text-xl" />
-                    <p className="font-bold text-xl">Satisfaction Rate</p>
+                    <p className="font-bold text-xl">Student Satisfaction Rate</p>
                 </div>
 
                 {/* Chart display */}

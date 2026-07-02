@@ -16,7 +16,7 @@ export default function CollegeBookings({ collegeActivity }: { collegeActivity: 
             <div className="flex flex-col gap-5">
                 <div className="flex items-center gap-2">
                     <FaSchool  className="text-xl" />
-                    <p className="font-bold text-xl">College Activity</p>
+                    <p className="font-bold text-xl">Bookings per College</p>
                 </div>
 
                 <BarChart responsive style={{ height: '300px', width: '100%'}} data={collegeActivity}>

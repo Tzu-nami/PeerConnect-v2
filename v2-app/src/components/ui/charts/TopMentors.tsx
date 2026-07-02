@@ -11,7 +11,7 @@ export default function TopMentors({ topMentors }: { topMentors: TopMentor[] }) 
                 {/* Table title */}
                 <div className="flex items-center gap-2 px-5 py-4">
                     <FaTrophy className="text-xl" />
-                    <p className="font-bold text-xl">Top Mentors</p>
+                    <p className="font-bold text-xl">Most Active Mentors</p>
                 </div>
 
                 {/* Table display */}
