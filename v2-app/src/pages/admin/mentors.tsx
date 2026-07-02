@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import type { GetServerSideProps } from 'next';
 import { createClient as createServerClient } from '@/utils/supabase/server';
@@ -46,6 +46,26 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
   const [deleteMentor, setDeleteMentor] = useState<AdminMentor | null>(null);
   const [showCreate, setShowCreate]     = useState(false);
   const [showSubject, setShowSubject]   = useState(false);
+
+    // Open mentor modal from URL query
+    useEffect(() => {
+        const mentorId = router.query.mentorId
+
+        if(mentorId && typeof mentorId === 'string' && initialMentors.length > 0) {
+            const found = initialMentors.find((mentor) => mentor.id === mentorId)
+
+            if(found) {
+                setViewMentor(found)
+            }
+        }
+    }, [router.query, initialMentors])
+
+    //  Open create mentor modal from quick actions
+    useEffect(() => {
+        if (router.query.action === 'add') {
+            setShowCreate(true)
+        }
+    }, [router.query])
 
   // Filters
   const filtered = useMemo(() => {

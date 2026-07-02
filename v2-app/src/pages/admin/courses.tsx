@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/router";
 import type { GetServerSideProps } from 'next';
 import { createClient as createServerClient } from '@/utils/supabase/server';
@@ -39,6 +39,13 @@ export default function AdminCoursesPage({ initialSubjects }: CourseProps) {
     const [editSubject, setEditSubject] = useState<AdminCourse | null>(null);
     const [deleteSubject, setDeleteSubject] = useState<AdminCourse | null>(null);
     const [viewSubject, setViewSubject] = useState<AdminCourse | null>(null);
+
+    //  Open add subject modal from quick actions
+    useEffect(() => {
+        if (router.query.action === 'add') {
+            setShowCreate(true)
+        }
+    }, [router.query])
 
     // Filters
     const uniqueMentors = useMemo(() => {

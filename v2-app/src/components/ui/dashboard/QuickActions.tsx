@@ -8,11 +8,11 @@ export default function QuickActions() {
            <p className="font-bold mb-3">Quick Actions</p>
             <div className="flex flex-col gap-2">
                 <div className="flex gap-2">
-                    <Link href="/admin/mentors" className="w-full flex gap-2 items-center justify-center border border-cream-border rounded-md py-2 hover:bg-cream-hover cursor-pointer">
+                    <Link href="/admin/mentors?action=add" className="w-full flex gap-2 items-center justify-center border border-cream-border rounded-md py-2 hover:bg-cream-hover cursor-pointer">
                         <MdPersonAddAlt1 className="text-base" />
                         <span className="font-semibold">Add Mentor</span>
                     </Link>
-                    <Link href="/admin/courses"  className="w-full flex gap-2 items-center justify-center border border-cream-border rounded-md py-2 hover:bg-cream-hover cursor-pointer">
+                    <Link href="/admin/courses?action=add"  className="w-full flex gap-2 items-center justify-center border border-cream-border rounded-md py-2 hover:bg-cream-hover cursor-pointer">
                         <MdLibraryAdd className="text-base" />
                         <span className="font-semibold">Add Subject</span>
                     </Link>

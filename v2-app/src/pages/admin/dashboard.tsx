@@ -224,7 +224,7 @@ export default function AdminDashboard({ totalMentors, totalSessionsToday, total
             </div>
 
             {/* Grid content */}
-            <div className="grid grid-cols-3 gap-4 mt-4 items-stretch">
+            <div className="grid grid-cols-3 gap-6 mt-4 items-stretch">
                 {/* ROW 1 - Today's schedule table */}
                 <div className="col-span-2">
                     <TodaysSchedule  currentSessions={todaySessions} date={dateFormat} />
