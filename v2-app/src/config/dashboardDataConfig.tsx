@@ -9,7 +9,7 @@ export const dashboardDataConfig: Record<string, {
             gridCols: 'grid-cols-5',
             cards: [
                 { label: 'Total Mentors',       dataKey: 'totalMentors',            href: '/admin/mentors',         borderColor: 'border-l-green-600',     icon: <FaChalkboardTeacher />,     iconColor: 'text-green-600'     },
-                { label: 'Total Students',      dataKey: 'totalStudents',           href: '/admin/students',        borderColor: 'border-l-blue-500',      icon: <FaUserGraduate />,          iconColor: 'text-blue-500'      },
+                { label: 'Total Students',      dataKey: 'totalStudents',           href: '/admin/sessions',        borderColor: 'border-l-blue-500',      icon: <FaUserGraduate />,          iconColor: 'text-blue-500'      },
                 { label: 'Sessions Today',      dataKey: 'totalSessionsToday',      href: '/admin/sessions',        borderColor: 'border-l-yellow-500',    icon: <IoToday />,                 iconColor: 'text-yellow-500'    },
                 { label: 'Pending Sessions',    dataKey: 'totalPendingSessions',    href: '/admin/sessions',        borderColor: 'border-l-red-600',       icon: <FaHourglassHalf />,         iconColor: 'text-red-600'       },
                 { label: 'Average Ratings',     dataKey: 'totalFeedbackAverage',    href: '/admin/feedbacks',       borderColor: 'border-l-purple-500',    icon: <FaStar />,                  iconColor: 'text-purple-500'    }

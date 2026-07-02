@@ -42,7 +42,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         // Total mentors
         supabase
             .from('mentor_profiles')
-            .select('*', { count: 'exact', head: true }),
+            .select('*', { count: 'exact', head: true })
+            .eq('is_active', true),
 
         // Total sessions today
         supabase
