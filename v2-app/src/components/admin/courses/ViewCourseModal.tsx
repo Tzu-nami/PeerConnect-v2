@@ -1,6 +1,6 @@
 import CrudModal from "@/components/ui/CrudModal";
-import { FaBook, FaUserSlash } from "react-icons/fa6";
-import type { AdminCourse, AdminMentor } from "@/types/admin";
+import { FaUserSlash } from "react-icons/fa6";
+import type { AdminCourse } from "@/types/admin";
 
 interface ViewCourseModalProps {
     isOpen: boolean;
@@ -16,7 +16,7 @@ export default function ViewCourseModal({ isOpen, onClose, subject }: ViewCourse
     return (
         <div>
             <CrudModal
-                open={isOpen} onClose={onClose} maxwidth="max-w-md"
+                open={isOpen} onClose={onClose} maxWidth="max-w-md"
                 title={subject.code}
                 subtitle={subject.name}
             >
