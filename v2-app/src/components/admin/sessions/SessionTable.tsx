@@ -44,6 +44,12 @@ export default function SessionTable({
     }
   };
 
+  const getFilterLabel = (status: string) => {
+    if (status === 'no_show') return 'No Show';
+    if (status === 'rejected') return 'Unavailable';
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  };
+
   return (
     <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
       {/* Header, search, filters */}
@@ -69,7 +75,7 @@ export default function SessionTable({
                 {statusFilters.length === 0 
                   ? 'All Statuses' 
                   : statusFilters.length === 1
-                    ? (statusFilters[0] === 'no_show' ? 'No Show' : statusFilters[0].charAt(0).toUpperCase() + statusFilters[0].slice(1))
+                    ? getFilterLabel(statusFilters[0])
                     : `${statusFilters.length} Selected`}
               </span>
               <MdKeyboardArrowDown className={`text-xl text-slate-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
@@ -93,8 +99,8 @@ export default function SessionTable({
                         onChange={() => toggleStatus(status)}
                         className="w-4 h-4 text-up-maroon border-cream-border rounded focus:ring-up-maroon/30 cursor-pointer"
                       />
-                      <span className="text-sm font-bold text-slate-700 capitalize">
-                        {status === 'no_show' ? 'No Show' : status}
+                      <span className="text-sm font-bold text-slate-700">
+                        {getFilterLabel(status)}
                       </span>
                     </label>
                   ))}
