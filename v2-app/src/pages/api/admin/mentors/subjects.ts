@@ -5,8 +5,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Check if admin
     const supabase = createServerClient({ req, res } as any);
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ error: 'Unauthorized' });
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) return res.status(401).json({ error: 'Unauthorized' });
 
     if (req.method === 'POST') {
         try {

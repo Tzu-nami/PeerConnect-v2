@@ -9,11 +9,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Check if authenticated
     const supabase = createServerClient({ req, res } as any);
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ error: 'Unauthorized' });
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) return res.status(401).json({ error: 'Unauthorized' });
 
     // Validate inputs
-    const userId = session.user.id;
+    const userId = user.id;
     const { student_num, college_id, degreeProgram_id, yearLevel_id } = req.body;
 
     if (!STUDENT_NUM_REGEX.test(student_num ?? ''))
