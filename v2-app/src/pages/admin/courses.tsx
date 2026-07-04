@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/router";
-import type { GetServerSideProps } from 'next';
+import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { createClient as createServerClient } from '@/utils/supabase/server';
 
 // UI
@@ -66,8 +66,8 @@ export default function AdminCoursesPage({ initialSubjects }: CourseProps) {
             return matchesSearch && matchesMentor;
         })
         .sort((a, b) => {
-            let va: any = a[sortCol as keyof AdminCourse];
-            let vb: any = b[sortCol as keyof AdminCourse];
+            let va = a[sortCol as keyof AdminCourse] ?? '';
+            let vb = b[sortCol as keyof AdminCourse] ?? '';
             if (typeof va === 'string') va = va.toLowerCase();
             if (typeof vb === 'string') vb = vb.toLowerCase();
 
@@ -159,8 +159,8 @@ export default function AdminCoursesPage({ initialSubjects }: CourseProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const supabase = createServerClient(context as any);
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+    const supabase = createServerClient(context);
     
     // Must be admin
     const { data: { user } } = await supabase.auth.getUser();

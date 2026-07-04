@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import type { GetServerSideProps } from 'next';
+import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { createClient as createServerClient } from '@/utils/supabase/server';
 
 // UI
@@ -18,16 +18,16 @@ import CancelSessionModal from '@/components/admin/sessions/CancelSessionModal';
 
 // Data fetch
 import { getAdminSessionsData } from '@/utils/services/sessionService';
-import type { AdminSession } from '@/types/admin';
+import type { AdminSession, SessionCounts } from '@/types/admin';
 
 const PAGE_SIZE = 10;
 
-interface Props {
+interface SessionProps {
   initialSessions: AdminSession[];
-  counts: any;
+  counts: SessionCounts;
 }
 
-export default function AdminSessionsPage({ initialSessions, counts }: Props) {
+export default function AdminSessionsPage({ initialSessions, counts }: SessionProps) {
   const router = useRouter();
 
   // Table
@@ -59,15 +59,16 @@ export default function AdminSessionsPage({ initialSessions, counts }: Props) {
         return matchesSearch && matchesStatus;
       })
       .sort((a, b) => {
-        let valA: any = (a as any)[sortCol];
-        let valB: any = (b as any)[sortCol];
+        let valA = a[sortCol as keyof AdminSession] ?? '';
+        let valB = b[sortCol as keyof AdminSession] ?? '';
 
         // Convert dates
         if (sortCol === 'date') {
           valA = new Date(a.date).getTime();
           valB = new Date(b.date).getTime();
         }
-
+        if (typeof valA === 'string') valA = valA.toLowerCase();
+        if (typeof valB === 'string') valB = valB.toLowerCase();
         if (valA < valB) return sortDir === 'asc' ? -1 : 1;
         if (valA > valB) return sortDir === 'asc' ? 1 : -1;
         return 0;
@@ -186,8 +187,8 @@ export default function AdminSessionsPage({ initialSessions, counts }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const supabase = createServerClient(context as any);
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  const supabase = createServerClient(context);
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { redirect: { destination: '/login', permanent: false } };
 

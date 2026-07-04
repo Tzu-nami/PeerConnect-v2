@@ -1,5 +1,28 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import type { AdminCourse } from '@/types/admin';
+import type { AdminCourse, CoursesMentor } from '@/types/admin';
+
+interface RawSubject {
+    id: string;
+    code: string;
+    name: string;
+    mentor_subjects: {
+        mentor_profiles: {
+            user_profiles: {
+                firstName: string;
+                lastName: string;
+                email: string;
+                avatar: string | null;
+                student_profiles: {
+                    year_levels: { name: string } | null;
+                    degree_programs: { code: string } | null;
+                } | {
+                    year_levels: { name: string } | null;
+                    degree_programs: { code: string } | null;
+                }[] | null;
+            } | null;
+        } | null;
+    }[] | null;
+}
 
 export async function getAdminCourseData(supabase: SupabaseClient) {
     // Fetch the data
@@ -24,7 +47,8 @@ export async function getAdminCourseData(supabase: SupabaseClient) {
             )
         )
     `)
-    .order('code', { ascending: true });
+    .order('code', { ascending: true })
+    .returns<RawSubject[]>();
 
     if (error) {
         console.error("Error fetching subjects:", error);
@@ -32,10 +56,10 @@ export async function getAdminCourseData(supabase: SupabaseClient) {
     }
 
     // Format courses for better display
-    const subjects: AdminCourse[] = (rawSubjects || []).map((sub: any) => {
+    const subjects: AdminCourse[] = (rawSubjects || []).map((sub) => {
         // Get mentor info
         const mappedMentors = (sub.mentor_subjects || [])
-            .map((ms: any) => {
+            .map((ms) => {
                 const userProfile = ms.mentor_profiles?.user_profiles;
                 if (!userProfile) return null;
 
@@ -51,10 +75,10 @@ export async function getAdminCourseData(supabase: SupabaseClient) {
                     degreeProgram: studentProfile?.degree_programs?.code ?? '',
                 };
             })
-            .filter(Boolean);
+            .filter((m): m is CoursesMentor => m !== null);
 
         // Sort mentors alphabetically
-        mappedMentors.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        mappedMentors.sort((a, b) => a.name.localeCompare(b.name));
 
         return {
             id: sub.id,

@@ -1,12 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient as createServerClient } from '@/utils/supabase/server';
 
+interface AvailabilityInput {
+    day_of_week: string;
+    start_time: string;
+    end_time: string;
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     // Check if admin
     const supabase = createServerClient({ req, res } as any);
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ error: 'Unauthorized' });
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) return res.status(401).json({ error: 'Unauthorized' });
+
+    const { data: callerProfile } = await supabase
+        .from('user_profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+    if (callerProfile?.role !== 'admin') {
+        return res.status(403).json({ error: 'Forbidden: Admin access required.' });
+    }
 
     // Create request
     if (req.method === 'POST') {
@@ -62,7 +78,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Create mentor availabilities
             if (availabilities?.length > 0) {
                 const { error: availError } = await supabase.from('mentor_availabilities').insert(
-                availabilities.map((a: any) => ({ mentor_id: mentorId, ...a }))
+                    availabilities.map((a: AvailabilityInput) => ({ 
+                        mentor_id: mentorId, 
+                        day_of_week: a.day_of_week, 
+                        start_time: a.start_time, 
+                        end_time: a.end_time 
+                    }))
                 );
                 if (availError) throw availError;
             }

@@ -5,7 +5,7 @@ import { FaPenToSquare } from 'react-icons/fa6';
 
 import CrudModal from '@/components/ui/CrudModal';
 import ConfirmModal from '@/components/ui/ConfirmModal';
-import MentorCrudForm from '@/components/admin/mentors/MentorCrudForm';
+import MentorCrudForm, { type MentorCrudForm as MentorCrudFormType } from '@/components/admin/mentors/MentorCrudForm';
 import type { AdminMentor, AvailabilityRow } from '@/types/admin';
 
 const EMPTY_AVAILABILITY = (): AvailabilityRow => ({ id: uuid(), day_of_week: '', start_time: '', end_time: '' });
@@ -105,7 +105,10 @@ export default function EditMentorModal({ isOpen, onClose, onSuccess, subjects, 
 
     if (originalAvails.length !== currentAvails.length) return true;
 
-    const sortFn = (a: any, b: any) => a.day_of_week.localeCompare(b.day_of_week) || a.start_time.localeCompare(b.start_time);
+    const sortFn = (
+      a: { day_of_week: string; start_time: string }, 
+      b: { day_of_week: string; start_time: string }
+    ) => a.day_of_week.localeCompare(b.day_of_week) || a.start_time.localeCompare(b.start_time);
     originalAvails.sort(sortFn);
     currentAvails.sort(sortFn);
 
@@ -192,7 +195,7 @@ export default function EditMentorModal({ isOpen, onClose, onSuccess, subjects, 
       >
         <MentorCrudForm
           mode="edit" formState={formState} subjects={subjects} errors={errors}
-          onFormChange={(p) => setFormState(f => ({ ...f, ...p } as any))}
+          onFormChange={(p: Partial<MentorCrudFormType>) => setFormState(f => ({ ...f, ...p }))}
         />
       </CrudModal>
 

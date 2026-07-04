@@ -9,6 +9,37 @@ function avatarPlaceholder(name: string) {
   return `https://api.dicebear.com/8.x/initials/svg?seed=${initial}&backgroundColor=1a3c2f&textColor=ffffff`;
 }
 
+interface RawAdminMentor {
+  id: string;
+  user_id: string;
+  user_profiles: {
+    firstName: string;
+    lastName: string;
+    middleInitial: string | null;
+    email: string;
+    avatar: string | null;
+    student_profiles: {
+      student_num: string;
+      year_levels: { name: string } | null;
+      degree_programs: { name: string } | null;
+      colleges: { name: string } | null;
+    } | {
+      student_num: string;
+      year_levels: { name: string } | null;
+      degree_programs: { name: string } | null;
+      colleges: { name: string } | null;
+    }[] | null;
+  } | null;
+  mentor_subjects: {
+    subjects: { id: string; code: string; name: string } | null;
+  }[] | null;
+  mentor_availabilities: {
+    day_of_week: string;
+    start_time: string;
+    end_time: string;
+  }[] | null;
+}
+
 export async function getAdminMentorsData(supabase: SupabaseClient) {
   const now = new Date();
   const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay() + 1);
@@ -27,27 +58,29 @@ export async function getAdminMentorsData(supabase: SupabaseClient) {
       mentor_subjects ( subjects(id, code, name) ),
       mentor_availabilities ( day_of_week, start_time, end_time )
     `).eq('is_active', true)
+    .returns<RawAdminMentor[]>()
   ]);
 
   // Format mentors for better display
-  const formattedMentors: AdminMentor[] = (mentorRows ?? []).map((mp: any) => {
+  const formattedMentors: AdminMentor[] = (mentorRows ?? []).map((mp) => {
     const u = mp.user_profiles;
     const sp = Array.isArray(u?.student_profiles) ? u.student_profiles[0] : u?.student_profiles;
 
-    const rawDays = [...new Set<string>((mp.mentor_availabilities ?? []).map((a: any) => a.day_of_week as string))]
+    const rawDays = [...new Set<string>((mp.mentor_availabilities ?? []).map((a) => a.day_of_week as string))]
       .sort((a, b) => (DAY_ORDER[a.toLowerCase()] ?? 99) - (DAY_ORDER[b.toLowerCase()] ?? 99))
       .map(d => d.charAt(0).toUpperCase() + d.slice(1, 3));
 
-    const schedule: any = {};
+    const schedule: Record<string, { slots: { start: string; end: string }[] }> = {};
     for (const a of (mp.mentor_availabilities ?? [])) {
       const key = a.day_of_week.toLowerCase();
       if (!schedule[key]) schedule[key] = { slots: [] };
       schedule[key].slots.push({ start: format12hrTime(a.start_time), end: format12hrTime(a.end_time) });
     }
 
-    const validSubjects = (mp.mentor_subjects ?? []).map((ms: any) => ms.subjects).filter(Boolean)
-      .filter((s: any, i: number, arr: any[]) => arr.findIndex(x => x.id === s.id) === i)
-      .sort((a: any, b: any) => a.code.localeCompare(b.code));
+    const validSubjects = (mp.mentor_subjects ?? []).map((ms) => ms.subjects)
+      .filter((s): s is { id: string; code: string; name: string } => s !== null)
+      .filter((s, i: number, arr) => arr.findIndex(x => x.id === s.id) === i)
+      .sort((a, b) => a.code.localeCompare(b.code));
 
     const fullName = `${u?.firstName ?? ''} ${u?.lastName ?? ''}`.trim();
 
@@ -60,13 +93,13 @@ export async function getAdminMentorsData(supabase: SupabaseClient) {
       student_num: sp?.student_num ?? '',
       avatar: u?.avatar ?? avatarPlaceholder(fullName),
       subjects: validSubjects,
-      subjectsTable: validSubjects.map((s: any) => s.code).join(', '),
+      subjectsTable: validSubjects.map((s) => s.code).join(', '),
       days: rawDays, schedule,
       yearLevel: sp?.year_levels?.name ?? '',
       degreeProgram: sp?.degree_programs?.name ?? '',
       college: sp?.colleges?.name ?? '',
     };
-  }).sort((a: any, b: any) => a.lastName.localeCompare(b.lastName));
+  }).sort((a, b) => a.lastName.localeCompare(b.lastName));
 
   // Stats
   let mostActiveName = 'N/A';

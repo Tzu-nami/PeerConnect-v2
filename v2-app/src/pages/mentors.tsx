@@ -1,4 +1,4 @@
-import type { GetServerSideProps } from 'next';
+import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { createClient } from '@/utils/supabase/server';
 import MentorHeader from '@/components/landing/mentors/MentorHeader';
 import MentorDirectory from '@/components/landing/mentors/MentorDirectory';
@@ -36,7 +36,36 @@ export default function MentorsPage({ mentors, subjects, isAuthenticated, userRo
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+interface RawMentor {
+    id: string;
+    user_id: string;
+    user_profiles: {
+        firstName: string;
+        lastName: string;
+        middleInitial: string | null;
+        email: string;
+        avatar: string | null;
+        student_profiles: {
+            year_levels: { name: string } | null;
+            degree_programs: { name: string } | null;
+            colleges: { name: string } | null;
+        } | {
+            year_levels: { name: string } | null;
+            degree_programs: { name: string } | null;
+            colleges: { name: string } | null;
+        }[] | null;
+    } | null;
+    mentor_subjects: {
+        subjects: { id: string; code: string; name: string } | null;
+    }[] | null;
+    mentor_availabilities: {
+        day_of_week: string;
+        start_time: string;
+        end_time: string;
+    }[] | null;
+}
+
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const supabase = createClient(context);
 
     // Database fetching
@@ -66,7 +95,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 start_time,
                 end_time
             )
-        `).eq('is_active', true),
+        `).eq('is_active', true)
+        .returns<RawMentor[]>(),
         supabase.from('subjects').select('id, code, name').order('code'),
     ]);
 
@@ -74,7 +104,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     // Mentors data
     const mentors: Mentor[] = (mentorRows ?? [])
-        .map((mp: any) => {
+        .map((mp) => {
             const user = mp.user_profiles;
             const rawStudentProfile = user?.student_profiles;
             const studentProfile = Array.isArray(rawStudentProfile) 
@@ -83,7 +113,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
             // Get mentor available days
             const rawDays: string[] = (mp.mentor_availabilities ?? [])
-                .map((a: any) => a.day_of_week as string);
+                .map((a) => a.day_of_week as string);
             const scheduleDays = [...new Set(rawDays)]
                 .sort((a, b) => (DAY_ORDER[a.toLowerCase()] ?? 99) - (DAY_ORDER[b.toLowerCase()] ?? 99))
                 .map((d) => d.charAt(0).toUpperCase() + d.slice(1, 3));
@@ -113,6 +143,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
             const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim();
 
+            const mappedSubjects = (mp.mentor_subjects ?? [])
+                .map((ms) => ms.subjects)
+                .filter((s): s is Subject => s !== null)
+                .filter((s, i, arr) => arr.findIndex((x) => x.id === s.id) === i)
+                .sort((a, b) => a.code.localeCompare(b.code));
+
             // Mapped data
             return {
                 id: mp.id,
@@ -122,11 +158,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 middleInitial: user?.middleInitial ? `${user.middleInitial}.` : '',
                 email: user?.email ?? '',
                 avatar: user?.avatar ?? avatarPlaceholder(fullName),
-                subjects: (mp.mentor_subjects ?? [])
-                    .map((ms: any) => ms.subjects)
-                    .filter(Boolean)
-                    .filter((s: any, i: number, arr: any[]) => arr.findIndex((x) => x.id === s.id) === i)
-                    .sort((a: any, b: any) => a.code.localeCompare(b.code)),
+                subjects: mappedSubjects,
                 days: scheduleDays,
                 schedule,
                 yearLevel: studentProfile?.year_levels?.name ?? '',

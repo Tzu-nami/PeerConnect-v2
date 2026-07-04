@@ -1,14 +1,34 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient as createServerClient } from '@/utils/supabase/server';
 
+interface FetchedMentor {
+    user_id: string;
+    user_profiles: { avatar: string | null } | null;
+}
+
+interface AvailabilityInput {
+    day_of_week: string;
+    start_time: string;
+    end_time: string;
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query as { id: string };
 
     // Check if admin
     const supabase = createServerClient({ req, res } as any);
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ error: 'Unauthorized' });
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) return res.status(401).json({ error: 'Unauthorized' });
 
+    const { data: callerProfile } = await supabase
+        .from('user_profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+    if (callerProfile?.role !== 'admin') {
+        return res.status(403).json({ error: 'Forbidden: Admin access required.' });
+    }
 
     // Edit request
     if (req.method === 'PUT') {
@@ -19,23 +39,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const { data: mp, error: fetchError } = await supabase.from('mentor_profiles')
                 .select('user_id, user_profiles(avatar)')
                 .eq('id', id)
+                .returns<FetchedMentor[]>()
                 .single();
             if (fetchError || !mp) throw new Error('Mentor not found');
 
             // Update profile
             const { error: userError } = await supabase.from('user_profiles')
                 .update({ 
-                firstName, 
-                lastName, 
-                middleInitial: middleInitial || null,
-                ...(avatarUrl !== undefined && { avatar: avatarUrl })
+                    firstName, 
+                    lastName, 
+                    middleInitial: middleInitial || null,
+                    ...(avatarUrl !== undefined && { avatar: avatarUrl })
                 })
                 .eq('id', mp.user_id);
             if (userError) throw userError;
 
             // Update avatar
-            if (avatarUrl !== undefined && (mp as any).user_profiles?.avatar) {
-                const oldAvatar = (mp as any).user_profiles.avatar;
+            if (avatarUrl !== undefined && mp.user_profiles?.avatar) {
+                const oldAvatar = mp.user_profiles.avatar;
                 if (oldAvatar.includes('supabase.co')) {
                     const oldPath = oldAvatar.split('/').pop();
                     if (oldPath) {
@@ -57,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             await supabase.from('mentor_availabilities').delete().eq('mentor_id', id);
             if (availabilities?.length > 0) {
                 const { error: availError } = await supabase.from('mentor_availabilities').insert(
-                    availabilities.map((a: any) => ({ 
+                    availabilities.map((a: AvailabilityInput) => ({ 
                         mentor_id: id, day_of_week: a.day_of_week, start_time: a.start_time, end_time: a.end_time 
                     }))
                 );
@@ -76,7 +97,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             // Fetch avatar url to be deleted
             const { data: mp, error: fetchError } = await supabase.from('mentor_profiles')
-                .select('user_id, user_profiles(avatar)').eq('id', id).single(); 
+                .select('user_id, user_profiles(avatar)').eq('id', id).returns<FetchedMentor[]>().single(); 
             
             if (fetchError || !mp) throw new Error('Mentor not found');
 
@@ -92,7 +113,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             await supabase.from('mentor_availabilities').delete().eq('mentor_id', id);
 
             // Delete avatar in supabase
-            const currentAvatar = (mp as any).user_profiles?.avatar;
+            const currentAvatar = mp.user_profiles?.avatar;
             if (currentAvatar && currentAvatar.includes('supabase.co')) {
                 const filePath = currentAvatar.split('/').pop(); 
                 if (filePath) {
