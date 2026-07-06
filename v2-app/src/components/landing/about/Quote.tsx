@@ -12,9 +12,9 @@ export default function Quote({ author }: QuoteProps) {
                 "At the LRC, we believe that every student has the capacity to succeed.
                 Sometimes, all they need is the right peer beside them."
                 </p>
-                <div className="w-8 h-px bg-up-yellow mx-auto mb-4"></div>
+                <div className="w-8 h-px bg-up-green mx-auto mb-4"></div>
                 <p className="text-text-brown-light text-xs tracking-widest uppercase">
-                — {author}, LRC Head
+                — {author}, LRC Coordinator
                 </p>
             </div>
         </section>

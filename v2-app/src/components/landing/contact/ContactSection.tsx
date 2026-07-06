@@ -9,8 +9,8 @@ const gmailUrl =
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-3 text-up-yellow text-xs tracking-widest font-bold uppercase">
-      <span className="block w-8 h-px bg-up-yellow" />
+    <div className="flex items-center gap-3 text-up-green text-xs tracking-widest font-bold uppercase">
+      <span className="block w-8 h-px bg-up-green" />
       {children}
     </div>
   );
@@ -27,7 +27,7 @@ export default function ContactSection() {
           </h1>
         </div>
 
-        <div className="text-text-brown leading-7 border-l-0 md:border-l border-up-yellow pl-0 md:pl-5 self-center animate-fade-up">
+        <div className="text-text-brown leading-7 border-l-0 md:border-l border-up-green pl-0 md:pl-5 self-center animate-fade-up">
           Have questions about PeerConnect or need help with your booking? Reach
           out to us and we&apos;ll get back to you as soon as we can.
         </div>
@@ -36,7 +36,7 @@ export default function ContactSection() {
       <section className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 border-t border-cream-border pt-12 px-6 md:px-20 pb-20 animate-fade-up">
         <div className="flex flex-col gap-9 animate-fade-up [animation-delay:150ms]">
           <div>
-            <div className="text-xs text-up-yellow font-bold tracking-widest uppercase mb-4">
+            <div className="text-xs text-up-green font-bold tracking-widest uppercase mb-4">
               Email Us Directly
             </div>
 
@@ -67,7 +67,7 @@ export default function ContactSection() {
           </div>
 
           <div>
-            <div className="text-xs text-up-yellow font-bold tracking-widest uppercase mb-4">
+            <div className="text-xs text-up-green font-bold tracking-widest uppercase mb-4">
               Find Us
             </div>
 
@@ -88,7 +88,7 @@ export default function ContactSection() {
 
         <div className="flex flex-col gap-9 animate-fade-up [animation-delay:250ms]">
           <div>
-            <div className="text-xs text-up-yellow font-bold tracking-widest uppercase mb-4">
+            <div className="text-xs text-up-green font-bold tracking-widest uppercase mb-4">
               Our Office
             </div>
 
@@ -124,7 +124,7 @@ export default function ContactSection() {
           </div>
 
           <div>
-            <div className="text-xs text-up-yellow font-bold tracking-widest uppercase mb-4">
+            <div className="text-xs text-up-green font-bold tracking-widest uppercase mb-4">
               Follow Us
             </div>
 

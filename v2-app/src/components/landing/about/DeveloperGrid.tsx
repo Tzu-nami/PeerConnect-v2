@@ -14,7 +14,7 @@ export default function DeveloperGrid() {
 
     return (
         <section className="py-8 animate-fade-up [animation-delay:325ms]">
-            <div className="text-up-yellow text-xs font-bold tracking-widest uppercase mb-4">
+            <div className="text-up-green text-xs font-bold tracking-widest uppercase mb-4">
                 Developed By
             </div>
             <div className="border border-cream-border divide-y divide-cream-border">

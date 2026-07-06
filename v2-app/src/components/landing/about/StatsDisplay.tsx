@@ -17,7 +17,7 @@ export default function StatsDisplay({ stats }: StatsDisplayProps) {
                     <div className="font-heading text-4xl sm:text-5xl md:text-6xl text-up-maroon mb-2">
                         {stat.value}
                     </div>
-                    <div className="text-up-yellow text-[10px] sm:text-xs font-bold tracking-wider sm:tracking-widest uppercase">
+                    <div className="text-up-green text-[10px] sm:text-xs font-bold tracking-wider sm:tracking-widest uppercase">
                         {stat.label}
                     </div>
                 </div>

@@ -9,7 +9,7 @@ const STEPS = [
 export default function HowItWorks() {
     return (
         <section className="py-16 border-b border-cream-border animate-fade-up [animation-delay:250ms]">
-            <div className="text-up-yellow text-xs font-bold tracking-widest uppercase mb-10">
+            <div className="text-up-green text-xs font-bold tracking-widest uppercase mb-10">
                 How it Works
             </div>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-0">
