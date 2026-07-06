@@ -88,10 +88,10 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated, us
 
         {/* Empty state */}
         {filteredMentors.length === 0 && (
-            <div className="bg-white rounded-xl border border-gray-100 py-20 text-center shadow-sm">
-            <FaChalkboardUser className="text-4xl text-gray-300 mb-4 block" />
-            <p className="font-medium text-gray-500">No mentors found.</p>
-            <p className="text-xs mt-1 text-gray-400">Try adjusting your search or filter.</p>
+            <div className="bg-white rounded-xl border border-cream-border py-20 text-center shadow-sm flex flex-col items-center justify-center">
+                <FaChalkboardUser className="text-4xl text-gray-300 mb-4" />
+                <p className="font-medium text-gray-500">No mentors found.</p>
+                <p className="text-xs mt-1 text-gray-400">Try adjusting your search or filter.</p>
             </div>
         )}
 
@@ -123,6 +123,7 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated, us
             mentor={selectedMentor}
             onClose={() => setSelectedMentor(null)}
             isAuthenticated={isAuthenticated}
+            userRole={userRole}
             hideFooter={userRole === 'admin'}
         />
         </div>
