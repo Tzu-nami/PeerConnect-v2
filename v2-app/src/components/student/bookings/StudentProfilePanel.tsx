@@ -81,7 +81,7 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
             <button
                 onClick={() => setOpen((v) => !v)}
                 type="button"
-                className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-cream-hover transition-colors"
+                className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-cream-hover transition-colors cursor-pointer"
             >
                 <span className="font-bold text-lg text-text-brown">Student Profile</span>
                     <MdKeyboardArrowDown
@@ -185,7 +185,6 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                     );
                                 })}
                             </div>
-                            {/* 3. FIXED: Moved the error text OUTSIDE the grid div! */}
                             {errors.yearLevel_id && <p className="mt-1 text-xs text-red-600">{errors.yearLevel_id}</p>}
                         </div>
 
