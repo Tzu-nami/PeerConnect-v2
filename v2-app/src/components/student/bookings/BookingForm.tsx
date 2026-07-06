@@ -30,6 +30,7 @@ interface BookingFormProps {
     lockedMentorId?: string;
     hasProfile: boolean;
     onSuccess: () => void;
+    userRole?: string;
 }
 
 function getDayOfWeek(dateStr: string): string {
@@ -52,7 +53,7 @@ function StepHeader({ n, label }: { n: number; label: React.ReactNode }) {
 }
 
 export default function BookingForm({
-    mentors, availabilities, bookedSlots, mentorSubjects, subjects, tutorialModes, lockedMentorId, hasProfile, onSuccess,
+    mentors, availabilities, bookedSlots, mentorSubjects, subjects, tutorialModes, lockedMentorId, hasProfile, onSuccess, userRole
 }: BookingFormProps) {
     const [form, setForm] = useState<BookingFormState>({
         mentor_id: lockedMentorId ?? '',
@@ -125,6 +126,16 @@ export default function BookingForm({
             setErrors((e) => ({ ...e, mentor_id: '' }));
         }
     }, [filteredMentors, form.mentor_id, isMentorLocked]);
+
+    // Filter subjects based on locked mentor
+    const filteredSubjects = useMemo(() => {
+        if (!isMentorLocked || !lockedMentorId) return subjects;
+        const mentorCanTeach = mentorSubjects
+            .filter((ms) => String(ms.mentorProfile_id) === String(lockedMentorId))
+            .map((ms) => String(ms.subject_id));
+
+        return subjects.filter((s) => mentorCanTeach.includes(String(s.id)));
+    }, [isMentorLocked, lockedMentorId, mentorSubjects, subjects]);
 
     // Date error handlings
     const validateDate = useCallback((value: string) => {
@@ -297,7 +308,7 @@ export default function BookingForm({
                             className={`${inputClass} ${!form.subject_id ? 'text-slate-400' : 'text-text-brown'}`}
                         >
                             <option value="" disabled>--- Select a Subject ---</option>
-                            {subjects.map((s) => (
+                            {filteredSubjects.map((s) => (
                                 <option key={s.id} value={s.id}>{s.code.toUpperCase()} - {s.name}</option>
                             ))}
                         </select>
@@ -313,6 +324,7 @@ export default function BookingForm({
                         availabilities={availabilities}
                         bookedSlots={bookedSlots}
                         error={errors.mentor_id}
+                        userRole={userRole}
                         updateField={updateField}
                     />
 
