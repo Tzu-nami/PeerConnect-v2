@@ -8,6 +8,8 @@ import ActivitiesSection from "@/components/landing/home/ActivitiesSection"
 
 // Utilities
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole"
+import {createClient} from "@/utils/supabase/server";
+import {LandingImages} from "@/types/landingImages";
 
 // Types
 type UserRole = "student" | "mentor" | "admin" | null
@@ -20,13 +22,32 @@ const ROLE_URLS: Record<Exclude<UserRole, null>, { book: string; dashboard: stri
 
 const DEFAULT_URLS = { book: "/login", dashboard: "/login", history: "/login" }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const userRole = await getServerSideUserRole(context)
-    return { props: { userRole } }
+interface HomeProps {
+    userRole: UserRole
+    landingImages: LandingImages[]
 }
 
-export default function Home({ userRole }: { userRole: UserRole }) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const userRole = await getServerSideUserRole(context)
+    const supabase = createClient(context)
+
+    // Fetch uploaded landing page images
+    const { data: landingImages } = await supabase
+        .from('landing_images')
+        .select('*')
+        .order('id')
+
+    return {
+        props: {
+            userRole,
+            landingImages: landingImages ?? []
+        }
+    }
+}
+
+export default function Home({ userRole, landingImages }: HomeProps) {
     const urls = userRole ? ROLE_URLS[userRole] : DEFAULT_URLS
+    const imageUrlMap = Object.fromEntries(landingImages.map((image) => [image.slot_key, image.image_url]))
 
     const bookURL = !userRole
         ? `/login?redirectTo=/bookings`
@@ -36,10 +57,10 @@ export default function Home({ userRole }: { userRole: UserRole }) {
 
     return (
         <>
-            <HeroSection shouldShowBookNow={userRole !== "admin"} bookURL={bookURL} />
-            <ServicesSection />
+            <HeroSection shouldShowBookNow={userRole !== "admin"} bookURL={bookURL} imageURL={imageUrlMap['hero_bg']} />
+            <ServicesSection imageURL={imageUrlMap} />
             <HowItWorks bookURL={bookURL} dashboardURL={urls.dashboard} historyURL={urls.history} />
-            <ActivitiesSection />
+            <ActivitiesSection imageURL={imageUrlMap} />
         </>
     )
 }
