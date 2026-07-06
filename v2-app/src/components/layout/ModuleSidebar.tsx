@@ -50,16 +50,25 @@ export default function ModuleSidebar({ userRole, collapsed, setCollapsed }: Mod
 
             <nav className="flex-grow">
                 <ul className="flex flex-col">
-                    {links.map((link) => {
+                    {links.map((link, index) => {
                         const isActive = router.pathname === link.href
-                        return(
+                        const prevSection = index > 0 ? links[index - 1].section : undefined
+                        const showSectionHeader = link.section && link.section !== prevSection
+
+                        return (
                             <li key={link.href}>
+                                {showSectionHeader && (
+                                    <div className={`px-7 pt-4 pb-1 text-xs font-semibold text-white/40 uppercase tracking-wide whitespace-nowrap overflow-hidden transition-all duration-300
+                                            ${collapsed ? 'opacity-0 h-0 py-0' : 'opacity-100'}`}>
+                                        {link.section}
+                                    </div>
+                                )}
                                 <Link href={link.href}
                                       className={`flex items-center gap-4 py-5 px-7 w-full transition-colors
-                                        ${isActive ? 'text-up-maroon font-bold bg-cream' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                                            ${isActive ? 'text-up-maroon font-bold bg-white' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                                     <div className="text-2xl w-6 shrink-0 flex items-center justify-center">{link.icon}</div>
                                     <span className={`whitespace-nowrap transition-all duration-300 overflow-hidden
-                                        ${collapsed ? 'opacity-0 w-0' : 'opacity-100'}`}>
+                                            ${collapsed ? 'opacity-0 w-0' : 'opacity-100'}`}>
                                         {link.label}
                                     </span>
                                 </Link>

@@ -1,23 +1,32 @@
 import { MdDashboard } from "react-icons/md"
-import { FaChalkboardTeacher, FaComments } from "react-icons/fa"
-import { FaCalendarCheck, FaClockRotateLeft, FaClock, FaUserTie, FaBookOpen } from "react-icons/fa6"
+import { FaChalkboardTeacher, FaComments, FaImages  } from "react-icons/fa"
+import { FaCalendarCheck, FaClockRotateLeft, FaClock, FaUserTie, FaBookOpen, FaGear  } from "react-icons/fa6"
 
-export const moduleNavLinks: Record<string, { href: string; icon: React.ReactNode; label: string }[]> = {
+interface NavLink {
+    href: string
+    icon: React.ReactNode
+    label: string
+    section?: string
+}
+
+export const moduleNavLinks: Record<string, NavLink[]> = {
     admin: [
-        { href: '/admin/dashboard',  icon: <MdDashboard />,         label: 'Dashboard' },
-        { href: '/admin/mentors',    icon: <FaChalkboardTeacher />, label: 'Mentor Management' },
-        { href: '/admin/staff',      icon: <FaUserTie />,           label: 'Staff Management' },
-        { href: '/admin/courses',    icon: <FaBookOpen />,          label: 'Course Management' },
-        { href: '/admin/sessions',   icon: <FaCalendarCheck />,     label: 'Session Management' },
-        { href: '/admin/feedbacks',  icon: <FaComments />,          label: 'Student Feedbacks' },
+        { href: '/admin/dashboard', icon: <MdDashboard />,         label: 'Dashboard' },
+        { href: '/admin/mentors',   icon: <FaChalkboardTeacher />, label: 'Mentor Management',      section: 'Content Management' },
+        { href: '/admin/staff',     icon: <FaUserTie />,           label: 'Staff Management',       section: 'Content Management' },
+        { href: '/admin/courses',   icon: <FaBookOpen />,          label: 'Course Management',      section: 'Content Management' },
+        { href: '/admin/sessions',  icon: <FaCalendarCheck />,     label: 'Session Management',     section: 'Content Management' },
+        { href: '/admin/images',    icon: <FaImages />,            label: 'Image Management',       section: 'Content Management' },
+        { href: '/admin/feedbacks', icon: <FaComments />,          label: 'Student Feedbacks',      section: 'Feedback' },
+        { href: '/admin/settings',  icon: <FaGear />,              label: 'Settings',               section: 'System' },
     ],
     mentor: [
         { href: '/mentor/dashboard', icon: <MdDashboard />,         label: 'Dashboard' },
-        { href: '/mentor/bookings',  icon: <FaCalendarCheck />,     label: 'Booking Form' },
-        { href: '/mentor/history',   icon: <FaClockRotateLeft />,   label: 'Booking History' },
-        { href: '/mentor/mentors',   icon: <FaChalkboardTeacher />, label: 'Mentors' },
-        { href: '/mentor/sessions',  icon: <FaClock />,             label: 'Tutorial Sessions' },
-        { href: '/mentor/feedbacks', icon: <FaComments />,          label: 'Student Feedbacks' },
+        { href: '/mentor/sessions',  icon: <FaClock />,             label: 'Tutorial Sessions',     section: 'As Mentor' },
+        { href: '/mentor/feedbacks', icon: <FaComments />,          label: 'Student Feedbacks',     section: 'As Mentor' },
+        { href: '/mentor/bookings',  icon: <FaCalendarCheck />,     label: 'Booking Form',          section: 'As Student' },
+        { href: '/mentor/history',   icon: <FaClockRotateLeft />,   label: 'Booking History',       section: 'As Student' },
+        { href: '/mentor/mentors',   icon: <FaChalkboardTeacher />, label: 'Mentors',               section: 'As Student' },
     ],
     student: [
         { href: '/student/dashboard', icon: <MdDashboard />,         label: 'Dashboard' },
