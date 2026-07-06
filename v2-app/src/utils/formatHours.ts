@@ -11,6 +11,7 @@ export function formatHours(totalMinutes: number): string {
 }
 
 export function format12hrTime(timeStr: string): string {
+  if (!timeStr) return '';
   const [h, m] = timeStr.split(':').map(Number);
   const period = h >= 12 ? 'PM' : 'AM';
   const hour = h % 12 || 12;
