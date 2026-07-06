@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { getServerSideUserRole } from '@/utils/getServerSideUserRole';
 import { createClient } from '@/utils/supabase/server';
 import { getStudentBookingPageData } from '@/utils/services/bookingService'; 
 import { FaBan } from 'react-icons/fa6';
@@ -29,9 +30,10 @@ interface BookingPageProps {
     recentBookings: RecentBooking[];
     activeBooking: ActiveBooking | null;
     lockedMentorId?: string;
+    userRole?: string
 }
 
-export default function StudentBookingsPage({ mentors, availabilities, bookedSlots, mentorSubjects, subjects, tutorialModes, colleges, degreePrograms, yearLevels, studentProfile: initialProfile, recentBookings,  activeBooking, lockedMentorId }: BookingPageProps) {
+export default function StudentBookingsPage({ mentors, availabilities, bookedSlots, mentorSubjects, subjects, tutorialModes, colleges, degreePrograms, yearLevels, studentProfile: initialProfile, recentBookings,  activeBooking, lockedMentorId, userRole }: BookingPageProps) {
     const router = useRouter();
     const [profile, setProfile]           = useState(initialProfile);
     const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -119,6 +121,7 @@ export default function StudentBookingsPage({ mentors, availabilities, bookedSlo
                                 lockedMentorId={lockedMentorId}
                                 hasProfile={!!profile}
                                 onSuccess={handleBookingSuccess}
+                                userRole={userRole}
                             />
                         </>
                     )}
@@ -158,6 +161,7 @@ export default function StudentBookingsPage({ mentors, availabilities, bookedSlo
 }
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const supabase = createClient(context);
+    const userRole = await getServerSideUserRole(context);
 
     // Authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -170,8 +174,9 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
     return {
         props: {
-        ...pageData,
-        ...(lockedMentorId ? { lockedMentorId } : {}),
+            ...pageData,
+            ...(lockedMentorId ? { lockedMentorId } : {}),
+            userRole,
         },
     };
 };
