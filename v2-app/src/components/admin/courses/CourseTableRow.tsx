@@ -20,12 +20,8 @@ export default function CourseTableRow({ subject, onView, onEdit, onDelete }: Co
             <td className="px-5 py-4 align-middle text-sm text-text-brown-light truncate" title={subject.name}>
                 {subject.name}
             </td>
-            <td className="px-5 py-4 align-middle">
-                <span 
-                className="items-center inline-block bg-red-50 text-red-700 px-2 py-0.5 rounded text-[11px] font-bold border border-red-100 w-22 truncate text-center"
-                >
-                    {subject.mentorCount} {subject.mentorCount === 1 ? 'Mentor' : 'Mentors'}
-                </span>
+            <td className="px-5 py-4 align-middle text-sm text-text-brown-light truncate" title={subject.mentors.map(s => s.name).join('\n')}>
+                {subject.mentorCount} {subject.mentorCount === 1 ? 'Mentor' : 'Mentors'}
             </td>
             <td className="px-5 py-4 align-middle text-sm text-center relative">
                 <span className="w-2 h-2 rounded-full bg-text-brown-light inline-block group-hover:opacity-0 transition-all duration-150 ease-in-out" />

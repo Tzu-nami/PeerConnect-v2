@@ -104,7 +104,7 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
 
   return (
     <div>
-      {/* Header and stat cards */}
+      {/* Header */}
       <div className="border-cream-border">
         <div>
           <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">Mentor Management</h1>
@@ -118,28 +118,28 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
           label="Total Mentors" 
           value={stats.total} 
           icon={<FaChalkboardUser />} 
-          borderColor="border-green-600"
+          borderColor="border-l-green-600"
           iconColor="text-green-600"
         />
         <StatCard 
           label="Accepted This Week" 
           value={stats.acceptedThisWeek} 
           icon={<FaCircleCheck />}
-          borderColor="border-blue-600"
+          borderColor="border-l-blue-600"
           iconColor="text-blue-600"
         />
         <StatCard 
           label="Pending This Week" 
           value={stats.pendingThisWeek} 
           icon={<FaHourglass />}
-          borderColor="border-yellow-500"
+          borderColor="border-l-yellow-500"
           iconColor="text-yellow-500" 
         />
         <StatCard 
-          label="Most Active" 
+          label="Most Completed Sessions" 
           value={stats.mostActive} 
           icon={<FaTrophy />}
-          borderColor="border-red-600"
+          borderColor="border-l-red-600"
           iconColor="text-red-600"
         />
       </div>
