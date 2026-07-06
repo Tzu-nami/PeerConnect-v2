@@ -1,3 +1,6 @@
+// Constants
+import { CHART_COLORS } from "@/constants/chartColors"
+
 // Icons
 import { FaChartArea } from "react-icons/fa"
 
@@ -26,12 +29,11 @@ export default function MonthlyTrends({ monthlyTrends }: { monthlyTrends: Monthl
                              itemStyle={{ fontSize: 13 }} />
                     <Legend />
 
-
                     {/* Lines */}
                     <Area type="monotone" dataKey="total_successful" name="Successful Sessions"
-                          stroke="#15803D" strokeWidth={2} fillOpacity={0.3} fill="#BBF7D0" />
+                          stroke={CHART_COLORS.successful.stroke} strokeWidth={2} fillOpacity={0.3} fill={CHART_COLORS.successful.fill} />
                     <Area type="monotone" dataKey="total_unsuccessful" name="Unsuccessful Sessions"
-                          stroke="#DC2626" strokeWidth={2} fillOpacity={0.3} fill="#FECACA" />
+                          stroke={CHART_COLORS.unsuccessful.stroke} strokeWidth={2} fillOpacity={0.3} fill={CHART_COLORS.unsuccessful.fill} />
                 </AreaChart>
             </div>
         </div>
