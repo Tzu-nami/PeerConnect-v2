@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async(context) => {
     }
 }
 
-export default function Staff({ staffList }: { staffList: StaffProfile[] }) {
+export default function StaffManagement({ staffList }: { staffList: StaffProfile[] }) {
     // Router
     const router = useRouter()
 
@@ -78,7 +78,7 @@ export default function Staff({ staffList }: { staffList: StaffProfile[] }) {
     return(
         <>
             {/* Page title */}
-            <div className="border-b border-cream-border">
+            <div className="border-b border-white-border">
                 <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">Staff Management</h1>
                 <p className="text-xs md:text-sm xl:text-base font-medium text-slate-500 mt-1 mb-3">LRC Registry Staff</p>
             </div>

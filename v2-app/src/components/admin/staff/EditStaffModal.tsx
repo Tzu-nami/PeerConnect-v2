@@ -13,7 +13,7 @@ interface EditStaffModalProps {
 }
 
 const INITIAL_FORM = { firstName: '', lastName: '', middleInitial: '', email: '', role: '' }
-const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"
+const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"
 
 export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: EditStaffModalProps) {
     const [form, setForm] = useState(INITIAL_FORM)
@@ -135,11 +135,11 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
             footer={
                 <div className="flex gap-3">
                     <button onClick={handleClose} disabled={loading}
-                            className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
+                            className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
                         Cancel
                     </button>
                     <button onClick={handleValidate} disabled={loading || !isFormComplete || isUnchanged}
-                            className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition">
+                            className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition">
                         {loading ? 'Updating...' : 'Update Staff Member'}
                     </button>
                 </div>
@@ -147,7 +147,7 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
         >
             <div className="grid grid-cols-2 gap-6">
                 <div className="flex flex-col gap-4">
-                    <p className="text-xs font-bold text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
                         <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">1</span>
                         Staff Information
                     </p>
@@ -185,16 +185,16 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    <p className="text-xs font-bold text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
                         <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">2</span>
                         Profile Picture
                     </p>
 
-                    <div className="w-full aspect-square rounded-xl border-2 border-dashed border-cream-border bg-cream-dark flex items-center justify-center overflow-hidden">
+                    <div className="w-full aspect-square rounded-xl border-2 border-dashed border-white-border bg-white-dark flex items-center justify-center overflow-hidden">
                         {avatarPreview ? <img src={avatarPreview} alt="preview" className="w-full h-full object-cover" /> : <MdImage className="text-4xl text-slate-300" />}
                     </div>
 
-                    <label className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md cursor-pointer">
+                    <label className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md cursor-pointer">
                         Choose File
                         <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
                     </label>
@@ -207,7 +207,7 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
 function Field({ label, required, error, children }: { label: string; required?: boolean; error?: string; children: React.ReactNode }) {
     return (
         <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-text-brown-light uppercase tracking-wider">
+            <label className="text-xs font-bold text-text-muted uppercase tracking-wider">
                 {label} {required && <span className="text-red-500">*</span>}
             </label>
             {children}

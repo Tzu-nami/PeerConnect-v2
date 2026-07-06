@@ -58,7 +58,7 @@ export default function DeleteStaffModal({ isOpen, onClose, onSuccess, staff }: 
             footer={
                 <div className="flex gap-3">
                     <button onClick={handleClose} disabled={loading}
-                            className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
+                            className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
                         Cancel
                     </button>
                     <button onClick={handleDelete} disabled={loading}

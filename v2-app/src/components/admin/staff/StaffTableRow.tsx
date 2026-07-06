@@ -22,13 +22,13 @@ export default function StaffTableRow({ staff, onView, onEdit, onDelete }: Staff
     const fullName = `${staff.lastName}, ${staff.firstName} ${mi ? `${mi}.` : ''}`
 
     return(
-        <tr onClick={() => onView(staff)} className="border-t border-cream-border hover:bg-cream-hover transition cursor-pointer group">
-            <td className="px-5 py-6 text-sm font-bold text-text-brown">{fullName}</td>
-            <td className="px-5 py-6 text-sm text-text-brown-light">{role}</td>
-            <td className="px-5 py-6 text-sm text-text-brown-light">{staff.email}</td>
+        <tr onClick={() => onView(staff)} className="border-t border-white-border hover:bg-white-hover transition cursor-pointer group">
+            <td className="px-5 py-6 text-sm font-bold text-text-primary">{fullName}</td>
+            <td className="px-5 py-6 text-sm text-text-muted">{role}</td>
+            <td className="px-5 py-6 text-sm text-text-muted">{staff.email}</td>
             <td className="px-5 py-4 text-sm text-center relative">
                 {/* Idle dot */}
-                <span className="w-2 h-2 rounded-full bg-text-brown-light inline-block group-hover:opacity-0 transition-all duration-150 ease-in-out" />
+                <span className="w-2 h-2 rounded-full bg-text-muted inline-block group-hover:opacity-0 transition-all duration-150 ease-in-out" />
 
                 {/* Action buttons */}
                 <div className="absolute inset-0 flex items-center justify-center gap-2 text-lg opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out">
