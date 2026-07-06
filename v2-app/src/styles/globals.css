@@ -20,7 +20,7 @@
     --color-up-yellow-dark:       #C28212;
     --color-up-black:             #000000;
 
-    /* Others */
+    /* Cream colors */
     --color-cream:                #FAF8F2;
     --color-cream-dark:           #F0EDE4;
     --color-cream-complement:     #E6FEFF;
@@ -34,6 +34,20 @@
     --color-btn-brown:            #3D2B2B;
     --color-btn-brown-hover:      #2A1E1E;
     --color-sidebar-green:        #1A3C2F;
+
+    /* White colors */
+    --color-white:                #FFFFFF;
+    --color-white-hover:          #F3F4F6;
+    --color-white-dark:           #EBEDEF;
+    --color-white-border:         #E5E7EB;
+    --color-white-surface:        #FAFBFC;
+    --color-white-dot:            #D1D5DB;
+    --color-text-primary:         #1F2937;
+    --color-text-muted:           #6B7280;
+
+    /* Others */
+    --color-white-complement:     #E6FEFF;
+    --color-white-triadic:        #F8F2FA;
     --color-day-available:        #D1FAE5;
     --color-day-unavailable:      #F8FAFC;
     --color-book-hover:           #2D5C47;
@@ -66,8 +80,8 @@ html {
 }
 
 body {
-    background: var(--color-cream);
-    color: var(--color-text-brown);
+    background: var(--color-white-surface);
+    color: var(--color-text-primary);
     font-family: Nunito, sans-serif;
 }
 
@@ -213,4 +227,91 @@ body {
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-up-maroon-dark;
+}
+
+/* Toolbar title, e.g. "July 6 – 12, 2026" */
+.fc .fc-toolbar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+/* Day headers (Mon, Jul 6 / Tue, Jul 7 / etc) */
+.fc .fc-col-header-cell {
+    background-color: var(--color-text-primary);
+    color: white;
+    padding: 8px 0;
+}
+.fc .fc-col-header-cell-cushion {
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Time slot labels down the side (8:00 AM, 8:30 AM, ...) */
+.fc .fc-timegrid-slot-label-cushion {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+/* The horizontal lines between time slots */
+.fc .fc-timegrid-slot {
+    height: 1.75rem;
+}
+
+/* Today's column highlight */
+.fc .fc-timegrid-col.fc-day-today {
+    background-color: var(--color-white-hover) !important;
+}
+
+/* Nav buttons (prev/next/today/view switcher) */
+.fc .fc-button {
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    padding: 6px 12px;
+}
+
+.fc .fc-button-primary {
+    background-color: transparent !important;
+    border-color: var(--color-white-border) !important;
+    color: var(--color-text-primary) !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background-color: var(--color-text-primary) !important;
+    border-color: var(--color-text-primary) !important;
+    color: white !important;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: var(--color-white-hover) !important;
+    border-color: var(--color-white-border) !important;
+    color: var(--color-text-primary) !important;
+}
+
+.fc .fc-button:focus,
+.fc .fc-button:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.fc .fc-button-primary:focus {
+    box-shadow: none !important;
+}
+
+.fc-event {
+    background: none !important;
+    border: none !important;
+}
+
+.fc-timegrid-event {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
 }
