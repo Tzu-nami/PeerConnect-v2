@@ -88,16 +88,16 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
     const hasResults = filteredMentors.length > 0 || filteredSessions.length > 0 || filteredStaff.length > 0 || filteredSubjects.length > 0
 
     return(
-        <div className="relative rounded-xl shadow-sm border border-cream-border mb-4">
+        <div className="relative rounded-xl shadow-sm border border-white-border mb-4">
             <div className="relative p-3">
-                <FaSearch className="absolute text-stone-400 left-[24px] top-1/2 -translate-y-1/2" />
+                <FaSearch className="absolute text-text-muted left-[24px] top-1/2 -translate-y-1/2" />
                 <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onFocus={() => setShowDropdown(true)}
                        type="text" placeholder={placeholder} autoComplete="off"
-                       className=" w-full pl-[34px] rounded-lg border placeholder-stone-400 border-cream-border text-sm font-medium focus:ring-1 focus:ring-text-brown"/>
+                       className=" w-full pl-[34px] rounded-lg border placeholder-text-muted border-white-border text-sm font-medium focus:ring-1 focus:ring-text-primary"/>
 
                 {searchQuery && (
                     <button onClick={() => { setSearchQuery(''); setShowDropdown(false)}}
-                            className="absolute text-stone-400 hover:text-red-700 text-sm font-bold right-7 top-1/2 -translate-y-1/2 transition cursor-pointer">✕</button>
+                            className="absolute text-text-muted hover:text-red-700 text-sm font-bold right-7 top-1/2 -translate-y-1/2 transition cursor-pointer">✕</button>
                 )}
             </div>
 
@@ -108,13 +108,13 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
                     {/* Mentor search result */}
                     {filteredMentors.length > 0 && (
                         <div>
-                            <p className="font-extrabold tracking-widest text-[11px] bg-cream-dark px-5 py-3 uppercase">Mentors</p>
+                            <p className="font-extrabold tracking-widest text-[11px] bg-white-dark px-5 py-3 uppercase">Mentors</p>
                             <ul className="flex flex-col">
                                 {filteredMentors.map((mentor) => {
                                     const details = `${mentor.email} | ${mentor.yearLevel} | ${mentor.degreeProgram}`
 
                                     return(
-                                       <li key={mentor.id} className="border-b border-cream-border hover:bg-stone-100 last:border-b-0">
+                                       <li key={mentor.id} className="border-b border-white-border hover:bg-white-hover last:border-b-0">
                                            <Link href={`${basePath}/mentors?mentorId=${mentor.id}`} onClick={() => setShowDropdown(false)}
                                                  className="text-sm flex items-center px-5">
                                                <div className="bg-green-100 text-green-600 p-2 rounded-lg">
@@ -122,7 +122,7 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
                                                </div>
                                                <div className="flex flex-col p-3 gap-[6px] ">
                                                    <span className="font-bold">{mentor.mentorName}</span>
-                                                   <span className="text-xs text-text-brown-light">{details}</span>
+                                                   <span className="text-xs text-text-muted">{details}</span>
                                                </div>
                                            </Link>
                                        </li>
@@ -135,14 +135,14 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
                     {/* Staff search result */}
                     {filteredStaff.length > 0 && (
                         <div>
-                            <p className="font-extrabold tracking-widest text-[11px] bg-cream-dark px-5 py-3 uppercase">Staff</p>
+                            <p className="font-extrabold tracking-widest text-[11px] bg-white-dark px-5 py-3 uppercase">Staff</p>
                             <ul className="flex flex-col">
                                 {filteredStaff.map((staff) => {
                                     const staffRole = ROLE_LABELS[staff.role]
                                     const details = `${staff.email} | ${staffRole}`
 
                                     return(
-                                        <li key={staff.id} className="border-b border-cream-border hover:bg-stone-100 last:border-b-0">
+                                        <li key={staff.id} className="border-b border-white-border hover:bg-white-hover last:border-b-0">
                                             <Link href={`/admin/staff?staffId=${staff.id}`} onClick={() => setShowDropdown(false)}
                                                   className="text-sm flex items-center px-5">
                                                 <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">
@@ -150,36 +150,7 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
                                                 </div>
                                                 <div className="flex flex-col p-3 gap-[6px] ">
                                                     <span className="font-bold">{staff.staff_name}</span>
-                                                    <span className="text-xs text-text-brown-light">{details}</span>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                    )}
-
-                    {/* Session search result */}
-                    {filteredSessions.length > 0 && (
-                        <div>
-                            <p className="font-extrabold tracking-widest text-[11px] bg-cream-dark px-5 py-3 uppercase">Sessions</p>
-                            <ul className="flex flex-col">
-                                {filteredSessions.map((session) => {
-                                    const topic = `${session.subject} — ${session.topic}`
-                                    const status = STATUS_LABELS[session.bookingStatus]
-                                    const details = `${session.mentorName} → ${session.studentName} | ${session.mode} | ${status}`
-
-                                    return(
-                                        <li key={session.id} className="border-b border-cream-border hover:bg-stone-100 last:border-b-0">
-                                            <Link href={`${basePath}/sessions?sessionId=${session.id}`} onClick={() => setShowDropdown(false)}
-                                                  className="text-sm flex items-center px-5">
-                                                <div className="bg-yellow-100 text-yellow-600 p-2 rounded-lg">
-                                                    <FaCalendarCheck className="text-lg" />
-                                                </div>
-                                                <div className="flex flex-col p-3 gap-[6px] ">
-                                                    <span className="font-bold">{topic}</span>
-                                                    <span className="text-xs text-text-brown-light">{details}</span>
+                                                    <span className="text-xs text-text-muted">{details}</span>
                                                 </div>
                                             </Link>
                                         </li>
@@ -192,11 +163,11 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
                     {/* Subject search result */}
                     {filteredSubjects.length > 0 && (
                         <div>
-                            <p className="font-extrabold tracking-widest text-[11px] bg-cream-dark px-5 py-3 uppercase">Subjects</p>
+                            <p className="font-extrabold tracking-widest text-[11px] bg-white-dark px-5 py-3 uppercase">Subjects</p>
                             <ul className="flex flex-col">
                                 {filteredSubjects.map((subject) => {
                                     return(
-                                        <li key={subject.id} className="border-b border-cream-border hover:bg-stone-100 last:border-b-0">
+                                        <li key={subject.id} className="border-b border-white-border hover:bg-white-hover last:border-b-0">
                                             <Link href={`${basePath}/mentors?subjectId=${subject.id}`} onClick={() => setShowDropdown(false)}
                                                   className="text-sm flex items-center px-5">
                                                 <div className="bg-purple-100 text-purple-600 p-2 rounded-lg">
@@ -204,7 +175,36 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
                                                 </div>
                                                 <div className="flex flex-col p-3 gap-[6px] ">
                                                     <span className="font-bold">{subject.code}</span>
-                                                    <span className="text-xs text-text-brown-light">{subject.name}</span>
+                                                    <span className="text-xs text-text-muted">{subject.name}</span>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Session search result */}
+                    {filteredSessions.length > 0 && (
+                        <div>
+                            <p className="font-extrabold tracking-widest text-[11px] bg-white-dark px-5 py-3 uppercase">Sessions</p>
+                            <ul className="flex flex-col">
+                                {filteredSessions.map((session) => {
+                                    const topic = `${session.subject} — ${session.topic}`
+                                    const status = STATUS_LABELS[session.bookingStatus]
+                                    const details = `${session.mentorName} → ${session.studentName} | ${session.mode} | ${status}`
+
+                                    return(
+                                        <li key={session.id} className="border-b border-white-border hover:bg-white-hover last:border-b-0">
+                                            <Link href={`${basePath}/sessions?sessionId=${session.id}`} onClick={() => setShowDropdown(false)}
+                                                  className="text-sm flex items-center px-5">
+                                                <div className="bg-yellow-100 text-yellow-600 p-2 rounded-lg">
+                                                    <FaCalendarCheck className="text-lg" />
+                                                </div>
+                                                <div className="flex flex-col p-3 gap-[6px] ">
+                                                    <span className="font-bold">{topic}</span>
+                                                    <span className="text-xs text-text-muted">{details}</span>
                                                 </div>
                                             </Link>
                                         </li>
@@ -218,7 +218,7 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
 
             {showDropdown && searchQuery && !hasResults && (
                 <div ref={dropdownRef} className="absolute bg-white  w-full mt-1 rounded-xl shadow-md z-50 overflow-hidden h-32 flex items-center justify-center">
-                   <div className="flex items-center gap-2 italic text-text-brown-light">
+                   <div className="flex items-center gap-2 italic text-text-muted">
                        <MdOutlineSearchOff className="text-2xl" />
                        <p className="text-sm">No matches found for <span className="font-bold">{searchQuery}</span></p>
                    </div>

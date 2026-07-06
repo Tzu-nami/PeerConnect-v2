@@ -5,6 +5,7 @@ import { SessionList } from "@/types/sessionList"
 
 // Components
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
+import { IoCalendarNumber } from "react-icons/io5";
 
 interface ScheduleCalendarProps {
     sessionsByDate: Record<string, SessionList[]>
@@ -32,9 +33,12 @@ function ScheduleHeader() {
     const currentTime = now?.toLocaleTimeString("en-GB")
 
     return (
-        <div className="flex items-center justify-between rounded-t-xl bg-cream-dark border-b border-cream-border px-4 py-3 text-[13px] font-semibold">
-            <span className="tracking-wide">{currentDay}</span>
-            <span className="text-text-brown-light">{currentTime}</span>
+        <div className="flex items-center justify-between rounded-t-xl bg-text-primary border-b border-white-border px-4 py-3 font-semibold">
+            <div className="flex items-center gap-2">
+                <IoCalendarNumber className="text-white text-xl" />
+                <span className="tracking-wide text-white">{currentDay}</span>
+            </div>
+            <span className="text-white">{currentTime}</span>
         </div>
     )
 }
@@ -44,21 +48,21 @@ function getDotColor(sessions: SessionList[] | undefined, dateKey: string, today
     if (!sessions || sessions.length === 0) return null
 
     if (dateKey < today) {
-        return 'bg-stone-400';
+        return 'bg-gray-400';
     }
 
     const hasPending = sessions.some((s) => s.bookingStatus === 'pending')
     if (hasPending) return 'bg-yellow-500'
 
     const hasAccepted = sessions.some((a) => a.bookingStatus === 'accepted')
-    if (hasAccepted) return 'bg-green-500'
+    if (hasAccepted) return 'bg-green-600'
 
-    return 'bg-stone-400'
+    return 'bg-gray-400'
 }
 
 export default function ScheduleCalendar({ sessionsByDate, today, selectedDate, onDateSelect }: ScheduleCalendarProps) {
     return (
-        <div className="rounded-xl shadow-sm border border-cream-border overflow-hidden">
+        <div className="rounded-xl shadow-sm border border-white-border overflow-hidden">
             <ScheduleHeader />
             <Calendar
                 mode="single"
@@ -78,7 +82,7 @@ export default function ScheduleCalendar({ sessionsByDate, today, selectedDate, 
                                     className="absolute inset-0 w-full h-full"
                                 />
                                 {dotColor && (
-                                    <span className={`pointer-events-none absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${dotColor}`} />
+                                    <span className={`pointer-events-none absolute bottom-1.5 left-1/2 -translate-x-1/2 w-[5px] h-[5px] rounded-full ${dotColor}`} />
                                 )}
                             </div>
                         )
