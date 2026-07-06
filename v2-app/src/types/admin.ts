@@ -46,7 +46,7 @@ export interface AdminCourse {
     mentorCount: number;
 }
 
-export type SessionStatus = | 'pending' | 'accepted' | 'completed' | 'unavailable' | 'cancelled' | 'no_show';
+export type SessionStatus = | 'pending' | 'accepted' | 'completed' | 'unavailable' | 'cancelled' | 'no_show' | 'rejected';
 
 export interface AdminSession {
     id: string;

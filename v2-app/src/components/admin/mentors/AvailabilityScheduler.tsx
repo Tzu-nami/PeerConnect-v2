@@ -20,9 +20,8 @@ const generateId = () => {
 const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"
 
 export default function AvailabilityScheduler({ rows, onChange, errors = [] }: Props) {
-    const update = (index: number, field: keyof AvailabilityRow, value: any) => {
-        const safeValue = value?.target?.value ?? value;
-        const next = rows.map((r, i) => i === index ? {...r, [field]: safeValue }: r);
+    const update = (index: number, field: keyof AvailabilityRow, value: string) => {
+        const next = rows.map((r, i) => i === index ? { ...r, [field]: value } : r);
         onChange(next);
     };
 

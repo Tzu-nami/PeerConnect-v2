@@ -1,6 +1,5 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { createClient } from '@/utils/supabase/server';
-import MentorHeader from '@/components/landing/mentors/MentorHeader';
 import MentorDirectory from '@/components/landing/mentors/MentorDirectory';
 import type { Mentor, Subject } from '@/types/mentor';
 
@@ -28,10 +27,15 @@ interface Props {
 export default function MentorsPage({ mentors, subjects, isAuthenticated, userRole }: Props) {
     return (
         <>
-            <MentorHeader />
-            <section className="px-6 md:px-20 pb-20">
+            <div className="border-cream-border">
+                <div>
+                <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">Our Peer Mentors</h1>
+                <p className="text-xs md:text-sm xl:text-base font-medium text-slate-500 mt-1 mb-3">Browse available mentors and their expertise</p>
+                </div>
+            </div>
+            <div>
                 <MentorDirectory mentors={mentors} subjects={subjects} isAuthenticated={isAuthenticated} userRole={userRole} />
-            </section>
+            </div>
         </>
     );
 }

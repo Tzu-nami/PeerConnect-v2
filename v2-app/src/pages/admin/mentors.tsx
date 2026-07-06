@@ -70,6 +70,7 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
   // Filters
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
+    
     return initialMentors
       .filter((m) =>
         !q ||
@@ -82,8 +83,12 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
         )
       )
       .sort((a, b) => {
-        const va = sortCol === 'name' ? `${a.lastName}${a.firstName}` : (a as any)[sortCol] ?? '';
-        const vb = sortCol === 'name' ? `${b.lastName}${b.firstName}` : (b as any)[sortCol] ?? '';
+        const va = sortCol === 'name' 
+          ? `${a.lastName}${a.firstName}` 
+          : String(a[sortCol as keyof AdminMentor] ?? '');
+        const vb = sortCol === 'name' 
+          ? `${b.lastName}${b.firstName}` 
+          : String(b[sortCol as keyof AdminMentor] ?? '');
         return sortDir === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va);
       });
   }, [initialMentors, search, sortCol, sortDir]);

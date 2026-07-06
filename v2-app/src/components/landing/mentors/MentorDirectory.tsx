@@ -3,6 +3,7 @@ import type { Mentor, Subject } from '@/types/mentor';
 import MentorFilters from './MentorFilters';
 import MentorCard from './MentorCard';
 import MentorModal from './MentorModal';
+import MentorFilterCards from '@/components/student/MentorFilterCards';
 import Pagination from '@/components/ui/Pagination';
 import { FaChalkboardUser } from 'react-icons/fa6';
 
@@ -29,7 +30,8 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated, us
         const matchesSearch =
             !q ||
             m.firstName.toLowerCase().includes(q) ||
-            m.lastName.toLowerCase().includes(q);
+            m.lastName.toLowerCase().includes(q) ||
+            m.email.toLowerCase().includes(q);
 
         const matchesDay =
             !selectedDay ||
@@ -55,9 +57,13 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated, us
     const handleDay = (d: string) => { setSelectedDay(d); setCurrentPage(1); };
     const handleSubject = (s: string) => { setSelectedSubject(s); setCurrentPage(1); };
 
+    // Change layout
+    const showDashboardFilters = isAuthenticated && (userRole === 'student' || userRole === 'mentor');
+
     return (
         <div>
-        <MentorFilters
+        {showDashboardFilters ? (
+            <MentorFilterCards
             subjects={subjects}
             searchQuery={searchQuery}
             selectedDay={selectedDay}
@@ -66,14 +72,26 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated, us
             onSearch={handleSearch}
             onDayChange={handleDay}
             onSubjectChange={handleSubject}
-        />
+            />
+        ) : (
+            <MentorFilters
+            subjects={subjects}
+            searchQuery={searchQuery}
+            selectedDay={selectedDay}
+            selectedSubject={selectedSubject}
+            resultCount={filteredMentors.length}
+            onSearch={handleSearch}
+            onDayChange={handleDay}
+            onSubjectChange={handleSubject}
+            />
+        )}
 
         {/* Empty state */}
         {filteredMentors.length === 0 && (
-            <div className="bg-white rounded-xl border border-gray-100 py-20 text-center shadow-sm">
-            <FaChalkboardUser className="text-4xl text-gray-300 mb-4 block" />
-            <p className="font-medium text-gray-500">No mentors found.</p>
-            <p className="text-xs mt-1 text-gray-400">Try adjusting your search or filter.</p>
+            <div className="bg-white rounded-xl border border-cream-border py-20 text-center shadow-sm flex flex-col items-center justify-center">
+                <FaChalkboardUser className="text-4xl text-gray-300 mb-4" />
+                <p className="font-medium text-gray-500">No mentors found.</p>
+                <p className="text-xs mt-1 text-gray-400">Try adjusting your search or filter.</p>
             </div>
         )}
 
@@ -105,6 +123,7 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated, us
             mentor={selectedMentor}
             onClose={() => setSelectedMentor(null)}
             isAuthenticated={isAuthenticated}
+            userRole={userRole}
             hideFooter={userRole === 'admin'}
         />
         </div>

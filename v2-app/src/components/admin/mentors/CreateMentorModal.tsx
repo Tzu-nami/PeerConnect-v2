@@ -5,7 +5,7 @@ import { FaUserPlus } from 'react-icons/fa6';
 
 import CrudModal from '@/components/ui/CrudModal';
 import ConfirmModal from '@/components/ui/ConfirmModal';
-import MentorCrudForm from '@/components/admin/mentors/MentorCrudForm';
+import MentorCrudForm, { type MentorCrudForm as MentorCrudFormType } from '@/components/admin/mentors/MentorCrudForm';
 import type { AvailabilityRow } from '@/types/admin';
 
 const EMPTY_AVAILABILITY = (): AvailabilityRow => ({ id: uuid(), day_of_week: '', start_time: '', end_time: '' });
@@ -20,10 +20,11 @@ interface CreateMentorModalProps {
 export default function CreateMentorModal({ isOpen, onClose, onSuccess, subjects }: CreateMentorModalProps) {
   const supabase = createBrowserClient();
   
-  const [formState, setFormState] = useState({
-    upMail: '', verifiedUser: null as any,
-    avatarFile: null as File | null,
-    selectedSubjects: [] as string[],
+  const [formState, setFormState] = useState<MentorCrudFormType>({
+    upMail: '', 
+    verifiedUser: null,
+    avatarFile: null,
+    selectedSubjects: [],
     availabilities: [EMPTY_AVAILABILITY()],
   });
   
@@ -114,6 +115,7 @@ export default function CreateMentorModal({ isOpen, onClose, onSuccess, subjects
 
   // Validate all inputs
   const handleSave = async () => {
+    if (!formState.verifiedUser) return;
     setLoading(true);
     try {
       let avatarUrl: string | undefined = undefined;
@@ -172,7 +174,7 @@ export default function CreateMentorModal({ isOpen, onClose, onSuccess, subjects
       >
         <MentorCrudForm
           mode="create" formState={formState} subjects={subjects} errors={errors}
-          onFormChange={(p) => setFormState(f => ({ ...f, ...p } as any))}
+          onFormChange={(p: Partial<MentorCrudFormType>) => setFormState(f => ({ ...f, ...p }))}
           onCheckEmail={handleCheckEmail} emailError={emailError} isCheckingEmail={isCheckingEmail}
         />
       </CrudModal>

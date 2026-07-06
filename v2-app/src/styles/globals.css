@@ -23,7 +23,9 @@
     /* Cream colors */
     --color-cream:                #FAF8F2;
     --color-cream-dark:           #F0EDE4;
-    --color-cream-complement:     #E6FEFF;
+    --color-cream-complement:     #EDF0FF;
+    --color-text-complement:      #2A54F7;
+    --color-complement-hover:     #F0F2FF;
     --color-cream-triadic:        #F8F2FA;
     --color-cream-border:         #D6CFC0;
     --color-cream-hover:          #F5F2EB;
@@ -76,6 +78,10 @@
         transform: translateY(0);
     }
 }
+@keyframes slide-down {
+    0% { transform: translateY(-5); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
 
 html {
     scroll-behavior: smooth;
