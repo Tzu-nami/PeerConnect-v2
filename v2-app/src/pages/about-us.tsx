@@ -1,6 +1,7 @@
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
+import { LandingImages } from "@/types/landingImages";
 
 // Components
 import HeadDesc from "@/components/landing/about/HeadDesc";
@@ -26,6 +27,7 @@ interface Props {
     bookingCount: number;
     subjectCount: number;
     staff: Staff | null;
+    images: Record<string, string | null>;
 }
 
 const FAQS: FaqData[] = [
@@ -43,7 +45,7 @@ const FAQS: FaqData[] = [
     },
 ];
 
-export default function AboutPage({ mentorCount, bookingCount, subjectCount, staff }: Props) {
+export default function AboutPage({ mentorCount, bookingCount, subjectCount, staff, images }: Props) {
 
     const stats = [
         { value: mentorCount, label: 'Mentors' },
@@ -52,8 +54,8 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
     ];
 
     const lrcHead = staff
-        ? `${staff.firstName} ${staff.middleInitial ? staff.middleInitial + ' ' : ''}${staff.lastName}`
-        : 'LRC Head'
+        ? `${staff.firstName} ${staff.middleInitial ? staff.middleInitial + '. ' : ''}${staff.lastName}`
+        : 'LRC Coordinator'
 
     return (
         <>
@@ -63,7 +65,7 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
             {/* Image */}
             <div className="w-full h-64 md:h-96 bg-cream-dark border-b border-cream-border overflow-hidden animate-fade-up [animation-delay:100ms]">
                 <img
-                    src="https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/hero/library.jpeg"
+                    src={images['about_banner'] ?? ''}
                     alt="LRC PeerConnect"
                     className="w-full h-full object-cover brightness-125"
                 />
@@ -74,18 +76,18 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
 
             {/* Mission and Quote */}
             <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <Mission />
+                <Mission imageURL={images['lrc_mission']} />
                 <Quote author={lrcHead} />
 
                 {/* How it works */}
                 <HowItWorks />
 
                 {/* Who are mentors */}
-                <MentorQualities />
+                <MentorQualities imageURL={images['mentors_staffs']} />
 
                 {/* FAQs */}
                 <section className="py-10 border-b border-cream-border animate-fade-up [animation-delay:300ms]">
-                    <div className="text-up-yellow text-xs font-bold tracking-widest uppercase mb-4">
+                    <div className="text-up-green text-xs font-bold tracking-widest uppercase mb-4">
                         Common Questions
                     </div>
 
@@ -115,13 +117,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         { count: bookingCount },
         { count: subjectCount },
         { data: staffData },
+        { data: landingImages },
     ] = await Promise.all([
         getServerSideUserRole(context),
         supabase.from('mentor_profiles').select('*', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('bookings').select('*', { count: 'exact', head: true }),
         supabase.from('subjects').select('*', { count: 'exact', head: true }),
-        supabase.from('staff_profiles').select('firstName, lastName, middleInitial').eq('role', 'lrc_head').single(),
+        supabase.from('staff_profiles').select('firstName, lastName, middleInitial').eq('role', 'lrc_coordinator').single(),
+        supabase.from('landing_images').select('*').order('id'),
     ]);
+
+    const images = Object.fromEntries(
+        (landingImages ?? []).map((image: LandingImages) => [image.slot_key, image.image_url])
+    );
 
     return {
         props: {
@@ -130,6 +138,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             bookingCount: bookingCount ?? 0,
             subjectCount: subjectCount ?? 0,
             staff: staffData ?? null,
+            images,
         },
     };
 };
