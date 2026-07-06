@@ -4,9 +4,10 @@ import { FaChevronDown } from "react-icons/fa"
 interface HeroSectionProps {
     shouldShowBookNow: boolean
     bookURL: string
+    imageURL: string | null
 }
 
-export default function HeroSection({ shouldShowBookNow, bookURL }: HeroSectionProps) {
+export default function HeroSection({ shouldShowBookNow, bookURL, imageURL }: HeroSectionProps) {
     const heroOverlay = {
         background: `linear-gradient(
             110deg,
@@ -18,7 +19,7 @@ export default function HeroSection({ shouldShowBookNow, bookURL }: HeroSectionP
     return (
         <section
             className="relative w-full min-h-[520px] sm:min-h-[600px] xl:h-[calc(100vh-83px)] flex flex-col justify-between overflow-hidden bg-cover bg-[center_30%]"
-            style={{backgroundImage: "url('https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/hero/library.jpeg')"}}>
+            style={{ backgroundImage: `url(${imageURL})` }}>
             {/* Background image overlay */}
             <div className="absolute inset-0 z-0" style={heroOverlay}></div>
 

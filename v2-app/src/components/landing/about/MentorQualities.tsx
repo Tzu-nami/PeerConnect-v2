@@ -8,22 +8,26 @@ const QUALITIES = [
     { icon: <MdOutlineFavoriteBorder />, text: 'Committed to peer-driven learning' },
 ];
 
-export default function MentorQualities() {
+interface MentorQualitiesProps {
+    imageURL: string | null
+}
+
+export default function MentorQualities({ imageURL }: MentorQualitiesProps) {
     return (
         <section className="py-16 border-b border-cream-border animate-fade-up [animation-delay:275ms]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                 {/* Image */}
                 <div className="aspect-[4/3] bg-cream-dark border border-cream-border overflow-hidden order-last lg:order-first">
                     <img
-                        src="https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/about-us/mentors.jpg"
+                        src={imageURL ?? ''}
                         alt="Our Mentors"
                         className="w-full h-full object-cover brightness-110"
                     />
                 </div>
-                
+
                 {/* Content */}
                 <div>
-                    <div className="text-up-yellow text-xs font-bold tracking-widest uppercase mb-4">
+                    <div className="text-up-green text-xs font-bold tracking-widest uppercase mb-4">
                         Who are Mentors?
                     </div>
                     <p className="text-text-brown leading-7 mb-6">
@@ -43,8 +47,8 @@ export default function MentorQualities() {
 
                     {/* Mentor tab route */}
                     <div className="mt-6">
-                        <Link 
-                            href="/mentors" 
+                        <Link
+                            href="/mentors"
                             className="text-up-maroon font-bold text-xs inline-flex items-center gap-1 tracking-widest uppercase border-b border-up-maroon pt-2 hover:text-up-maroon/70 w-max"
                         >
                             Meet our Mentors

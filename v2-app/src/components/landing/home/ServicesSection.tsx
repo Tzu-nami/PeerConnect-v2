@@ -4,13 +4,17 @@ import Image from "next/image";
 // Icons
 import { FaLongArrowAltRight } from "react-icons/fa";
 
-export default function ServicesSection() {
+interface ServicesSectionProps {
+    imageURL: Record<string, string | null>
+}
+
+export default function ServicesSection({ imageURL }: ServicesSectionProps) {
     const services = [
         {
             title: "One-on-One Sessions",
             description: "Get personalized support from one of our experienced mentors. Work through challenging concepts, review course materials, and build confidence at your own pace.",
             href: "/services#one-on-one",
-            img: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/services/one-on-one.jpeg",
+            img: imageURL['one_on_one'],
             alt: "One on One Sessions",
             border: "border-b sm:border-b-0 sm:border-r border-cream-dark",
         },
@@ -18,7 +22,7 @@ export default function ServicesSection() {
             title: "Group Sessions",
             description: "Gather with a group of friends in a guided session led by a peer mentor. Ideal for tackling challenging subjects together and learning from one another.",
             href: "/services#group-session",
-            img: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/services/group-session.jpg",
+            img: imageURL['group_session'],
             alt: "Group Sessions",
             border: "border-b sm:border-b-0 sm:border-r border-cream-dark",
         },
@@ -26,7 +30,7 @@ export default function ServicesSection() {
             title: "Review Classes",
             description: "Prepare for major exams through review sessions led by experienced peer mentors. Review key topics and build effective exam strategies.",
             href: "/services#review-classes",
-            img: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/services/review_classes.jpg",
+            img: imageURL['review_class'],
             alt: "Review Classes",
             border: "border-b sm:border-b-0 border-cream-dark",
         },
@@ -49,7 +53,7 @@ export default function ServicesSection() {
                     return(
                         <Link key={service.title} href={service.href} className={`group flex flex-col px-4 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-10 transition-colors hover:bg-cream-dark/30 ${service.border}`}>
                             <div className="relative w-full h-32 sm:h-44 md:h-48 mb-3 sm:mb-5">
-                                <Image src={service.img} alt={service.alt} fill className="object-cover rounded-sm border border-cream-border" />
+                                <Image src={service.img ?? ''} alt={service.alt} fill className="object-cover rounded-sm border border-cream-border" />
                             </div>
                             <div className="text-sm sm:text-base md:text-[15px] lg:text-[18px] xl:text-[22px] text-up-maroon font-medium mb-1 md:mb-2">{service.title}</div>
                             <div className="text-[11px] sm:text-sm lg:text-base leading-5 sm:leading-7 font-light text-gray-600 mb-2 md:mb-3">{service.description}</div>

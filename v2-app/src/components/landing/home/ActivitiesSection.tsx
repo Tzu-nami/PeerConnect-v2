@@ -16,17 +16,20 @@ import "yet-another-react-lightbox/styles.css";
 import { MdChevronRight } from "react-icons/md";
 import { MdChevronLeft } from "react-icons/md";
 
-const images = [
-    { src: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/activities/Image-1.jpg", alt: "Activity 1" },
-    { src: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/activities/Image-2.jpg", alt: "Activity 2" },
-    { src: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/activities/Image-3.jpg", alt: "Activity 3" },
-    { src: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/activities/Image-4.jpg", alt: "Activity 4" },
-    { src: "https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/images/activities/Image-5.jpg", alt: "Activity 5" },
-];
+interface ActivitiesSectionProps {
+    imageURL: Record<string, string | null>
+}
 
-export default function ActivitiesSection() {
+export default function ActivitiesSection({ imageURL }: ActivitiesSectionProps) {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const [activeSlide, setActiveSlide] = useState(0);
+    const images = [
+        { src: imageURL['carousel_1'], alt: "Activity 1" },
+        { src: imageURL['carousel_2'], alt: "Activity 2" },
+        { src: imageURL['carousel_3'], alt: "Activity 3" },
+        { src: imageURL['carousel_4'], alt: "Activity 4" },
+        { src: imageURL['carousel_5'], alt: "Activity 5" },
+    ].filter((img): img is { src: string; alt: string } => img.src !== null && img.src !== undefined)
 
     return (
         <section className="w-full py-10 sm:py-16 md:py-20 overflow-hidden">
