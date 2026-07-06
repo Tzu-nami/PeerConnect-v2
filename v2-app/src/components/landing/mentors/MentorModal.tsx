@@ -8,10 +8,11 @@ interface Props {
     mentor: Mentor | null;
     onClose: () => void;
     isAuthenticated?: boolean;
+    userRole?: string;
     hideFooter?: boolean;
 }
 
-export default function MentorModal({ mentor, onClose, isAuthenticated = false, hideFooter = false }: Props) {
+export default function MentorModal({ mentor, onClose, isAuthenticated = false, hideFooter = false, userRole }: Props) {
     if (!mentor) return null;
 
     const fullName = `${mentor.lastName}, ${mentor.firstName} ${mentor.middleInitial || ''}`.trim();
@@ -77,19 +78,19 @@ export default function MentorModal({ mentor, onClose, isAuthenticated = false, 
                 <div className="flex-shrink-0 px-6 py-4 bg-white border-t border-gray-100">
                     {isAuthenticated ? (
                         <Link
-                            href={mentor.bookingUrl || '/bookings'}
-                            className="block w-full text-center bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
+                            href={`bookings/?mentor=${mentor.id}`}
+                            className="flex items-center justify-center w-full bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
                         >
-                            <FaCalendarCheck className="mr-2" />
-                                Book a Session
+                            <FaCalendarCheck className="mr-2 text-lg" />
+                            Book a Session
                         </Link>
                     ) : (
                         <Link
                             href="/login" 
-                            className="block w-full text-center bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
+                            className="flex items-center justify-center w-full bg-sidebar-green hover:bg-book-hover text-white text-sm font-bold py-3 rounded-xl transition shadow-sm"
                         >
-                            <FaRightToBracket className="mr-2" />
-                                Log in to Book a Session
+                            <FaRightToBracket className="mr-2 text-lg" />
+                            Log in to Book a Session
                         </Link>
                     )}
                 </div>
