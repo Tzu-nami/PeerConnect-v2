@@ -83,3 +83,29 @@ export interface StudentBooking {
         }
     };
 }
+
+export interface RecentBooking {
+    id: string;
+    subject_code: string;
+    subject_name: string;
+    mentor_name: string;
+    topic: string;
+    mode: string;
+    date: string;
+    start_time: string;
+    end_time: string;
+    status: string;
+}
+
+export interface ActiveBooking {
+    id: string;
+    subject_code: string;
+    subject_name: string;
+    topic: string;
+    mentor_name: string;
+    mode: string;
+    date: string;
+    start_time: string;
+    end_time: string;
+    status: 'pending' | 'accepted';
+}
