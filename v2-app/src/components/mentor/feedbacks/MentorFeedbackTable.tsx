@@ -1,0 +1,203 @@
+import {
+  MdArrowDownward,
+  MdArrowUpward,
+  MdKeyboardArrowDown,
+  MdUnfoldMore,
+} from "react-icons/md";
+
+import SearchBar from "@/components/ui/SearchBar";
+import MentorFeedbackTableRow from "./MentorFeedbackTableRow";
+import type {
+  MentorFeedbackRow,
+  MentorFeedbackSortKey,
+  SortDirection,
+} from "@/pages/mentor/feedbacks";
+
+type Props = {
+  feedbacks: MentorFeedbackRow[];
+  totalCount: number;
+  searchQuery: string;
+  onSearch: (query: string) => void;
+  subjectOptions: string[];
+  subjectFilter: string;
+  onSubjectFilter: (subject: string) => void;
+  onResetFilters: () => void;
+  sortCol: MentorFeedbackSortKey;
+  sortDir: SortDirection;
+  onSort: (col: MentorFeedbackSortKey) => void;
+  onView: (feedback: MentorFeedbackRow) => void;
+};
+
+function SortIcon({
+  col,
+  sortCol,
+  sortDir,
+}: {
+  col: MentorFeedbackSortKey;
+  sortCol: MentorFeedbackSortKey;
+  sortDir: SortDirection;
+}) {
+  if (sortCol !== col) return <MdUnfoldMore className="text-text-brown-light" />;
+
+  return sortDir === "asc" ? (
+    <MdArrowUpward className="text-text-brown" />
+  ) : (
+    <MdArrowDownward className="text-text-brown" />
+  );
+}
+
+export default function MentorFeedbackTable({
+  feedbacks,
+  totalCount,
+  searchQuery,
+  onSearch,
+  subjectOptions,
+  subjectFilter,
+  onSubjectFilter,
+  onResetFilters,
+  sortCol,
+  sortDir,
+  onSort,
+  onView,
+}: Props) {
+  return (
+    <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
+      <div className="flex flex-wrap gap-4 justify-between items-center p-5">
+        <div>
+          <h2 className="font-bold text-lg text-text-brown">All Feedbacks</h2>
+          <p className="text-sm text-text-brown-light font-medium">
+            {totalCount} Feedback{totalCount !== 1 ? "s" : ""} found
+          </p>
+        </div>
+
+        <div className="flex gap-3 items-center flex-wrap">
+          <SearchBar
+            value={searchQuery}
+            onChange={onSearch}
+            placeholder="Search feedback..."
+            className="w-56"
+          />
+
+          <div className="relative">
+            <select
+              value={subjectFilter}
+              onChange={(event) => onSubjectFilter(event.target.value)}
+              className="appearance-none px-4 py-2 pr-10 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] shadow-sm cursor-pointer"
+            >
+              <option value="all">All Subjects</option>
+              {subjectOptions.map((subject) => (
+                <option key={subject} value={subject}>
+                  {subject}
+                </option>
+              ))}
+            </select>
+            <MdKeyboardArrowDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xl text-slate-400" />
+          </div>
+
+          <button
+            type="button"
+            onClick={onResetFilters}
+            className="px-4 py-2 text-xs font-bold text-text-brown-light border border-cream-border rounded-lg bg-white hover:bg-cream-hover transition h-[36px] shadow-sm cursor-pointer"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div className="border-t border-cream-border overflow-x-auto">
+        <table className="w-full text-left text-sm table-fixed min-w-[760px]">
+          <thead className="border-b border-cream-border bg-cream-dark">
+            <tr>
+              <th className="px-5 py-3 w-[14%]">
+                <button
+                  onClick={() => onSort("date")}
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                    sortCol === "date"
+                      ? "font-extrabold text-text-brown"
+                      : "font-bold text-text-brown-light"
+                  }`}
+                >
+                  Date
+                  <SortIcon col="date" sortCol={sortCol} sortDir={sortDir} />
+                </button>
+              </th>
+
+              <th className="px-5 py-3 w-[14%]">
+                <button
+                  onClick={() => onSort("subject")}
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                    sortCol === "subject"
+                      ? "font-extrabold text-text-brown"
+                      : "font-bold text-text-brown-light"
+                  }`}
+                >
+                  Subject
+                  <SortIcon
+                    col="subject"
+                    sortCol={sortCol}
+                    sortDir={sortDir}
+                  />
+                </button>
+              </th>
+
+              <th className="px-5 py-3 w-[22%]">
+                <button
+                  onClick={() => onSort("topic")}
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                    sortCol === "topic"
+                      ? "font-extrabold text-text-brown"
+                      : "font-bold text-text-brown-light"
+                  }`}
+                >
+                  Topic
+                  <SortIcon col="topic" sortCol={sortCol} sortDir={sortDir} />
+                </button>
+              </th>
+
+              <th className="px-5 py-3 w-[30%] text-xs font-bold text-text-brown-light uppercase tracking-wider">
+                Feedback
+              </th>
+
+              <th className="px-5 py-3 w-[20%] text-center">
+                <button
+                  onClick={() => onSort("rating")}
+                  className={`flex items-center justify-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer mx-auto ${
+                    sortCol === "rating"
+                      ? "font-extrabold text-text-brown"
+                      : "font-bold text-text-brown-light"
+                  }`}
+                >
+                  Rating
+                  <SortIcon col="rating" sortCol={sortCol} sortDir={sortDir} />
+                </button>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {feedbacks.length > 0 ? (
+              feedbacks.map((feedback) => (
+                <MentorFeedbackTableRow
+                  key={feedback.id}
+                  feedback={feedback}
+                  onView={onView}
+                />
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="text-center py-12 text-sm text-text-brown-light italic"
+                >
+                  <p className="text-sm font-semibold text-slate-500">
+                    No feedbacks match your filters.
+                  </p>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
