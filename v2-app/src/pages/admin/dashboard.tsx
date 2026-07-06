@@ -37,7 +37,7 @@ import { getRatingLabel } from "@/utils/getRatingLabel"
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createClient(context)
 
-    // Fetch variable counts for stat cards
+    // Fetch data from server
     const [result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12] = await Promise.all([
         // Total mentors
         supabase
@@ -71,7 +71,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         // Booking details
         supabase
             .from('booking_details')
-            .select('*').order('schedule_start', { ascending: true }),
+            .select('*')
+            .order('schedule_start', { ascending: true }),
 
         // Staff details
         supabase
@@ -201,9 +202,10 @@ export default function AdminDashboard({ totalMentors, totalSessionsToday, total
         totalStudents,
         totalSessionsToday,
         totalPendingSessions,
-        totalFeedbackAverage: totalFeedbackAverage.toFixed(2) }
+        totalFeedbackAverage: totalFeedbackAverage.toFixed(2)
+    }
 
-    // Today's Schedule and calendar
+    // Today's schedule table and calendar info
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
     const todaySessions = sessionList.filter((session) => session.date === selectedDate?.toLocaleDateString('en-CA'))
     const dateFormat = selectedDate?.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'Asia/Manila'})
@@ -228,13 +230,13 @@ export default function AdminDashboard({ totalMentors, totalSessionsToday, total
             <div className="grid grid-cols-3 gap-6 mt-4 items-stretch">
                 {/* ROW 1 - Today's schedule table */}
                 <div className="col-span-2">
-                    <TodaysSchedule  currentSessions={todaySessions} date={dateFormat} />
+                    <TodaysSchedule  currentSessions={todaySessions} date={dateFormat} role="admin" />
                 </div>
 
                 {/* Calendar  */}
                 <div className="col-span-1 flex flex-col gap-4">
-                    <ScheduleCalendar sessionsByDate={sessionsByDate} today={TODAY} selectedDate={selectedDate} onDateSelect={(date) => {if (date) setSelectedDate(date)}} />
                     <QuickActions />
+                    <ScheduleCalendar sessionsByDate={sessionsByDate} today={TODAY} selectedDate={selectedDate} onDateSelect={(date) => {if (date) setSelectedDate(date)}} />
                 </div>
 
                 {/* ROW 2 - Monthly trends */}

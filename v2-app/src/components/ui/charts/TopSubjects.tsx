@@ -1,14 +1,17 @@
+// Constants
+import { CHART_COLORS } from "@/constants/chartColors"
+
 // Icons
-import { FaBook } from "react-icons/fa";
+import { FaBook } from "react-icons/fa"
 
 // Recharts
-import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis, Rectangle } from "recharts";
-import type { RectangleProps } from "recharts";
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis, Rectangle } from "recharts"
+import type { RectangleProps } from "recharts"
 
 // Types
-import { TopSubject } from "@/types/topSubject";
+import { TopSubject } from "@/types/topSubject"
 
-const COLORS = ["#9B2C2C", "#2C7A4B", "#D97706", "#7C3AED", "#0891B2"];
+const COLORS = CHART_COLORS.bars
 
 export default function TopSubjects({ topSubjects }: { topSubjects: TopSubject[] }) {
     return (
@@ -24,11 +27,16 @@ export default function TopSubjects({ topSubjects }: { topSubjects: TopSubject[]
                     <XAxis dataKey="subject_code" tick={{ fontSize: 13}} />
                     <YAxis tick={{ fontSize: 13}} />
                     <Tooltip contentStyle={{ fontSize: 13, borderRadius: 8, borderColor: '#D6CFC0' }}
-                             itemStyle={{ fontSize: 13 }} />
+                             itemStyle={{ fontSize: 13 }} cursor={false} />
                     <Bar
                         dataKey="total_bookings"
                         name="Bookings"
                         radius={[8, 8, 0, 0]}
+                        activeBar={(props: RectangleProps & { index?: number }) => {
+                            const { index, ...rest } = props;
+                            const baseColor = COLORS[(index ?? 0) % COLORS.length];
+                            return <Rectangle {...rest} fill={baseColor} style={{ filter: 'brightness(0.8)' }} />;
+                        }}
                         shape={(props: RectangleProps & { index?: number }) => {
                             const { index, ...rest } = props;
                             return <Rectangle {...rest} fill={COLORS[(index ?? 0) % COLORS.length]} />;

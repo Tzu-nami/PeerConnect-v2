@@ -1,12 +1,14 @@
-import { FaSmile } from "react-icons/fa";
-import { Pie, PieChart, Cell, Tooltip, Legend } from "recharts";
+// Constants
+import { CHART_COLORS } from "@/constants/chartColors"
+
+// Icons
+import { FaSmile } from "react-icons/fa"
+
+// Recharts
+import { Pie, PieChart, Cell, Tooltip, Sector } from "recharts"
 
 // Types
-import { SatisfactionData } from "@/types/satisfactionData";
-
-// Constants
-import { SATISFACTION_COLORS } from "@/constants/satisfactionRateColors"
-
+import { SatisfactionData } from "@/types/satisfactionData"
 
 export default function SatisfactionRate({ satisfactionData }: { satisfactionData: SatisfactionData[] }) {
     return (
@@ -27,15 +29,30 @@ export default function SatisfactionRate({ satisfactionData }: { satisfactionDat
                         cx="50%"
                         cy="50%"
                         outerRadius={90}
+                        activeShape={(props: any) => {
+                            const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props
+                            return (
+                                <Sector
+                                    cx={cx}
+                                    cy={cy}
+                                    innerRadius={innerRadius}
+                                    outerRadius={outerRadius + 6}
+                                    startAngle={startAngle}
+                                    endAngle={endAngle}
+                                    fill={fill}
+                                    style={{ filter: 'brightness(0.85)' }}
+                                />
+                            )
+                        }}
                         label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
                     >
-                        {satisfactionData.map((entry) => (
-                            <Cell key={entry.name} fill={SATISFACTION_COLORS[entry.name] ?? "#9CA3AF"} />
-                        ))}
+                        {satisfactionData.map((entry) => {
+                            const color = CHART_COLORS.satisfaction[entry.name as keyof typeof CHART_COLORS.satisfaction]
+                            return <Cell key={entry.name} fill={color ?? "#9CA3AF"} />
+                        })}
                     </Pie>
                     <Tooltip contentStyle={{ fontSize: 13, borderRadius: 8, borderColor: '#D6CFC0' }}
                              itemStyle={{ fontSize: 13 }} />
-                    <Legend />
                 </PieChart>
             </div>
         </div>
