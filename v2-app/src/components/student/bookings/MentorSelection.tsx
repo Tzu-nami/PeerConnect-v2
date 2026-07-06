@@ -11,6 +11,7 @@ interface MentorSelectionProps {
     availabilities: MentorAvailability[];
     bookedSlots: MentorBookedSlot[];
     error?: string;
+    userRole?: string;
     updateField: <K extends keyof BookingFormState>(key: K, value: BookingFormState[K]) => void;
 }
 
@@ -22,8 +23,10 @@ export default function MentorSelection({
     availabilities,
     bookedSlots,
     error,
+    userRole,
     updateField
 }: MentorSelectionProps) {
+
     return (
         <>
             {/* Mentor dropdown */}
@@ -57,10 +60,10 @@ export default function MentorSelection({
                 {/* Locked Mentor */}
                 {isMentorLocked && (
                     <div className="mt-1.5 flex justify-between items-center px-1">
-                        <span className="text-[11px] text-blue-600 font-bold flex items-center">
+                        <span className="text-[11px] text-blue-600 font-normal flex items-center">
                             <FaLock className="mr-1" /> Mentor Locked.
                         </span>
-                        <a href="/student/bookings" className="text-[10px] text-gray-400 hover:text-red-600 underline">
+                        <a href={`/${userRole}/bookings `}className="text-[10px] text-gray-400 hover:text-red-400 underline">
                             Unlock & Clear
                         </a>
                     </div>
