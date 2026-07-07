@@ -234,28 +234,22 @@ export default function BookingForm({
             const r = await fetch('/api/bookings/bookings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...form,
-                    group_emails: form.group_emails.filter((e) => e.trim() !== ''),
+                body: JSON.stringify({...form, group_emails: form.group_emails.filter((e) => e.trim() !== ''),
                 }),
             });
-            
             if (!r.ok) {
                 const data = await r.json();
                 setErrors(data.errors ?? { general: 'Booking failed.' });
                 setShowConfirm(false);
-                setSubmitting(false);
                 return;
             }
-            
             setShowConfirm(false);
-            onSuccess(); 
-
-        } catch (error) {
+            onSuccess();
+        } finally {
             setSubmitting(false);
-            setErrors({ general: 'A network error occurred.' });
         }
-    };
+    }; 
+    
     const isSubmitDisabled = !hasProfile || !!dateError || !!startTimeError || !!endTimeError || !form.subject_id || !form.topic || !form.tutorialMode_id || !form.date || !form.schedule_start || !form.schedule_end || !form.mentor_id || validating;
 
     const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50";
