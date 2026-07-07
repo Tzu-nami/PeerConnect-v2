@@ -51,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         booking_status:  'pending',
         group_id:        groupId,
     };
-    const { data: error } = await supabase
+    const { error } = await supabase
         .from('bookings').insert(bookingData).select().single();
     if (error) return res.status(500).json({ error: error.message });
 

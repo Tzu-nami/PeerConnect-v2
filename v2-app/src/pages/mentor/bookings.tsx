@@ -39,30 +39,14 @@ export default function StudentBookingsPage({ mentors, availabilities, bookedSlo
     const [showCancelConfirm, setShowCancelConfirm] = useState(false);
     const [cancelLoading, setCancelLoading]         = useState(false);
 
-    const [isWaitingForBookingUpdate, setIsWaitingForBookingUpdate] = useState(false);
-
-
-    useEffect(() => {
-        if (isWaitingForBookingUpdate && activeBooking) {
-        toast.success("Your session has been booked and is now pending approval.");
-        setIsWaitingForBookingUpdate(false);
-        }
-    }, [activeBooking, isWaitingForBookingUpdate]);
-
-    // Note: hindi ko mapagana yung auto refresh pagka submit booking forms
+    // Okay na it now refreshes
     const handleRefresh = () => {
-        router.replace(
-            { pathname: router.pathname, query: { ...router.query, t: Date.now() } },
-            router.asPath,
-            { scroll: false }
-        );
-    };
+        router.replace(router.asPath);
+    }
 
     const handleBookingSuccess = () => {
-        toast.success("Booking requested! Refreshing page...");
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000); 
+        toast.success("Your session has been booked and is now pending approval.");
+        handleRefresh();
     };
 
     const handleCancel = async () => {
