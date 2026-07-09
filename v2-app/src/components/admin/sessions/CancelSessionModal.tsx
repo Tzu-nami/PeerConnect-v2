@@ -2,10 +2,11 @@ import { useState } from 'react';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import type { AdminSession } from '@/types/admin';
+import { MentorSessionRow } from '@/pages/mentor/sessions';
 
 interface CancelSessionModalProps {
   isOpen: boolean;
-  session: AdminSession | null;
+  session: AdminSession | null | MentorSessionRow;
   onClose: () => void;
   onSuccess: () => void;
 }

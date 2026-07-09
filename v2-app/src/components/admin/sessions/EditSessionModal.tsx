@@ -3,10 +3,11 @@ import CrudModal from '@/components/ui/CrudModal';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { FaClock, FaPenToSquare } from 'react-icons/fa6';
 import type { AdminSession } from '@/types/admin';
+import { MentorSessionRow } from '@/pages/mentor/sessions';
 
 interface EditSessionModalProps {
   isOpen: boolean;
-  session: AdminSession | null;
+  session: AdminSession | null | MentorSessionRow;
   onClose: () => void;
   onSuccess: () => void;
 }

@@ -55,8 +55,8 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
             end:   `${String(endDt.getHours()).padStart(2,'0')}:${String(endDt.getMinutes()).padStart(2,'0')}`,
         };
     });
-  let recentBookings: RecentBooking[] = [];
-  let activeBooking: ActiveBooking | null = null;
+    let recentBookings: RecentBooking[] = [];
+    let activeBooking: ActiveBooking | null = null;
 
     if (studentProfile) {
         const { data: recent } = await supabase
@@ -101,7 +101,7 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
                 topic: active.topic ?? '',
                 mentor_name: (active.mentor_profiles as any)?.user_profiles
                 ? `${((active.mentor_profiles as any).user_profiles.lastName ?? '').toUpperCase()}, ${(active.mentor_profiles as any).user_profiles.firstName ?? ''}`
-                : '', // Handled by fallback in ActiveBookingCard
+                : '',
                 mode: (active.tutorial_modes as any)?.mode ?? '—',
                 date: new Date(active.date).toISOString().split('T')[0],
                 start_time: new Date(active.schedule_start).toTimeString().substring(0,5),
