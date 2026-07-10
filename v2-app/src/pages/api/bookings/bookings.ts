@@ -50,6 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         schedule_end:    `${date}T${schedule_end}:00`,
         booking_status:  'pending',
         group_id:        groupId,
+        is_any:          isAny,
     };
     const { error } = await supabase
         .from('bookings').insert(bookingData).select().single();
