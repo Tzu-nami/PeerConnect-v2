@@ -28,13 +28,17 @@ type Props = {
   onView: (session: MentorSessionRow) => void;
   onEdit: (session: MentorSessionRow) => void;
   onCancel: (session: MentorSessionRow) => void;
+  onAccept: (session: MentorSessionRow) => void;
+  onReject: (session: MentorSessionRow) => void;
+  onComplete: (session: MentorSessionRow) => void;
+  onNoShow: (session: MentorSessionRow) => void;
 };
 
-function formatStatus(status: string) {
-  return status === "no_show"
-    ? "No Show"
-    : status.charAt(0).toUpperCase() + status.slice(1).replace("_", " ");
-}
+const getFilterLabel = (status: string) => {
+  if (status === 'no_show') return 'No Show';
+  if (status === 'rejected') return 'Unavailable';
+  return status.charAt(0).toUpperCase() + status.slice(1);
+};
 
 function SortIcon({
   col,
@@ -68,6 +72,10 @@ export default function MentorSessionsTable({
   onView,
   onEdit,
   onCancel,
+  onAccept,
+  onReject,
+  onComplete,
+  onNoShow,
 }: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -104,10 +112,10 @@ export default function MentorSessionsTable({
               className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-muted focus:ring-text-muted/30 transition-shadow h-[36px] min-w-[150px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
             >
               <span>
-                {statusFilters.length === 0
-                  ? "All Statuses"
+                {statusFilters.length === 0 
+                  ? 'All Statuses' 
                   : statusFilters.length === 1
-                    ? formatStatus(statusFilters[0])
+                    ? getFilterLabel(statusFilters[0])
                     : `${statusFilters.length} Selected`}
               </span>
               <MdKeyboardArrowDown
@@ -137,7 +145,7 @@ export default function MentorSessionsTable({
                         className="w-4 h-4 text-up-maroon border-white-border rounded focus:ring-up-maroon/30 cursor-pointer"
                       />
                       <span className="text-sm font-bold text-slate-700">
-                        {formatStatus(status)}
+                        {getFilterLabel(status)}
                       </span>
                     </label>
                   ))}
@@ -245,7 +253,11 @@ export default function MentorSessionsTable({
                   session={session}
                   onView={onView}
                   onEdit={onEdit} 
-                  onCancel={onCancel} 
+                  onCancel={onCancel}
+                  onAccept={onAccept}
+                  onReject={onReject}
+                  onComplete={onComplete}
+                  onNoShow={onNoShow}
                 />
               ))
             ) : (

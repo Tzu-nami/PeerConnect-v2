@@ -17,6 +17,7 @@ import { createClient } from "@/utils/supabase/server";
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole";
 import EditSessionModal from '@/components/admin/sessions/EditSessionModal';
 import CancelSessionModal from '@/components/admin/sessions/CancelSessionModal';
+import UpdateSessionStatusModal, {StatusAction} from "@/components/mentor/sessions/UpdateSessionStatusModal";
 import { toast } from "sonner";
 
 export type SortDirection = "asc" | "desc";
@@ -52,6 +53,7 @@ export type MentorSessionRow = {
   degreeProgram: string;
   status: string;
   isOpen: boolean;
+  isAny: boolean;
 };
 
 type Props = {
@@ -168,6 +170,7 @@ export default function MentorSessionsPage({ sessions, stats }: Props) {
     useState<ActiveStatModal>(null);
   const [editSession, setEditSession] = useState<MentorSessionRow | null>(null);
   const [cancelSession, setCancelSession] = useState<MentorSessionRow | null>(null);
+  const [statusModalConfig, setStatusModalConfig] = useState<{ session: MentorSessionRow, action: StatusAction } | null>(null);
 
   const availableStatuses = useMemo(() => {
     return [...new Set(sessions.map((session) => session.status))].filter(
@@ -312,6 +315,10 @@ export default function MentorSessionsPage({ sessions, stats }: Props) {
         onView={setSelectedSession}
         onEdit={(session) => setEditSession(session)}
         onCancel={(session) => setCancelSession(session)}
+        onAccept={(s) => setStatusModalConfig({ session: s, action: s.isOpen ? 'claim' : 'accepted' })}
+        onReject={(s) => setStatusModalConfig({ session: s, action: 'rejected' })}
+        onComplete={(s) => setStatusModalConfig({ session: s, action: 'completed' })}
+        onNoShow={(s) => setStatusModalConfig({ session: s, action: 'no_show' })}
       />
 
       <Pagination
@@ -400,6 +407,19 @@ export default function MentorSessionsPage({ sessions, stats }: Props) {
         onSuccess={() => { handleRefresh(); setCancelSession(null); toast.success("Session has been cancelled."); }} 
       />
 
+      <UpdateSessionStatusModal
+        isOpen={!!statusModalConfig}
+        session={statusModalConfig?.session || null}
+        action={statusModalConfig?.action || null}
+        onClose={() => setStatusModalConfig(null)}
+        onSuccess={(actionType) => {
+          handleRefresh();
+          setStatusModalConfig(null);
+          const messages = { claim: 'claimed', accepted: 'accepted', rejected: 'rejected', completed: 'completed', no_show: 'marked as a no show' };
+          toast.success(`Session successfully ${messages[actionType]}!`);
+        }}
+      />
+
     </>
   );
 }
@@ -465,6 +485,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
       schedule_end,
       mentor_id,
       subject_id,
+      is_any,
       student_profiles!student_id (
         student_num,
         year_levels ( name ),
@@ -521,7 +542,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   const groupedBookings = groupBookings([...(assignedRows ?? []), ...openRows]);
 
   const sessions: MentorSessionRow[] = groupedBookings.map((group) => {
-    const firstBooking = group[0];
+    // Filter out cancelled members in group sessions
+    const activeMembers = group.filter((b: any) => b.booking_status !== 'cancelled');
+    const displayGroup = activeMembers.length > 0 ? activeMembers : group;
+    const firstBooking = displayGroup[0];
     const durationHours = getDurationHours(
       firstBooking.schedule_start,
       firstBooking.schedule_end
@@ -532,7 +556,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     const startStr = `${String(startDate.getHours()).padStart(2, '0')}:${String(startDate.getMinutes()).padStart(2, '0')}`;
     const endStr = `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
 
-    const studentProfiles = group
+    const studentProfiles = displayGroup
       .map((booking: any) => booking.student_profiles)
       .filter(Boolean);
 
@@ -562,11 +586,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
       end: endStr,
       mentor: 'You',
       student:
-        group.length > 1
-          ? `${group.length} Students (Group)`
+        displayGroup.length > 1
+          ? `${displayGroup.length} Students (Group)`
           : studentNames || "Unknown",
       studentNames: studentNames || "Unknown",
-      email: group.length > 1 ? "Multiple Emails" : emails || "-",
+      email: displayGroup.length > 1 ? "Multiple Emails" : emails || "-",
       emails: emails || "-",
       subject: firstBooking.subjects?.code ?? "-",
       subjectName: firstBooking.subjects?.name ?? "-",
@@ -584,10 +608,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
       mode: firstBooking.tutorial_modes?.mode
         ? cleanMode(firstBooking.tutorial_modes.mode)
         : "-",
-      yearLevel: studentProfiles[0]?.year_levels?.name ?? "N/A",
-      degreeProgram: studentProfiles[0]?.degree_programs?.name ?? "N/A",
+      yearLevel: studentProfiles
+        .map((s: any) => s?.year_levels?.name ?? "N/A")
+        .join(", "),
+      degreeProgram: studentProfiles
+        .map((s: any) => s?.degree_programs?.name ?? "N/A")
+        .join(", "),
       status: firstBooking.booking_status ?? "-",
       isOpen: firstBooking.mentor_id === null,
+      isAny: firstBooking.is_any ?? false,
     };
   });
 
