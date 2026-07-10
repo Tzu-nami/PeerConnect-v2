@@ -1,10 +1,18 @@
+// Components
+import EmptyState from "@/components/ui/charts/EmptyState";
+
 // Icons
 import { FaTrophy } from "react-icons/fa"
 
 // Types
 import {TopMentor} from "@/types/topMentor"
 
-export default function TopMentors({ topMentors }: { topMentors: TopMentor[] }) {
+interface TopMentorsProps {
+    topMentors: TopMentor[]
+    hasActiveSemester: boolean
+}
+
+export default function TopMentors({ topMentors, hasActiveSemester }: TopMentorsProps) {
     return(
         <div className="rounded-xl shadow-sm border border-white-border h-full">
             <div className="flex flex-col">
@@ -14,10 +22,12 @@ export default function TopMentors({ topMentors }: { topMentors: TopMentor[] }) 
                     <p className="font-bold text-xl">Most Active Mentors</p>
                 </div>
 
-                {/* Table display */}
-                <div>
+                {!hasActiveSemester ? (
+                    <EmptyState />
+                ) : topMentors.length === 0 ? (
+                    <EmptyState message="No feedbacks received yet for this semester." />
+                ) : (
                     <table className="w-full table-fixed text-left text-sm">
-                        {/* Table header */}
                         <thead className="text-text-muted text-xs bg-white-dark border-y border-white-border">
                         <tr>
                             <th className="px-4 py-2 text-center w-[20%]">Rank</th>
@@ -27,24 +37,24 @@ export default function TopMentors({ topMentors }: { topMentors: TopMentor[] }) 
                         </tr>
                         </thead>
 
-                        {/* Table content */}
                         <tbody>
                         {topMentors.map((mentor, index) => {
                             const medals = ['🥇', '🥈', '🥉'];
 
-                            return(
+                            return (
                                 <tr key={mentor.mentor_id} className="border-t border-white-border">
-                                    <td className={index < 3 ? "p-4 text-center text-lg" : "px-4 py-3 text-center"}>{medals[index] ?? index + 1}</td>
-                                    <td className="p-4  font-bold">{mentor.mentor_name}</td>
-                                    <td className="p-4  text-center">{mentor.total_sessions}</td>
-                                    <td className="p-4  text-center">{mentor.average_rating}</td>
+                                    <td className={index < 3 ? "p-4 text-center text-lg" : "px-4 py-3 text-center"}>
+                                        {medals[index] ?? index + 1}
+                                    </td>
+                                    <td className="p-4 font-bold">{mentor.mentor_name}</td>
+                                    <td className="p-4 text-center">{mentor.total_sessions}</td>
+                                    <td className="p-4 text-center">{mentor.average_rating}</td>
                                 </tr>
                             )
                         })}
                         </tbody>
                     </table>
-
-                </div>
+                )}
             </div>
         </div>
     )
