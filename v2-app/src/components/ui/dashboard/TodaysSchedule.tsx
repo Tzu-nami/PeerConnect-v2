@@ -11,8 +11,8 @@ import SearchBar from "@/components/ui/SearchBar"
 import StatusBadge from "@/components/ui/StatusBadge"
 
 // Icons
-import { FaCalendarCheck } from "react-icons/fa"
-import { MdChevronLeft, MdChevronRight } from "react-icons/md"
+import { FaCalendarCheck, FaCalendarXmark  } from "react-icons/fa6"
+import { MdEventBusy, MdChevronLeft, MdChevronRight } from "react-icons/md"
 
 // Types
 import { SessionList } from "@/types/sessionList"
@@ -105,8 +105,8 @@ export default function TodaysSchedule({ currentSessions, date, role }: TodaysSc
                         <tr>
                             <td colSpan={colHeader.length} className="text-center py-40 text-text-muted">
                                 <div className="flex flex-col items-center gap-2">
-                                    <FaCalendarCheck className="text-3xl opacity-30" />
-                                    <p className="text-sm font-medium">No sessions found for today</p>
+                                    <MdEventBusy  className="text-4xl opacity-30" />
+                                    <p className="text-sm italic">No sessions found for today</p>
                                 </div>
                             </td>
                         </tr>
