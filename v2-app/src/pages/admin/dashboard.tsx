@@ -37,6 +37,15 @@ import { getRatingLabel } from "@/utils/getRatingLabel"
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const supabase = createClient(context)
 
+    const { data: currentSemester } = await supabase
+        .from('semesters')
+        .select('id')
+        .eq('is_current', true)
+        .single()
+
+    const semesterId = currentSemester?.id ?? null
+    const hasActiveSemester = semesterId !== null
+
     // Fetch data from server
     const [result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12] = await Promise.all([
         // Total mentors
@@ -50,18 +59,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .from('bookings')
             .select('*', { count: 'exact', head: true })
             .eq('booking_status', 'accepted')
-            .eq('date', TODAY),
+            .eq('date', TODAY)
+            .eq('semester_id', semesterId),
 
         // Total pending sessions
         supabase
             .from('bookings')
             .select('*', { count: 'exact', head: true })
-            .eq('booking_status', 'pending'),
+            .eq('booking_status', 'pending')
+            .eq('semester_id', semesterId),
 
         // Average ratings
         supabase
-            .from('feedback')
-            .select('q1, q2, q3, q4, q5, q6, q7, q8, q9'),
+            .from('feedback_details')
+            .select('average_rating')
+            .eq('semester_id', semesterId),
 
         // Total students
         supabase
@@ -72,6 +84,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         supabase
             .from('booking_details')
             .select('*')
+            .eq('semester_id', semesterId)
             .order('schedule_start', { ascending: true }),
 
         // Staff details
@@ -85,16 +98,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .select('*'),
 
         // Top mentors
-        supabase.rpc('get_top_mentors'),
+        supabase.rpc('get_top_mentors', { p_semester_id: semesterId }),
 
         // Top subjects
-        supabase.rpc('get_top_subjects'),
+        supabase.rpc('get_top_subjects', { p_semester_id: semesterId }),
 
         // College activity
-        supabase.rpc('get_college_activity'),
+        supabase.rpc('get_college_activity', { p_semester_id: semesterId }),
 
         // Monthly trends
-        supabase.rpc('get_monthly_trends')
+        supabase.rpc('get_monthly_trends', { p_semester_id: semesterId })
     ])
 
     const totalMentors = result1.count
@@ -109,15 +122,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     // Average feedback calculation
     const feedbackData = result4.data ?? []
-    const rowAverage = feedbackData.map((feedback) => {
-        const ratings = Object.values(feedback).filter((value) => value !== null)
-        return ratings.reduce((total, sum) => total + (sum as number), 0) / ratings.length
-    })
+    const rowAverage = feedbackData.map((feedback) => feedback.average_rating).filter((value) => value !== null)
     const totalFeedbackAverage = rowAverage.length > 0
         ? rowAverage.reduce((total, sum) => total + sum, 0) / rowAverage.length
         : 0
 
-    // Satisfaction distribution
     const satisfactionCounts = rowAverage.reduce((acc, avg) => {
         const label = getRatingLabel(avg)
         acc[label] = (acc[label] ?? 0) + 1
@@ -171,7 +180,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             collegeActivity,
             monthlyTrends,
             sessionsByDate,
-            satisfactionData
+            satisfactionData,
+            hasActiveSemester
         }
     }
 }
@@ -191,9 +201,10 @@ interface AdminDashboardProps {
     monthlyTrends: MonthlyTrend[]
     sessionsByDate: Record<string, SessionList[]>
     satisfactionData: SatisfactionData[]
+    hasActiveSemester: boolean
 }
 
-export default function AdminDashboard({ totalMentors, totalSessionsToday, totalPendingSessions, totalFeedbackAverage, totalStudents, staffList, sessionList, mentorList, topMentors, topSubjects, collegeActivity, monthlyTrends, sessionsByDate, satisfactionData }: AdminDashboardProps) {
+export default function AdminDashboard({ totalMentors, totalSessionsToday, totalPendingSessions, totalFeedbackAverage, totalStudents, staffList, sessionList, mentorList, topMentors, topSubjects, collegeActivity, monthlyTrends, sessionsByDate, satisfactionData, hasActiveSemester }: AdminDashboardProps) {
     // Stat cards
     const cards = dashboardDataConfig['admin'].cards
     const gridCols = dashboardDataConfig['admin'].gridCols
@@ -241,27 +252,27 @@ export default function AdminDashboard({ totalMentors, totalSessionsToday, total
 
                 {/* ROW 2 - Monthly trends */}
                 <div className=" col-span-2 h-full">
-                    <MonthlyTrends monthlyTrends={monthlyTrends} />
+                    <MonthlyTrends monthlyTrends={monthlyTrends} hasActiveSemester={hasActiveSemester} />
                 </div>
 
                 {/* Top mentors */}
                 <div className="col-span-1 h-full">
-                    <TopMentors topMentors={topMentors} />
+                    <TopMentors topMentors={topMentors} hasActiveSemester={hasActiveSemester} />
                 </div>
 
                 {/* ROW 3 - Top subjects */}
                 <div className="col-span-1">
-                    <TopSubjects topSubjects={topSubjects} />
+                    <TopSubjects topSubjects={topSubjects} hasActiveSemester={hasActiveSemester} />
                 </div>
 
                 {/* College activity */}
                 <div className=" col-span-1">
-                    <CollegeBookings collegeActivity={collegeActivity} />
+                    <CollegeBookings collegeActivity={collegeActivity} hasActiveSemester={hasActiveSemester} />
                 </div>
 
                 {/* Satisfaction rate */}
                 <div className=" col-span-1">
-                    <SatisfactionRate satisfactionData={satisfactionData} />
+                    <SatisfactionRate satisfactionData={satisfactionData} hasActiveSemester={hasActiveSemester} />
                 </div>
             </div>
         </>
