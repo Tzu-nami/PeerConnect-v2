@@ -21,10 +21,18 @@ export default function CancelSessionModal({ isOpen, session, onClose, onSuccess
     try {
       const idsToCancel = session.group_ids?.length > 0 ? session.group_ids : [session.id];
 
-      const res = await fetch('/api/admin/sessions/cancel', {
+      // ANY cancellations
+      const wasOpenPool = 'isAny' in session ? session.isAny : false;
+      const isMentor = 'isAny' in session;
+      const url = isMentor ? '/api/sessions/update-status' : '/api/admin/sessions/cancel';
+      const body = isMentor 
+        ? { booking_ids: idsToCancel, booking_status: 'cancelled', revert_to_pool: wasOpenPool }
+        : { ids: idsToCancel };
+
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids: idsToCancel }),
+        body: JSON.stringify(body),
       });
 
       if (!res.ok) {
