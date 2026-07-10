@@ -30,8 +30,8 @@ export const moduleNavLinks: Record<string, NavLink[]> = {
     ],
     student: [
         { href: '/student/dashboard', icon: <MdDashboard />,         label: 'Dashboard' },
-        { href: '/student/bookings',  icon: <FaCalendarCheck />,     label: 'Booking Form' },
-        { href: '/student/history',   icon: <FaClockRotateLeft />,   label: 'Booking History' },
-        { href: '/student/mentors',   icon: <FaChalkboardTeacher />, label: 'Mentors' },
+        { href: '/student/bookings',  icon: <FaCalendarCheck />,     label: 'Booking Form',         section: 'Bookings' },
+        { href: '/student/history',   icon: <FaClockRotateLeft />,   label: 'Booking History',      section: 'Bookings' },
+        { href: '/student/mentors',   icon: <FaChalkboardTeacher />, label: 'Mentors',              section: 'Bookings' },
     ],
 }
