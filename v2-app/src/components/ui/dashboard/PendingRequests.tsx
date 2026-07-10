@@ -7,26 +7,19 @@ import { FaCheck, FaTimes, FaHourglassHalf } from "react-icons/fa"
 import { SessionList } from "@/types/sessionList"
 
 // Utilities
-import { createClient } from "@/utils/supabase/client"
 import { formatTime } from "@/utils/formatTime"
+import UpdateSessionStatusModal, { StatusAction } from "@/components/mentor/sessions/UpdateSessionStatusModal"
 import Link from "next/link";
 
 interface PendingRequestsProps {
-    pendingSessions: SessionList[]
-    onSuccess: (status: 'accepted' | 'rejected') => void
+    pendingSessions: (SessionList & { isOpen: boolean})[]
+    onSuccess: (status: StatusAction) => void
 }
 
 export default function PendingRequests({ pendingSessions, onSuccess }: PendingRequestsProps) {
-    const [bookingId, setBookingId] = useState<string | null>(null)
-    const supabase = createClient()
+    const [selectedSession, setSelectedSession] = useState<any | null>(null);
+    const [modalAction, setModalAction] = useState<StatusAction | null>(null);
     const displayedRequests = pendingSessions.slice(0, 5)
-
-    async function handleAction(id: string, status: 'accepted' | 'rejected') {
-        setBookingId(id)
-        await supabase.from('bookings').update({ booking_status: status }).eq('id', id)
-        setBookingId(null)
-        onSuccess(status)
-    }
 
     return(
         <div className="bg-white rounded-xl shadow-sm border border-white-border flex flex-col">
@@ -65,15 +58,42 @@ export default function PendingRequests({ pendingSessions, onSuccess }: PendingR
 
                                 {/* Action buttons */}
                                 <div className="flex gap-2">
-                                    <button onClick={() => handleAction(session.id,'accepted')} disabled={bookingId === session.id}
-                                            className="p-1.5 rounded-lg text-green-500  bg-green-50 hover:bg-green-200 cursor-pointer disabled:opacity-50">
+                                    <button 
+                                        onClick={() => {
+                                            setSelectedSession({
+                                                id: session.id,
+                                                group_ids: [session.id],
+                                                student: session.studentName,
+                                                subject: session.subject,
+                                                date: formattedDate,
+                                                time: `${startTime} - ${endTime}`
+                                            });
+                                            setModalAction(session.isOpen ? 'claim' : 'accepted');
+                                        }}
+                                        className={`p-1.5 rounded-lg cursor-pointer transition ${session.isOpen ? 'text-emerald-500 bg-emerald-50 hover:bg-emerald-200' : 'text-green-500 bg-green-50 hover:bg-green-200'}`}
+                                        title={session.isOpen ? "Claim Session" : "Accept Session"}
+                                    >
                                         <FaCheck />
                                     </button>
-                                    <button onClick={() => handleAction(session.id, 'rejected')} disabled={bookingId === session.id}
-
-                                        className="p-1.5 rounded-lg text-red-500  bg-red-50 hover:bg-red-100 cursor-pointer disabled:opacity-50">
-                                        <FaTimes />
-                                    </button>
+                                    {!session.isOpen && (
+                                        <button 
+                                            onClick={() => {
+                                                setSelectedSession({
+                                                    id: session.id,
+                                                    group_ids: [session.id],
+                                                    student: session.studentName,
+                                                    subject: session.subject,
+                                                    date: formattedDate,
+                                                    time: `${startTime} - ${endTime}`
+                                                });
+                                                setModalAction('rejected');
+                                            }}
+                                            className="p-1.5 rounded-lg text-red-500 bg-red-50 hover:bg-red-100 cursor-pointer transition"
+                                            title="Mark as unavailable"
+                                        >
+                                            <FaTimes />
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         )
@@ -84,6 +104,21 @@ export default function PendingRequests({ pendingSessions, onSuccess }: PendingR
             <Link href="/mentor/sessions" className="block text-center text-xs font-bold text-text-muted hover:text-up-maroon py-3 border-t border-white-border transition">
                 View all sessions
             </Link>
+
+            <UpdateSessionStatusModal
+                isOpen={!!selectedSession}
+                session={selectedSession}
+                action={modalAction}
+                onClose={() => {
+                    setSelectedSession(null);
+                    setModalAction(null);
+                }}
+                onSuccess={(action) => {
+                    setSelectedSession(null);
+                    setModalAction(null);
+                    onSuccess(action);
+                }}
+            />
         </div>
     )
 }
