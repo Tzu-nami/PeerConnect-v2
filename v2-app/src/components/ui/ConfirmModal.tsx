@@ -20,7 +20,7 @@ export default function ConfirmModal({
     title,
     message,
     confirmLabel = 'Confirm',
-    confirmClassName = 'btn-up-maroon',
+    confirmClassName = 'bg-btn-gray hover:bg-btn-gray-hover',
     icon,
     loading = false,
     onConfirm,
@@ -38,6 +38,14 @@ export default function ConfirmModal({
         }
         return () => { document.body.style.overflow = ''; };
         }, [isOpen]);
+
+    useEffect(() => {
+        function handleKeyDown(e: KeyboardEvent) {
+            if (e.key === 'Escape' && !loading) onCancel()
+        }
+        if (isOpen) document.addEventListener('keydown', handleKeyDown)
+        return () => document.removeEventListener('keydown', handleKeyDown)
+    }, [isOpen, loading, onCancel])
 
     if (!isOpen || !mounted) return null;
 
@@ -58,19 +66,15 @@ export default function ConfirmModal({
                         type="button"
                         onClick={onCancel}
                         disabled={loading}
-                        className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer"
-                    >
+                        className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer">
                         Cancel
                     </button>
                     <button
                         type="button"
                         onClick={onConfirm}
                         disabled={loading}
-                        className={`flex-1 px-4 py-2 text-sm font-semibold text-cream rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition ${confirmClassName}`}
-                    >
-                        {loading ?
-                            <>Processing...</>
-                            : confirmLabel}
+                        className={`flex-1 px-4 py-2 text-sm font-semibold text-white rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition ${confirmClassName}`}>
+                        {loading ? <>Processing...</> : confirmLabel}
                     </button>
                 </div>
             </div>
