@@ -4,7 +4,7 @@ import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { getServerSideUserRole } from '@/utils/getServerSideUserRole';
 import { createClient } from '@/utils/supabase/server';
 import { getStudentBookingPageData } from '@/utils/services/bookingService'; 
-import { FaBan } from 'react-icons/fa6';
+import {FaBan, FaCalendarXmark} from 'react-icons/fa6';
 import { toast } from 'sonner';
 
 import ActiveBookingCard from '@/components/student/bookings/ActiveBookingCard';
@@ -31,9 +31,11 @@ interface BookingPageProps {
     activeBooking: ActiveBooking | null;
     lockedMentorId?: string;
     userRole?: string
+    bookingsEnabled: boolean;
+    disabledMessage: string | null;
 }
 
-export default function StudentBookingsPage({ mentors, availabilities, bookedSlots, mentorSubjects, subjects, tutorialModes, colleges, degreePrograms, yearLevels, studentProfile: initialProfile, recentBookings,  activeBooking, lockedMentorId, userRole }: BookingPageProps) {
+export default function StudentBookingsPage({ mentors, availabilities, bookedSlots, mentorSubjects, subjects, tutorialModes, colleges, degreePrograms, yearLevels, studentProfile: initialProfile, recentBookings,  activeBooking, lockedMentorId, userRole, bookingsEnabled, disabledMessage }: BookingPageProps) {
     const router = useRouter();
     const [profile, setProfile]           = useState(initialProfile);
     const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -80,34 +82,45 @@ export default function StudentBookingsPage({ mentors, availabilities, bookedSlo
             >
                 {/* Booking forms */}
                 <div className="lg:col-span-2">
+                    <div className="flex-1 min-w-0 pb-5 pt-0 ">
+                        <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">
+                            Request An Enrichment Session
+                        </h1>
+                        <p className="text-xs md:text-sm xl:text-base font-medium text-text-muted mt-1">
+                            {activeBooking
+                                ? 'You have an active session request. You can view its details or cancel it below.'
+                                : !bookingsEnabled
+                                    ? 'Booking submissions are temporarily unavailable.'
+                                    : 'Please fill out the details below. Your request will be reviewed by the peer mentor.'}
+                        </p>
+                    </div>
+
                     {activeBooking ? (
                         <ActiveBookingCard
                             booking={activeBooking}
                             onCancel={() => setShowCancelConfirm(true)}
                         />
+                    ) : !bookingsEnabled ? (
+                        <div className="bg-white rounded-xl border border-white-border shadow-sm py-16 px-8 flex flex-col items-center text-center">
+                            <FaCalendarXmark className="text-5xl text-up-maroon/70 mb-4" />
+                            <p className="text-lg font-medium text-text-primary mt-2">
+                                Bookings are currently closed{disabledMessage ? ` during ${disabledMessage}` : '.'}
+                            </p>
+                            <p className="text-sm text-text-muted mt-2 italic">Check back later or contact the LRC for assistance.</p>
+                        </div>
                     ) : (
-                        <>
-                            <div className="flex-1 min-w-0 pb-6 pt-0">
-                                <h1 className="text-3xl font-extrabold tracking-tight text-up-maroon">
-                                Request An Enrichment Session
-                                </h1>
-                                <p className="text-sm font-medium text-slate-500 leading-snug mt-1">
-                                Please fill out the details below. Your request will be reviewed by the peer mentor.
-                                </p>
-                            </div>
-                            <BookingForm
-                                mentors={mentors}
-                                availabilities={availabilities}
-                                bookedSlots={bookedSlots}
-                                mentorSubjects={mentorSubjects}
-                                subjects={subjects}
-                                tutorialModes={tutorialModes}
-                                lockedMentorId={lockedMentorId}
-                                hasProfile={!!profile}
-                                onSuccess={handleBookingSuccess}
-                                userRole={userRole}
-                            />
-                        </>
+                        <BookingForm
+                            mentors={mentors}
+                            availabilities={availabilities}
+                            bookedSlots={bookedSlots}
+                            mentorSubjects={mentorSubjects}
+                            subjects={subjects}
+                            tutorialModes={tutorialModes}
+                            lockedMentorId={lockedMentorId}
+                            hasProfile={!!profile}
+                            onSuccess={handleBookingSuccess}
+                            userRole={userRole}
+                        />
                     )}
                 </div>
 

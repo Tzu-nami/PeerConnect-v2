@@ -3,6 +3,7 @@ import DateTimeSelection from './DateTimeSelection';
 import MentorSelection from './MentorSelection';
 import GroupEmailInput from './GroupEmailInput';
 import ConfirmBookingModal from './ConfirmBookingModal';
+import { toast } from 'sonner';
 import type { BookingMentor, MentorAvailability, MentorBookedSlot, MentorSubjectLink, TutorialMode } from '@/types/bookings';
 import type { Subject } from '@/types/mentor';
 
@@ -239,8 +240,10 @@ export default function BookingForm({
             });
             if (!r.ok) {
                 const data = await r.json();
-                setErrors(data.errors ?? { general: 'Booking failed.' });
+                const errorData = data.errors ?? { general: 'Booking failed.' };
+                setErrors(errorData);
                 setShowConfirm(false);
+                if (errorData.general) toast.error(errorData.general);
                 return;
             }
             setShowConfirm(false);
