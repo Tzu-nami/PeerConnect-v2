@@ -16,9 +16,10 @@ interface ModuleSidebarProps {
     userRole: string | null
     collapsed: boolean
     setCollapsed: React.Dispatch<React.SetStateAction<boolean>>
+    currentSemesterLabel: string | null
 }
 
-export default function ModuleSidebar({ userRole, collapsed, setCollapsed }: ModuleSidebarProps ) {
+export default function ModuleSidebar({ userRole, collapsed, setCollapsed, currentSemesterLabel }: ModuleSidebarProps ) {
     // Nav links
     const links = userRole ? moduleNavLinks[userRole] ?? [] : []
 
@@ -36,9 +37,19 @@ export default function ModuleSidebar({ userRole, collapsed, setCollapsed }: Mod
             <div>
                 <Link href='/' className="flex items-center gap-3 h-[60px] md:h-[83px] px-7">
                     <FaGraduationCap className="text-3xl shrink-0"/>
-                    <div className={`text-xl font-bold whitespace-nowrap transition-all duration-300 overflow-hidden
-                            ${collapsed ? 'opacity-0 w-0' : 'opacity-100'}`}>
-                        LRC <span className="text-up-yellow">PeerConnect</span>
+                    <div className="flex flex-col overflow-hidden">
+                        <div className={`text-xl font-bold whitespace-nowrap transition-all duration-300
+                ${collapsed ? 'opacity-0 w-0' : 'opacity-100'}`}>
+                            LRC <span className="text-up-yellow">PeerConnect</span>
+                        </div>
+
+                        {/* Current semester */}
+                        {currentSemesterLabel && (
+                            <div className={`text-xs text-white/50 whitespace-nowrap transition-all duration-300
+                    ${collapsed ? 'opacity-0 h-0' : 'opacity-100'}`}>
+                                {currentSemesterLabel}
+                            </div>
+                        )}
                     </div>
                 </Link>
             </div>
@@ -58,14 +69,19 @@ export default function ModuleSidebar({ userRole, collapsed, setCollapsed }: Mod
                         return (
                             <li key={link.href}>
                                 {showSectionHeader && (
-                                    <div className={`px-7 pt-4 pb-1 text-xs font-semibold text-white/40 uppercase tracking-wide whitespace-nowrap overflow-hidden transition-all duration-300
-                                            ${collapsed ? 'opacity-0 h-0 py-0' : 'opacity-100'}`}>
-                                        {link.section}
+                                    <div className="h-10 px-7 flex items-center">
+                                        {collapsed ? (
+                                            <div className="w-full border-t border-white/10" />
+                                        ) : (
+                                            <span className="text-xs font-semibold text-white/40 uppercase tracking-wide whitespace-nowrap overflow-hidden">
+                                                {link.section}
+                                            </span>
+                                        )}
                                     </div>
                                 )}
                                 <Link href={link.href}
                                       className={`flex items-center gap-4 py-5 px-7 w-full transition-colors
-                                            ${isActive ? 'text-up-maroon font-bold bg-white' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                                            ${isActive ? 'text-up-maroon font-bold bg-white-surface' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                                     <div className="text-2xl w-6 shrink-0 flex items-center justify-center">{link.icon}</div>
                                     <span className={`whitespace-nowrap transition-all duration-300 overflow-hidden
                                             ${collapsed ? 'opacity-0 w-0' : 'opacity-100'}`}>
