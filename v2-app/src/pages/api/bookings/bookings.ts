@@ -18,6 +18,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     if (authError || !user) return res.status(401).json({ error: 'Unauthorized' });
 
+    const { data: settings } = await supabase
+        .from('system_settings')
+        .select('bookings_enabled, disabled_message')
+        .single();
+
+    if (!settings?.bookings_enabled) {
+        return res.status(403).json({ errors: { general: settings?.disabled_message || 'Bookings are currently closed.' } });
+    }
+
+    const { data: currentSemester } = await supabase
+        .from('semesters')
+        .select('id')
+        .eq('is_current', true)
+        .single();
+
+    if (!currentSemester) {
+        return res.status(403).json({ errors: { general: 'No active semester. Bookings are currently closed.' } });
+    }
+
     // Request info
     const { mentor_id, subject_id, topic, tutorialMode_id, date, schedule_start, schedule_end, group_emails = [] } = req.body;
 
@@ -38,7 +57,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const isGroupBooking = cleanEmails.length > 0;
     const groupId = isGroupBooking ? v4() : null;
 
-    // Create booking
     const bookingData = {
         student_id:      profile.id,
         mentor_id:       resolvedMentorId,
@@ -50,7 +68,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         schedule_end:    `${date}T${schedule_end}:00`,
         booking_status:  'pending',
         group_id:        groupId,
+        semester_id:     currentSemester.id,
     };
+
     const { error } = await supabase
         .from('bookings').insert(bookingData).select().single();
     if (error) return res.status(500).json({ error: error.message });
@@ -81,5 +101,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
     }
+
+
   return res.status(201).json({ ok: true });
 }

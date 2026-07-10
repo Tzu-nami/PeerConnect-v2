@@ -12,9 +12,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Check if authenticated
     const supabase = createServerClient({ req, res } as any);
+
     const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
     if (authError || !user) return res.status(401).json({ error: 'Unauthorized' });
+
+    const { data: settings } = await supabase.from('system_settings').select('bookings_enabled, disabled_message').single();
+    if (!settings?.bookings_enabled) return res.status(403).json({ errors: { general: settings?.disabled_message || 'Bookings are currently closed.' } });
 
     // Request info and validate inputs
     const userId = user.id;

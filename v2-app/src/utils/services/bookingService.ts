@@ -13,18 +13,49 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
         { data: degreeRows },
         { data: yearRows },
         { data: studentProfile },
+        { data: systemSettings },
     ] = await Promise.all([
-        supabase.from('mentor_profiles').select('id, user_profiles(id, firstName, lastName)').neq('user_id', userId).eq('is_active', true),
-        supabase.from('mentor_availabilities').select('mentor_id, day_of_week, start_time, end_time'),
-        supabase.from('bookings').select('mentor_id, date, schedule_start, schedule_end')
-        .in('booking_status', ['accepted', 'completed']).not('mentor_id', 'is', null),
-        supabase.from('mentor_subjects').select('mentor_id, subject_id'),
-        supabase.from('subjects').select('id, code, name').order('code'),
-        supabase.from('tutorial_modes').select('id, mode').order('id'),
-        supabase.from('colleges').select('id, code, name').order('name'),
-        supabase.from('degree_programs').select('id, college_id, name').order('name'),
-        supabase.from('year_levels').select('id, name').order('name'),
-        supabase.from('student_profiles').select('id, student_num, college_id, degreeProgram_id, yearLevel_id').eq('user_id', userId).maybeSingle(),
+        supabase
+            .from('mentor_profiles')
+            .select('id, user_profiles(id, firstName, lastName)')
+            .neq('user_id', userId)
+            .eq('is_active', true),
+        supabase
+            .from('mentor_availabilities')
+            .select('mentor_id, day_of_week, start_time, end_time'),
+        supabase
+            .from('bookings')
+            .select('mentor_id, date, schedule_start, schedule_end')
+            .in('booking_status', ['accepted', 'completed'])
+            .not('mentor_id', 'is', null),
+        supabase
+            .from('mentor_subjects')
+            .select('mentor_id, subject_id'),
+        supabase
+            .from('subjects')
+            .select('id, code, name').order('code'),
+        supabase
+            .from('tutorial_modes')
+            .select('id, mode').order('id'),
+        supabase
+            .from('colleges')
+            .select('id, code, name').order('name'),
+        supabase
+            .from('degree_programs')
+            .select('id, college_id, name')
+            .order('name'),
+        supabase
+            .from('year_levels')
+            .select('id, name')
+            .order('name'),
+        supabase
+            .from('student_profiles')
+            .select('id, student_num, college_id, degreeProgram_id, yearLevel_id')
+            .eq('user_id', userId).maybeSingle(),
+        supabase
+            .from('system_settings')
+            .select('bookings_enabled, disabled_message')
+            .single(),
     ]);
 
     const mentors: BookingMentor[] = (mentorRows ?? [])
@@ -124,5 +155,7 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
         studentProfile: studentProfile ?? null,
         recentBookings,
         activeBooking,
+        bookingsEnabled: systemSettings?.bookings_enabled ?? true,
+        disabledMessage: systemSettings?.disabled_message ?? null,
     };
 }
