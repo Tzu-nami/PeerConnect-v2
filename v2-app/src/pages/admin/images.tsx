@@ -115,7 +115,7 @@ export default function ImageManagement({ landingImages }: ImageManagementProps)
             {/* Page title */}
             <div className="border-b border-white-border">
                 <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">Landing Page Image Management</h1>
-                <p className="text-xs md:text-sm xl:text-base font-medium text-slate-500 mt-1 mb-3">Update and manage images displayed across the landing page</p>
+                <p className="text-xs md:text-sm xl:text-base font-medium text-text-muted mt-1 mb-3">Update and manage images displayed across the landing page</p>
             </div>
 
             <div className="flex flex-col gap-6 mt-5">
