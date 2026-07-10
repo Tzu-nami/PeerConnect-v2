@@ -47,15 +47,16 @@ function ScheduleHeader() {
 function getDotColor(sessions: SessionList[] | undefined, dateKey: string, today: string) {
     if (!sessions || sessions.length === 0) return null
 
-    if (dateKey < today) {
-        return 'bg-gray-400';
-    }
+    if (dateKey < today) return 'bg-gray-400'
 
-    const hasPending = sessions.some((s) => s.bookingStatus === 'pending')
+    const hasPending   = sessions.some(s => s.bookingStatus === 'pending')
     if (hasPending) return 'bg-yellow-500'
 
-    const hasAccepted = sessions.some((a) => a.bookingStatus === 'accepted')
+    const hasAccepted  = sessions.some(s => s.bookingStatus === 'accepted')
     if (hasAccepted) return 'bg-green-600'
+
+    const hasBad = sessions.some(s => ['cancelled', 'rejected', 'no_show'].includes(s.bookingStatus))
+    if (hasBad) return 'bg-red-500'
 
     return 'bg-gray-400'
 }
