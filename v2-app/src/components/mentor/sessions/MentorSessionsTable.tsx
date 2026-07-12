@@ -1,18 +1,12 @@
 import { useState } from "react";
-import {
-  MdArrowDownward,
-  MdArrowUpward,
-  MdKeyboardArrowDown,
-  MdUnfoldMore,
-} from "react-icons/md";
+import { MdArrowDownward, MdArrowUpward, MdKeyboardArrowDown, MdUnfoldMore } from "react-icons/md";
 
 import SearchBar from "@/components/ui/SearchBar";
 import MentorSessionsTableRow from "./MentorSessionsTableRow";
-import type {
-  MentorSessionRow,
-  MentorSessionSortKey,
-  SortDirection,
-} from "@/pages/mentor/sessions";
+import type { MentorSessionRow, MentorSessionSortKey, SortDirection } from "@/pages/mentor/sessions";
+import {Semester} from "@/types/semester";
+import SemesterFilter from "@/components/admin/SemesterFilter";
+import EmptyState from "@/components/ui/charts/EmptyState";
 
 type Props = {
   sessions: MentorSessionRow[];
@@ -26,6 +20,9 @@ type Props = {
   sortDir: SortDirection;
   onSort: (col: MentorSessionSortKey) => void;
   onView: (session: MentorSessionRow) => void;
+    semesters: Semester[];
+    selectedSemesterId: string | null;
+    onSemesterChange: (id: string) => void;
 };
 
 function formatStatus(status: string) {
@@ -64,6 +61,9 @@ export default function MentorSessionsTable({
   sortDir,
   onSort,
   onView,
+    semesters,
+    selectedSemesterId,
+    onSemesterChange
 }: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -92,6 +92,12 @@ export default function MentorSessionsTable({
             placeholder="Search sessions..."
             className="w-56"
           />
+
+            <SemesterFilter
+                semesters={semesters}
+                selected={selectedSemesterId}
+                onChange={onSemesterChange}
+            />
 
           <div className="relative">
             <button
@@ -228,28 +234,25 @@ export default function MentorSessionsTable({
             </tr>
           </thead>
 
-          <tbody>
-            {sessions.length > 0 ? (
-              sessions.map((session) => (
-                <MentorSessionsTableRow
-                  key={session.id}
-                  session={session}
-                  onView={onView}
-                />
-              ))
+            <tbody>
+            {!selectedSemesterId ? (
+                <tr>
+                    <td colSpan={5}>
+                        <EmptyState />
+                    </td>
+                </tr>
+            ) : sessions.length > 0 ? (
+                sessions.map((session) => (
+                    <MentorSessionsTableRow key={session.id} session={session} onView={onView} />
+                ))
             ) : (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="text-center py-12 text-sm text-text-brown-light italic"
-                >
-                  <p className="text-sm font-semibold text-slate-500">
-                    No sessions match your filters.
-                  </p>
-                </td>
-              </tr>
+                <tr>
+                    <td colSpan={5} className="text-center py-12 text-sm text-text-brown-light italic">
+                        <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
+                    </td>
+                </tr>
             )}
-          </tbody>
+            </tbody>
         </table>
       </div>
     </div>

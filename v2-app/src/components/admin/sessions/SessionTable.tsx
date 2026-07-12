@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import SearchBar from '@/components/ui/SearchBar';
 import SessionTableRow from './SessionTableRow';
+import {Semester} from "@/types/semester";
+import SemesterFilter from "@/components/admin/SemesterFilter";
+
 
 // Icons
 import { MdArrowUpward, MdArrowDownward, MdUnfoldMore, MdKeyboardArrowDown } from "react-icons/md";
 
 import type { AdminSession } from '@/types/admin';
+import EmptyState from "@/components/ui/charts/EmptyState";
 
 interface SessionTableProps {
   sessions: AdminSession[];
@@ -20,7 +24,10 @@ interface SessionTableProps {
   onSort: (col: string) => void;
   onView: (s: AdminSession) => void;
   onEdit: (s: AdminSession) => void;
-  onCancel: (s: AdminSession) => void;
+  onCancel: (s: AdminSession) => void
+    semesters: Semester[];
+    selectedSemesterId: string | null;
+    onSemesterChange: (id: string) => void;
 }
 
 function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sortDir: 'asc' | 'desc' }) {
@@ -30,7 +37,7 @@ function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sor
 
 
 export default function SessionTable({ 
-  sessions, totalCount, searchQuery, onSearch, statusFilters, onStatusChange, availableStatuses, sortCol, sortDir, onSort, onView, onEdit, onCancel 
+  sessions, totalCount, searchQuery, onSearch, statusFilters, onStatusChange, availableStatuses, sortCol, sortDir, onSort, onView, onEdit, onCancel, semesters, selectedSemesterId, onSemesterChange
 }: SessionTableProps) {
   
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -65,6 +72,13 @@ export default function SessionTable({
             placeholder="Search sessions..." 
             className="w-56" 
           />
+
+            <SemesterFilter
+                semesters={semesters}
+                selected={selectedSemesterId}
+                onChange={onSemesterChange}
+            />
+
           <div className="relative">
             {/* Status filters */}
             <button 
@@ -146,23 +160,33 @@ export default function SessionTable({
               </th>
             </tr>
           </thead>
-          <tbody>
-            {sessions.length > 0 ? sessions.map(s => (
-              <SessionTableRow 
-                key={s.id} 
-                session={s} 
-                onView={onView} 
-                onEdit={onEdit} 
-                onCancel={onCancel} 
-              />
-            )) : (
-              <tr>
-                <td colSpan={6} className="text-center py-12 text-sm text-text-brown-light italic">
-                  <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
-                </td>
-              </tr>
+            <tbody>
+            {!selectedSemesterId ? (
+                <tr>
+                    <td colSpan={6}>
+                        <EmptyState />
+                    </td>
+                </tr>
+            ) : sessions.length > 0 ? (
+                sessions.map(s => (
+                    <SessionTableRow
+                        key={s.id}
+                        session={s}
+                        onView={onView}
+                        onEdit={onEdit}
+                        onCancel={onCancel}
+                    />
+                ))
+            ) : (
+                <tr>
+                    <td colSpan={6} className="text-center py-12 text-sm text-text-brown-light italic">
+                        <p className="text-sm font-semibold text-slate-500">
+                            No sessions match your filters.
+                        </p>
+                    </td>
+                </tr>
             )}
-          </tbody>
+            </tbody>
         </table>
       </div>
     </div>
