@@ -109,3 +109,26 @@ export interface ActiveBooking {
     end_time: string;
     status: 'pending' | 'accepted';
 }
+
+export interface CompletedBookingForFeedback {
+    id: string;
+    subject_code: string;
+    subject_name: string;
+    mentor_name: string;
+    date: string;
+    topic: string;
+}
+
+export interface FeedbackFormState {
+    q1: number | null;
+    q2: number | null;
+    q3: number | null;
+    q4: number | null;
+    q5: number | null;
+    q6: number | null;
+    q7: number | null;
+    q8: number | null;
+    q9: number | null;
+    q10: boolean | null;
+    feedback: string;
+}

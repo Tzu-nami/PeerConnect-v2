@@ -69,8 +69,13 @@ export async function getAdminSessionsData(supabase: SupabaseClient) {
   }
 
   const groups = new Map<string, RawBooking[]>();
+  const cancelledSessions: RawBooking[] = [];
 
   for (const b of bookings) {
+    if (b.booking_status === 'cancelled') {
+      cancelledSessions.push(b);
+      continue; 
+    }
     const modeRaw = b.tutorial_modes?.mode ?? '';
     const isGroup = modeRaw.toLowerCase().includes('group');
 
@@ -84,63 +89,58 @@ export async function getAdminSessionsData(supabase: SupabaseClient) {
 
   // Sessions data formatting display
   const sessions: AdminSession[] = [];
-  
-  for (const group of groups.values()) {
+  const createAdminSession = (group: RawBooking[], derivedStatus: SessionStatus): AdminSession => {
     const b = group[0];
     const start = new Date(b.schedule_start);
-    const end   = new Date(b.schedule_end);
+    const end = new Date(b.schedule_end);
     const diffMs = end.getTime() - start.getTime();
     const diffMinutes = diffMs / 60000;
-    const durationHours = (diffMs / 60000) / 60;
-    const startStr = `${String(start.getHours()).padStart(2,'0')}:${String(start.getMinutes()).padStart(2,'0')}`;
-    const endStr   = `${String(end.getHours()).padStart(2,'0')}:${String(end.getMinutes()).padStart(2,'0')}`;
-    
+    const durationHours = diffMinutes / 60;
     const studentUsers = group
       .map(bk => bk.student_profiles?.user_profiles)
       .filter((u): u is NonNullable<typeof u> => u !== null && u !== undefined);
-      
-    const studentNames = studentUsers
-      .map(u => `${u.firstName} ${u.lastName}`)
-      .join(', ');
-      
-    const emails = studentUsers
-      .map(u => u.email ?? '')
-      .join(', ');
-      
     const mentorUser = b.mentor_profiles?.user_profiles;
-    const subject    = b.subjects;
-    const modeRaw    = b.tutorial_modes?.mode ?? '';
-    const sp         = b.student_profiles;
-    const dateObj  = new Date(b.date);
-    const dateStr  = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    const timeStr  = `${format12hrTime(startStr)} – ${format12hrTime(endStr)}`;
-    const durText  = formatHours(diffMinutes);
-    const durationText = `${format12hrTime(startStr)} - ${format12hrTime(endStr)} (${durText})`;
-
-    sessions.push({
-      id:            b.id,
-      group_ids:     group.map(bk => bk.id),
-      avatar:        group.length > 1 ? null : studentUsers[0]?.avatar ?? null,
-      student:       group.length > 1 ? `${group.length} Students (Group)` : studentNames,
-      studentNames,
-      email:         group.length > 1 ? 'Multiple Emails' : emails,
-      emails,
-      mentor:        mentorUser ? `${mentorUser.firstName} ${mentorUser.lastName}` : '—',
-      subject:       subject?.code ?? 'N/A',
-      subjectName:   subject?.name ?? '',
-      topic:         b.topic ?? '—',
-      date:          dateStr,
-      time:          timeStr,
-      start:         startStr,
-      end:           endStr,
-      durationText, 
+    const sp = b.student_profiles;
+    return {
+      id: b.id,
+      group_ids: group.map(bk => bk.id),
+      avatar: group.length > 1 ? null : studentUsers[0]?.avatar ?? null,
+      student: group.length > 1 ? `${group.length} Students (Group)` : `${studentUsers[0]?.firstName} ${studentUsers[0]?.lastName}`,
+      studentNames: studentUsers.map(u => `${u.firstName} ${u.lastName}`).join(', '),
+      email: group.length > 1 ? 'Multiple Emails' : (studentUsers[0]?.email ?? ''),
+      emails: studentUsers.map(u => u.email ?? '').join(', '),
+      mentor: mentorUser ? `${mentorUser.firstName} ${mentorUser.lastName}` : '—',
+      subject: b.subjects?.code ?? 'N/A',
+      subjectName: b.subjects?.name ?? '',
+      topic: b.topic ?? '—',
+      date: new Date(b.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+      time: `${format12hrTime(`${String(start.getHours()).padStart(2,'0')}:${String(start.getMinutes()).padStart(2,'0')}`)} – ${format12hrTime(`${String(end.getHours()).padStart(2,'0')}:${String(end.getMinutes()).padStart(2,'0')}`)}`,
+      start: `${String(start.getHours()).padStart(2,'0')}:${String(start.getMinutes()).padStart(2,'0')}`,
+      end: `${String(end.getHours()).padStart(2,'0')}:${String(end.getMinutes()).padStart(2,'0')}`,
+      durationText: `${format12hrTime(`${String(start.getHours()).padStart(2,'0')}:${String(start.getMinutes()).padStart(2,'0')}`)} - ${format12hrTime(`${String(end.getHours()).padStart(2,'0')}:${String(end.getMinutes()).padStart(2,'0')}`)} (${formatHours(diffMinutes)})`,
       durationHours,
-      mode:          modeRaw ? cleanMode(modeRaw) : '—',
-      yearLevel:     sp?.year_levels?.name ?? 'N/A',
+      mode: b.tutorial_modes?.mode ? cleanMode(b.tutorial_modes.mode) : '—',
+      yearLevel: sp?.year_levels?.name ?? 'N/A',
       degreeProgram: sp?.degree_programs?.name ?? 'N/A',
-      status:        b.booking_status,
-      is_open:       b.mentor_id === null,
-    });
+      status: derivedStatus,
+      is_open: b.mentor_id === null,
+    };
+  };
+  
+  for (const group of groups.values()) {
+    const hasCompleted = group.some(bk => bk.booking_status === 'completed');
+    const hasAccepted = group.some(bk => bk.booking_status === 'accepted');
+    const hasPending = group.some(bk => bk.booking_status === 'pending');
+    
+    let derivedStatus: SessionStatus = group[0].booking_status;
+    if (hasCompleted) derivedStatus = 'completed';
+    else if (hasAccepted) derivedStatus = 'accepted';
+    else if (hasPending) derivedStatus = 'pending';
+
+    sessions.push(createAdminSession(group, derivedStatus));
+  }
+  for (const b of cancelledSessions) {
+    sessions.push(createAdminSession([b], 'cancelled'));
   }
 
   // Sort chrnologically
