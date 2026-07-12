@@ -86,7 +86,7 @@ export default function MentorFeedbackDetailModal({
   return (
     <ModalBase isOpen={!!feedback} onClose={onClose} maxWidth="max-w-4xl">
       <div className="p-6 overflow-y-auto">
-        <div className="flex items-start justify-between gap-4 border-b border-cream-border pb-4">
+        <div className="flex items-start justify-between gap-4 border-b border-white-border pb-4">
           <div>
             <h2 className="text-2xl font-extrabold text-up-maroon">
               Feedback Details
@@ -105,11 +105,11 @@ export default function MentorFeedbackDetailModal({
           <DetailItem label="Topic" value={feedback.topic} />
         </div>
 
-        <div className="mt-5 pt-5 border-t border-cream-border">
+        <div className="mt-5 pt-5 border-t border-white-border">
           <DetailItem label="Written Feedback" value={feedback.feedback} />
         </div>
 
-        <div className="mt-5 pt-5 border-t border-cream-border">
+        <div className="mt-5 pt-5 border-t border-white-border">
           <p className="text-xs font-bold uppercase tracking-wide text-text-brown-light mb-3">
             Rating Breakdown
           </p>
@@ -118,7 +118,7 @@ export default function MentorFeedbackDetailModal({
             {QUESTIONS.map((question, index) => (
               <div
                 key={question}
-                className="flex flex-col gap-1 rounded-lg border border-cream-border bg-cream px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-1 rounded-lg border border-white-border bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
               >
                 <p className="text-sm font-medium text-text-brown">
                   {index + 1}. {question}
@@ -131,7 +131,7 @@ export default function MentorFeedbackDetailModal({
           </div>
         </div>
 
-        <div className="mt-5 pt-5 border-t border-cream-border">
+        <div className="mt-5 pt-5 border-t border-white-border">
           <DetailItem
             label="Would Recommend"
             value={
