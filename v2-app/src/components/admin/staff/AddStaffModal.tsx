@@ -2,12 +2,13 @@ import { useState } from "react"
 
 // Components
 import CrudModal from "@/components/ui/CrudModal"
+import ConfirmModal from "@/components/ui/ConfirmModal"
 
 // Constants
 import { ROLE_LABELS } from "@/constants/roleLabels"
 
 // Icons
-import { MdImage } from "react-icons/md"
+import { MdImage, MdPersonAddAlt1 } from "react-icons/md"
 
 // Utilities
 import { createClient } from "@/utils/supabase/client"
@@ -76,7 +77,7 @@ export default function AddStaffModal({ isOpen, onClose, onSuccess }: AddStaffMo
             if (!emailRegex.test(form.email)) errs.email = 'Please enter a valid email address.'
         if (!form.role) errs.role = 'Role is required.'
         setErrors(errs)
-        if (Object.keys(errs).length === 0) await handleSubmit()
+        if (Object.keys(errs).length === 0) setConfirmOpen(true)
     }
 
     // Handles form submission
@@ -236,6 +237,18 @@ export default function AddStaffModal({ isOpen, onClose, onSuccess }: AddStaffMo
                     </div>
                 </div>
             </CrudModal>
+
+            <ConfirmModal
+                isOpen={confirmOpen}
+                onCancel={() => setConfirmOpen(false)}
+                title="Add this staff member?"
+                message="This will create a new staff account with the information provided."
+                icon={<MdPersonAddAlt1 className="text-green-600 text-5xl" />}
+                confirmLabel="Add Staff"
+                confirmClassName="bg-green-600 hover:bg-green-700"
+                loading={loading}
+                onConfirm={handleSubmit}
+            />
         </>
     )
 }

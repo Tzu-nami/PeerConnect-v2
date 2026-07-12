@@ -1,8 +1,20 @@
 import { useEffect, useState } from "react"
+
+// Components
 import CrudModal from "@/components/ui/CrudModal"
+import ConfirmModal from "@/components/ui/ConfirmModal"
+
+// Constants
 import { ROLE_LABELS } from "@/constants/roleLabels"
+
+// Icons
+import { FaUserEdit } from "react-icons/fa"
 import { MdImage } from "react-icons/md"
+
+// Types
 import { StaffProfile } from "@/types/staff"
+
+// Utilities
 import { createClient } from "@/utils/supabase/client"
 
 interface EditStaffModalProps {
@@ -21,6 +33,7 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
     const [errors, setErrors] = useState<Record<string, string>>({})
     const [loading, setLoading] = useState(false)
+    const [confirmOpen, setConfirmOpen] = useState(false)
 
     // Set form values using the current data
     useEffect(() => {
@@ -63,7 +76,7 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(form.email)) errs.email = 'Please enter a valid email address.'
         setErrors(errs)
-        if (Object.keys(errs).length === 0) await handleSubmit()
+        if (Object.keys(errs).length === 0) setConfirmOpen(true)
     }
 
     // Handles submitting the form
@@ -126,81 +139,96 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
         !avatarFile
 
     return (
-        <CrudModal
-            open={isOpen}
-            title="Edit Staff Member"
-            subtitle="Update their information and profile picture."
-            onClose={handleClose}
-            maxWidth="max-w-4xl"
-            footer={
-                <div className="flex gap-3">
-                    <button onClick={handleClose} disabled={loading}
-                            className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
-                        Cancel
-                    </button>
-                    <button onClick={handleValidate} disabled={loading || !isFormComplete || isUnchanged}
-                            className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition">
-                        {loading ? 'Updating...' : 'Update Staff Member'}
-                    </button>
-                </div>
-            }
-        >
-            <div className="grid grid-cols-2 gap-6">
-                <div className="flex flex-col gap-4">
-                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">1</span>
-                        Staff Information
-                    </p>
+        <>
+            <CrudModal
+                open={isOpen && !confirmOpen}
+                title="Edit Staff Member"
+                subtitle="Update their information and profile picture."
+                onClose={handleClose}
+                maxWidth="max-w-4xl"
+                footer={
+                    <div className="flex gap-3">
+                        <button onClick={handleClose} disabled={loading}
+                                className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
+                            Cancel
+                        </button>
+                        <button onClick={handleValidate} disabled={loading || !isFormComplete || isUnchanged}
+                                className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition">
+                            {loading ? 'Updating...' : 'Update Staff Member'}
+                        </button>
+                    </div>
+                }
+            >
+                <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">1</span>
+                            Staff Information
+                        </p>
 
-                    <div className="grid grid-cols-2 gap-3">
-                        <Field label="First Name" required error={errors.firstName}>
-                            <input name="firstName" value={form.firstName} onChange={handleChange} className={inputClass} />
+                        <div className="grid grid-cols-2 gap-3">
+                            <Field label="First Name" required error={errors.firstName}>
+                                <input name="firstName" value={form.firstName} onChange={handleChange} className={inputClass} />
+                            </Field>
+                            <Field label="Last Name" required error={errors.lastName}>
+                                <input name="lastName" value={form.lastName} onChange={handleChange} className={inputClass} />
+                            </Field>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <Field label="M.I.">
+                                <input name="middleInitial" value={form.middleInitial} onChange={handleChange} maxLength={1} className={inputClass} />
+                            </Field>
+                            <Field label="Email" required error={errors.email}>
+                                <input name="email" type="email" value={form.email} onChange={handleChange} className={inputClass} />
+                            </Field>
+                        </div>
+
+                        <Field label="Role / Position" required error={errors.role}>
+                            <select name="role" value={form.role} onChange={handleChange} className={inputClass}>
+                                <option value="" disabled hidden>Select role</option>
+                                {Object.entries(ROLE_LABELS).map(([value, label]) => (
+                                    <option key={value} value={value}>{label as string}</option>
+                                ))}
+                            </select>
                         </Field>
-                        <Field label="Last Name" required error={errors.lastName}>
-                            <input name="lastName" value={form.lastName} onChange={handleChange} className={inputClass} />
-                        </Field>
+
+                        {errors.general && (
+                            <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2">{errors.general}</div>
+                        )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                        <Field label="M.I.">
-                            <input name="middleInitial" value={form.middleInitial} onChange={handleChange} maxLength={1} className={inputClass} />
-                        </Field>
-                        <Field label="Email" required error={errors.email}>
-                            <input name="email" type="email" value={form.email} onChange={handleChange} className={inputClass} />
-                        </Field>
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">2</span>
+                            Profile Picture
+                        </p>
+
+                        <div className="w-full aspect-square rounded-xl border-2 border-dashed border-white-border bg-white-dark flex items-center justify-center overflow-hidden">
+                            {avatarPreview ? <img src={avatarPreview} alt="preview" className="w-full h-full object-cover" /> : <MdImage className="text-4xl text-slate-300" />}
+                        </div>
+
+                        <label className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md cursor-pointer">
+                            Choose File
+                            <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
+                        </label>
                     </div>
-
-                    <Field label="Role / Position" required error={errors.role}>
-                        <select name="role" value={form.role} onChange={handleChange} className={inputClass}>
-                            <option value="" disabled hidden>Select role</option>
-                            {Object.entries(ROLE_LABELS).map(([value, label]) => (
-                                <option key={value} value={value}>{label as string}</option>
-                            ))}
-                        </select>
-                    </Field>
-
-                    {errors.general && (
-                        <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2">{errors.general}</div>
-                    )}
                 </div>
+            </CrudModal>
 
-                <div className="flex flex-col gap-4">
-                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">2</span>
-                        Profile Picture
-                    </p>
+            <ConfirmModal
+                isOpen={confirmOpen}
+                onCancel={() => setConfirmOpen(false)}
+                title="Update this staff member?"
+                message="This will save the changes made to their information and profile."
+                icon={<FaUserEdit  className="text-blue-600 text-5xl" />}
+                confirmLabel="Update"
+                confirmClassName="bg-blue-600 hover:bg-blue-700"
+                loading={loading}
+                onConfirm={handleSubmit}
+            />
+        </>
 
-                    <div className="w-full aspect-square rounded-xl border-2 border-dashed border-white-border bg-white-dark flex items-center justify-center overflow-hidden">
-                        {avatarPreview ? <img src={avatarPreview} alt="preview" className="w-full h-full object-cover" /> : <MdImage className="text-4xl text-slate-300" />}
-                    </div>
-
-                    <label className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md cursor-pointer">
-                        Choose File
-                        <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
-                    </label>
-                </div>
-            </div>
-        </CrudModal>
     )
 }
 
