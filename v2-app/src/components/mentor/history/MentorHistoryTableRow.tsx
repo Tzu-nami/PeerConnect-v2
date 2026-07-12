@@ -10,7 +10,7 @@ export default function MentorHistoryTableRow({ booking, onView }: Props) {
   return (
     <tr
       onClick={() => onView(booking)}
-      className="border-t border-cream-border hover:bg-cream-hover transition cursor-pointer"
+      className="border-t border-white-border hover:bg-white-hover transition cursor-pointer"
     >
       <td className="px-5 py-4 align-middle">
         <p className="font-bold text-sm text-text-brown truncate">

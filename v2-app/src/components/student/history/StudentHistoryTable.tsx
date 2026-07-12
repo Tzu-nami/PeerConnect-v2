@@ -75,7 +75,7 @@ export default function StudentHistoryTable({
   }
 
   return (
-    <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
+    <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
       <div className="flex flex-wrap gap-4 justify-between items-center p-5">
         <div>
           <h2 className="font-bold text-lg text-text-brown">All Bookings</h2>
@@ -102,7 +102,7 @@ export default function StudentHistoryTable({
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="px-4 py-2 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-text-brown border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
             >
               <span>
                 {statusFilters.length === 0
@@ -125,17 +125,17 @@ export default function StudentHistoryTable({
                   onClick={() => setIsDropdownOpen(false)}
                 />
 
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-cream-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
                   {availableStatuses.map((status) => (
                     <label
                       key={status}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-cream cursor-pointer transition"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white cursor-pointer transition"
                     >
                       <input
                         type="checkbox"
                         checked={statusFilters.includes(status)}
                         onChange={() => toggleStatus(status)}
-                        className="w-4 h-4 text-up-maroon border-cream-border rounded focus:ring-up-maroon/30 cursor-pointer"
+                        className="w-4 h-4 text-up-maroon border-white-border rounded focus:ring-up-maroon/30 cursor-pointer"
                       />
                       <span className="text-sm font-bold text-slate-700">
                         {formatStatus(status)}
@@ -149,9 +149,9 @@ export default function StudentHistoryTable({
         </div>
       </div>
 
-      <div className="border-t border-cream-border overflow-x-auto">
+      <div className="border-t border-white-border overflow-x-auto">
         <table className="w-full text-left text-sm table-fixed min-w-[850px]">
-          <thead className="border-b border-cream-border bg-cream-dark">
+          <thead className="border-b border-white-border bg-white">
             <tr>
               <th className="px-5 py-3 w-[17%]">
                 <button
