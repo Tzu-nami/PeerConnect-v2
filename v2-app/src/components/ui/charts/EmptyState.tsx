@@ -7,8 +7,8 @@ interface EmptyStateProps {
 
 export default function EmptyState({ message="No semester is currently active." }: EmptyStateProps) {
     return (
-        <div className="flex-1 flex flex-col items-center justify-center text-sm text-text-muted italic text-center px-4">
-            <FaInbox className="text-4xl opacity-30" />
+        <div className="flex flex-col items-center justify-center min-h-[250px] text-sm text-text-muted italic text-center px-4">
+            <FaInbox className="text-4xl opacity-30 mb-2" />
             <div>{message}</div>
         </div>
     )
