@@ -32,7 +32,6 @@
     --color-cream-dot:            #C4BDB0;
     --color-text-brown:           #554444;
     --color-text-brown-light:     #998888;
-    --color-text-complement:      #006F75;
     --color-btn-brown:            #3D2B2B;
     --color-btn-brown-hover:      #2A1E1E;
     --color-sidebar-green:        #1A3C2F;
@@ -78,10 +77,10 @@
         transform: translateY(0);
     }
 }
-@keyframes slide-down {
-    0% { transform: translateY(-5); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-  }
+    @keyframes slide-down {
+        0% { transform: translateY(-5); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+      }
 
 html {
     scroll-behavior: smooth;
