@@ -33,10 +33,12 @@ export function buildSummarySheet(workbook: ExcelJS.Workbook, summary: any) {
         cell.alignment = { horizontal: 'left' };
     };
 
+    const formatDate = (d: string | null) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Ongoing';
+
     // Semester label
     addSectionTitle('Semester Info');
     addSummaryRow('Semester', summary.semesterLabel);
-    addSummaryRow('Date Range', `${summary.semesterStart} — ${summary.semesterEnd}`);
+    addSummaryRow('Date Range', `${formatDate(summary.semesterStart)} – ${formatDate(summary.semesterEnd)}`);
 
     sheet.addRow({});
 
@@ -101,7 +103,7 @@ export function buildFeedbackList(workbook: ExcelJS.Workbook, rows: any[]) {
         { header: 'Mentor',             key: 'mentor_name',         width: 35 },
         { header: 'Subject',            key: 'subject_code',        width: 20 },
         { header: 'Topic',              key: 'topic',               width: 35 },
-        { header: 'Avg Rating',         key: 'average_rating',      width: 15 },
+        { header: 'Average Rating',     key: 'average_rating',      width: 18 },
         { header: 'Feedback',           key: 'feedback',            width: 40 },
     ]
 
@@ -122,9 +124,9 @@ export function buildMentorList(workbook: ExcelJS.Workbook, rows: any[]) {
         { header: 'Mentor',                 key: 'mentor_name',             width: 35 },
         { header: 'Program',                key: 'program',                 width: 50 },
         { header: 'Year Level',             key: 'year_level',              width: 15 },
-        { header: 'Sessions Completed',     key: 'sessions_completed',      width: 15 },
-        { header: 'Hours Rendered',         key: 'hours_rendered',          width: 15 },
-        { header: 'Average Rating',         key: 'average_rating',          width: 15,      style: { numFmt: '0.00' } },
+        { header: 'Sessions Completed',     key: 'sessions_completed',      width: 22 },
+        { header: 'Hours Rendered',         key: 'hours_rendered',          width: 18 },
+        { header: 'Average Rating',         key: 'average_rating',          width: 18,      style: { numFmt: '0.00' } },
     ]
 
     rows.forEach((row) => sheet.addRow(row))
