@@ -1,18 +1,12 @@
 import { useState } from "react";
-import {
-  MdArrowDownward,
-  MdArrowUpward,
-  MdKeyboardArrowDown,
-  MdUnfoldMore,
-} from "react-icons/md";
+import { MdArrowDownward,  MdArrowUpward,  MdKeyboardArrowDown,  MdUnfoldMore } from "react-icons/md";
 
 import SearchBar from "@/components/ui/SearchBar";
 import MentorHistoryTableRow from "./MentorHistoryTableRow";
-import type {
-  MentorHistoryRow,
-  MentorHistorySortKey,
-  SortDirection,
-} from "@/pages/mentor/history";
+import type { MentorHistoryRow, MentorHistorySortKey, SortDirection } from "@/pages/mentor/history";
+import {Semester} from "@/types/semester";
+import SemesterFilter from "@/components/admin/SemesterFilter"
+import EmptyState from "@/components/ui/charts/EmptyState";
 
 type Props = {
   bookings: MentorHistoryRow[];
@@ -26,6 +20,9 @@ type Props = {
   sortDir: SortDirection;
   onSort: (col: MentorHistorySortKey) => void;
   onView: (booking: MentorHistoryRow) => void;
+    semesters: Semester[];
+    selectedSemesterId: string | null;
+    onSemesterChange: (id: string) => void;
 };
 
 function formatStatus(status: string) {
@@ -64,6 +61,9 @@ export default function MentorHistoryTable({
   sortDir,
   onSort,
   onView,
+    semesters,
+    selectedSemesterId,
+    onSemesterChange
 }: Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -92,6 +92,12 @@ export default function MentorHistoryTable({
             placeholder="Search bookings..."
             className="w-56"
           />
+
+            <SemesterFilter
+                semesters={semesters}
+                selected={selectedSemesterId}
+                onChange={onSemesterChange}
+            />
 
           <div className="relative">
             <button
@@ -224,28 +230,34 @@ export default function MentorHistoryTable({
             </tr>
           </thead>
 
-          <tbody>
-            {bookings.length > 0 ? (
-              bookings.map((booking) => (
-                <MentorHistoryTableRow
-                  key={booking.id}
-                  booking={booking}
-                  onView={onView}
-                />
-              ))
+            <tbody>
+            {!selectedSemesterId ? (
+                <tr>
+                    <td colSpan={5}>
+                        <EmptyState />
+                    </td>
+                </tr>
+            ) : bookings.length > 0 ? (
+                bookings.map((booking) => (
+                    <MentorHistoryTableRow
+                        key={booking.id}
+                        booking={booking}
+                        onView={onView}
+                    />
+                ))
             ) : (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="text-center py-12 text-sm text-text-brown-light italic"
-                >
-                  <p className="text-sm font-semibold text-slate-500">
-                    No bookings match your filters.
-                  </p>
-                </td>
-              </tr>
+                <tr>
+                    <td
+                        colSpan={5}
+                        className="text-center py-12 text-sm text-text-brown-light italic"
+                    >
+                        <p className="text-sm font-semibold text-slate-500">
+                            No bookings match your filters.
+                        </p>
+                    </td>
+                </tr>
             )}
-          </tbody>
+            </tbody>
         </table>
       </div>
     </div>

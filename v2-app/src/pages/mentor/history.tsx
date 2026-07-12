@@ -15,6 +15,9 @@ import Pagination from "@/components/ui/Pagination";
 import StatCard from "@/components/ui/StatCard";
 import { createClient } from "@/utils/supabase/server";
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole";
+import { getRecentSemesters } from '@/utils/services/sessionService';
+import {Semester} from "@/types/semester";
+import { useRouter } from "next/router";
 
 export type SortDirection = "asc" | "desc";
 export type MentorHistorySortKey =
@@ -49,6 +52,8 @@ type Props = {
     cancelled: number;
     totalHours: string;
   };
+    semesters: Semester[];
+    selectedSemesterId: string | null;
 };
 
 type ActiveStatModal =
@@ -107,7 +112,7 @@ function getSortValue(row: MentorHistoryRow, key: MentorHistorySortKey) {
   return String(row[key] ?? "").toLowerCase();
 }
 
-export default function MentorHistoryPage({ bookings, stats }: Props) {
+export default function MentorHistoryPage({ bookings, stats, semesters, selectedSemesterId }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilters, setStatusFilters] = useState<string[]>([]);
   const [sortCol, setSortCol] = useState<MentorHistorySortKey>("date");
@@ -118,11 +123,17 @@ export default function MentorHistoryPage({ bookings, stats }: Props) {
   const [activeStatModal, setActiveStatModal] =
     useState<ActiveStatModal>(null);
 
+    const router = useRouter()
+
   const availableStatuses = useMemo(() => {
     return [...new Set(bookings.map((booking) => booking.status))].filter(
       Boolean
     );
   }, [bookings]);
+
+    const handleSemesterChange = (semesterId: string) => {
+        router.push({ pathname: router.pathname, query: { semester: semesterId } });
+    };
 
   const filteredBookings = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -252,6 +263,9 @@ export default function MentorHistoryPage({ bookings, stats }: Props) {
         sortDir={sortDir}
         onSort={handleSort}
         onView={setSelectedBooking}
+        semesters={semesters}
+        selectedSemesterId={selectedSemesterId}
+        onSemesterChange={handleSemesterChange}
       />
 
       <Pagination
@@ -330,75 +344,44 @@ export default function MentorHistoryPage({ bookings, stats }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
-) => {
-  const supabase = createClient(context);
-  const userRole = await getServerSideUserRole(context);
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+    const supabase = createClient(context);
+    const userRole = await getServerSideUserRole(context);
 
-  if (userRole !== "mentor") {
-    return {
-      redirect: {
-        destination: userRole ? `/${userRole}/dashboard` : "/login",
-        permanent: false,
-      },
-    };
-  }
+    if (userRole !== "mentor") {
+        return { redirect: { destination: userRole ? `/${userRole}/dashboard` : "/login", permanent: false } };
+    }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { redirect: { destination: "/login", permanent: false } };
 
-  if (!user) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
+    const { data: mentorProfile } = await supabase
+        .from("mentor_profiles")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
 
-  const { data: studentProfile } = await supabase
-    .from("student_profiles")
-    .select("id")
-    .eq("user_id", user.id)
-    .single();
+    const semesters = await getRecentSemesters(supabase);
+    const currentSemester = semesters.find(s => s.is_current);
+    const selectedSemesterId = (context.query.semester as string) ?? currentSemester?.id ?? null;
 
-  if (!studentProfile) {
-    return {
-      props: {
-        bookings: [],
-        stats: {
-          total: 0,
-          pending: 0,
-          completed: 0,
-          cancelled: 0,
-          totalHours: "0.00",
-        },
-      },
-    };
-  }
+    const emptyStats = { total: 0, pending: 0, completed: 0, cancelled: 0, totalHours: "0.00" };
 
-  const { data: bookingRows } = await supabase
-    .from("bookings")
-    .select(
-      `
-      id,
-      topic,
-      booking_status,
-      date,
-      schedule_start,
-      schedule_end,
-      mentor_id,
+    if (!mentorProfile || !selectedSemesterId) {
+        return { props: { bookings: [], stats: emptyStats, semesters, selectedSemesterId } };
+    }
+
+    const { data: bookingRows } = await supabase
+        .from("bookings")
+        .select(`
+      id, topic, booking_status, date, schedule_start, schedule_end, mentor_id,
       subjects ( code, name ),
-      mentor_profiles!mentor_id (
-        user_profiles ( firstName, lastName )
-      ),
+      mentor_profiles!mentor_id ( user_profiles ( firstName, lastName ) ),
       tutorial_modes ( mode )
-    `
-    )
-    .eq("student_id", studentProfile.id)
-    .order("date", { ascending: false });
+    `)
+        .eq("mentor_id", mentorProfile.id)
+        .eq("semester_id", selectedSemesterId)
+        .order("date", { ascending: false });
 
   const bookings: MentorHistoryRow[] = (bookingRows ?? []).map(
     (booking: any) => {
@@ -457,6 +440,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
           .length,
         totalHours: totalHours.toFixed(2),
       },
+        semesters,
+        selectedSemesterId,
     },
   };
 };
