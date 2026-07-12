@@ -47,6 +47,19 @@ export default function AdminCoursesPage({ initialSubjects }: CourseProps) {
         }
     }, [router.query])
 
+    // Open subject view modal from URL query
+    useEffect(() => {
+        const subjectId = router.query.subjectId
+
+        if (subjectId && typeof subjectId === 'string' && initialSubjects.length > 0) {
+            const found = initialSubjects.find((subject) => subject.id === subjectId)
+
+            if (found) {
+                setViewSubject(found)
+            }
+        }
+    }, [router.query, initialSubjects])
+
     // Filters
     const uniqueMentors = useMemo(() => {
         const mentorsSet = new Set<string>();
