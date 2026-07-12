@@ -59,14 +59,14 @@ export default function ConfirmModal({
                 {icon && (
                     <div className="flex items-center justify-center mx-auto mb-5">{icon}</div>
                 )}
-                <h3 className="text-xl font-black text-slate-800">{title}</h3>
-                <div className="text-sm text-gray-500 mt-2 mb-8">{message}</div>
+                <h3 className="text-2xl font-black text-text-primary">{title}</h3>
+                <div className="text-text-muted mt-2 mb-8">{message}</div>
                 <div className="flex gap-3">
                     <button
                         type="button"
                         onClick={onCancel}
                         disabled={loading}
-                        className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer">
+                        className="flex-1 px-4 py-2 text-sm font-semibold text-text-muted bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer">
                         Cancel
                     </button>
                     <button
