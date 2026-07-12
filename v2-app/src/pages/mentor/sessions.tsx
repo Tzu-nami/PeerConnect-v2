@@ -260,7 +260,7 @@ export default function MentorSessionsPage({ sessions, stats }: Props) {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4 w-full mt-5 mb-6">
         <StatCard
-          onClick={() => setActiveStatModal("total")}
+          onClick={() => handleStatusChange([])}
           label="All Sessions"
           value={stats.total}
           icon={<FaListCheck />}
@@ -268,7 +268,7 @@ export default function MentorSessionsPage({ sessions, stats }: Props) {
           iconColor="text-slate-500"
         />
         <StatCard
-          onClick={() => setActiveStatModal("accepted")}
+          onClick={() => handleStatusChange(["accepted"])}
           label="Accepted"
           value={stats.accepted}
           icon={<FaCircleCheck />}
@@ -276,7 +276,7 @@ export default function MentorSessionsPage({ sessions, stats }: Props) {
           iconColor="text-green-600"
         />
         <StatCard
-          onClick={() => setActiveStatModal("pending")}
+          onClick={() => handleStatusChange(["pending"])}
           label="Pending"
           value={stats.pending}
           icon={<FaHourglassHalf />}
@@ -284,7 +284,7 @@ export default function MentorSessionsPage({ sessions, stats }: Props) {
           iconColor="text-yellow-500"
         />
         <StatCard
-          onClick={() => setActiveStatModal("completed")}
+          onClick={() => handleStatusChange(["completed"])}
           label="Completed"
           value={stats.completed}
           icon={<FaCircleCheck />}
@@ -332,53 +332,6 @@ export default function MentorSessionsPage({ sessions, stats }: Props) {
         onClose={() => setSelectedSession(null)}
       />
 
-      <MentorSessionsStatsModal
-        isOpen={activeStatModal === "total"}
-        title="All Sessions"
-        subtitle={`${stats.total} session${stats.total !== 1 ? "s" : ""}`}
-        sessions={sessions}
-        onClose={() => setActiveStatModal(null)}
-        onSelect={(session) => {
-        setActiveStatModal(null);
-        setSelectedSession(session);
-        }}
-      />
-
-      <MentorSessionsStatsModal
-        isOpen={activeStatModal === "accepted"}
-        title="Accepted Sessions"
-        subtitle={`${stats.accepted} accepted session${stats.accepted !== 1 ? "s" : ""}`}
-        sessions={sessions.filter((session) => session.status === "accepted")}
-        onClose={() => setActiveStatModal(null)}
-        onSelect={(session) => {
-        setActiveStatModal(null);
-        setSelectedSession(session);
-      }}
-      />
-
-      <MentorSessionsStatsModal
-        isOpen={activeStatModal === "pending"}
-        title="Pending Sessions"
-        subtitle={`${stats.pending} pending session${stats.pending !== 1 ? "s" : ""}`}
-        sessions={sessions.filter((session) => session.status === "pending")}
-        onClose={() => setActiveStatModal(null)}
-        onSelect={(session) => {
-        setActiveStatModal(null);
-        setSelectedSession(session);
-        }}
-      />
-
-      <MentorSessionsStatsModal
-        isOpen={activeStatModal === "completed"}
-        title="Completed Sessions"
-        subtitle={`${stats.completed} completed session${stats.completed !== 1 ? "s" : ""}`}
-        sessions={sessions.filter((session) => session.status === "completed")}
-        onClose={() => setActiveStatModal(null)}
-        onSelect={(session) => {
-        setActiveStatModal(null);
-        setSelectedSession(session);
-        }}
-      />
 
       <MentorSessionsStatsModal
         isOpen={activeStatModal === "hours"}
