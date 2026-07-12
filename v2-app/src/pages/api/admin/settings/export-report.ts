@@ -1,9 +1,13 @@
-import {NextApiRequest, NextApiResponse} from "next";
-import {createClient} from "@/utils/supabase/server";
-import { getServerSideUserRole } from "@/utils/getServerSideUserRole";
+import { NextApiRequest, NextApiResponse } from "next"
+import ExcelJS from "exceljs"
+
+// Constants
 import {TERM_LABELS} from "@/constants/termLabels";
-import ExcelJS from "exceljs";
-import {buildFeedbackList, buildMentorList, buildSessionSheet, buildSummarySheet} from "@/utils/reportExcel";
+
+// Utilities
+import { createClient } from "@/utils/supabase/server"
+import { getServerSideUserRole } from "@/utils/getServerSideUserRole"
+import { buildFeedbackList, buildMentorList, buildSessionSheet, buildSummarySheet } from "@/utils/reportExcel"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Check if semester exists
@@ -127,7 +131,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     res.setHeader('Content-Disposition', `attachment; filename="LRC-Report-${formattedSemesterLabel}-AY-${semester.ay_start}-${semester.ay_start + 1}.xlsx"`)
     res.send(buffer)
-
-
-
 }

@@ -1,7 +1,14 @@
-import { useState } from "react";
-import { toast } from "sonner";
-import SemesterFilter from "@/components/admin/settings/SemesterFilter";
-import { Semester } from "@/types/semester";
+import { useState } from "react"
+import { toast } from "sonner"
+
+// Components
+import SemesterFilter from "@/components/admin/settings/SemesterFilter"
+
+// Icons
+import { FiDownload } from "react-icons/fi"
+
+// Types
+import { Semester } from "@/types/semester"
 
 interface GenerateReportProps {
     semesters: Semester[]
@@ -57,7 +64,8 @@ export default function GenerateReport({ semesters, selectedSemesterId, onSemest
                 <button
                     onClick={handleExport}
                     disabled={loading || !selectedSemesterId}
-                    className="px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer">
+                    className="px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer flex items-center gap-2">
+                    <FiDownload size={16} />
                     {loading ? "Generating..." : "Download"}
                 </button>
                 <SemesterFilter semesters={semesters} selected={selectedSemesterId} onChange={onSemesterChange} />

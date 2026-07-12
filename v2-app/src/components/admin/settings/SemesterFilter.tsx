@@ -1,7 +1,8 @@
-// components/admin/SemesterFilter.tsx
-import { MdKeyboardArrowDown } from 'react-icons/md';
-import { Semester } from "@/types/semester";
-import { TERM_LABELS } from '@/constants/termLabels';
+// Constants
+import { TERM_LABELS } from '@/constants/termLabels'
+
+// Types
+import { Semester } from "@/types/semester"
 
 interface SemesterFilterProps {
     semesters: Semester[];

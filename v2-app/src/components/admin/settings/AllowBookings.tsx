@@ -1,7 +1,11 @@
 import { useState } from "react"
-import { FaToggleOn, FaToggleOff } from "react-icons/fa6"
-import { createClient } from "@/utils/supabase/client"
 import { toast } from "sonner"
+
+// Icons
+import { FaToggleOn, FaToggleOff } from "react-icons/fa6"
+
+// Utilities
+import { createClient } from "@/utils/supabase/client"
 
 interface AllowBookingsProps {
     initialEnabled: boolean
