@@ -260,13 +260,23 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         return { props: { feedbacks: [], semesters, selectedSemesterId } };
     }
 
-  const { data: bookingRows } = await supabase
-    .from("bookings")
-    .select("id")
-    .eq("mentor_id", mentorProfile.id)
-      .eq("semester_id", selectedSemesterId);
+const { data: bookingRows } = await supabase
+  .from("bookings")
+  .select(`
+    id,
+    topic,
+    subjects (
+      code,
+      name
+    )
+  `)
+  .eq("mentor_id", mentorProfile.id)
+  .eq("semester_id", selectedSemesterId);
 
   const bookingIds = (bookingRows ?? []).map((booking: any) => booking.id);
+  const bookingsById = new Map(
+  (bookingRows ?? []).map((booking: any) => [String(booking.id), booking])
+);
 
     if (bookingIds.length === 0) {
         return { props: { feedbacks: [], semesters, selectedSemesterId } };
@@ -278,13 +288,16 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     .in("booking_id", bookingIds)
     .order("date_submitted", { ascending: false });
 
-  const feedbacks: MentorFeedbackRow[] = (feedbackRows ?? []).map((fb: any) => {
-    const avg = getAverage(fb);
+const feedbacks: MentorFeedbackRow[] = (feedbackRows ?? []).map((fb: any) => {
+  const avg = getAverage(fb);
+  const booking = fb.booking_id
+    ? bookingsById.get(String(fb.booking_id))
+    : null;
 
-    return {
-      id: String(fb.id),
-      subject: fb.subject || "-",
-      topic: fb.topic || "-",
+  return {
+    id: String(fb.id),
+    subject: fb.subject || booking?.subjects?.code || "-",
+    topic: fb.topic || booking?.topic || "-",
       date_submitted: fb.date_submitted ?? null,
       date_formatted: formatDate(fb.date_submitted ?? null),
       feedback: fb.feedback || "-",
