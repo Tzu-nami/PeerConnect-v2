@@ -26,8 +26,18 @@ export default function StaffGrid({ staffList }: {  staffList: StaffProfile[] })
                                                 ${isLastOdd && isLastItem ? 'sm:col-span-2 sm:w-1/2 sm:mx-auto sm:self-start' : ''}`}>
                             <div className="flex flex-col justify-center items-center gap-4 bg-up-green py-4 px-8">
                                 {staff.avatar
-                                    ? <Image src={staff.avatar} alt={role} width={80} height={80}/>
-                                    : <div className="w-20 h-20 rounded-full bg-white"/>
+                                    ? (
+                                        <div className="w-24 h-24 rounded-sm overflow-hidden shrink-0">
+                                            <Image
+                                                src={staff.avatar}
+                                                alt={role}
+                                                width={80}
+                                                height={80}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    )
+                                    : <div className="w-24 h-24 rounded-sm bg-white shrink-0"/>
                                 }
                                 <div className="text-center">
                                     <div className="text-lg font-heading text-cream font-bold">
