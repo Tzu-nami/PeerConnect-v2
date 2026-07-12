@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import type { Mentor, Subject } from '@/types/mentor';
 import MentorFilters from './MentorFilters';
 import MentorCard from './MentorCard';
@@ -22,6 +23,17 @@ export default function MentorDirectory({ mentors, subjects, isAuthenticated, us
     const [selectedSubject, setSelectedSubject] = useState('');
     const [currentPage, setCurrentPage]         = useState(1);
     const [selectedMentor, setSelectedMentor]   = useState<Mentor | null>(null);
+
+    const router = useRouter();
+
+    // Pre-filter mentors by subject from URL query (e.g. GlobalSearch)
+    useEffect(() => {
+        const subjectId = router.query.subjectId
+
+        if (subjectId && typeof subjectId === 'string') {
+            setSelectedSubject(subjectId)
+        }
+    }, [router.query])
 
     // Filter logic
     const filteredMentors = useMemo(() => {
