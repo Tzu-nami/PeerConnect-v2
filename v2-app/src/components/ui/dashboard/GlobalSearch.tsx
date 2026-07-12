@@ -166,9 +166,13 @@ export default function GlobalSearch({ mentorList, sessionList, staffList, subje
                             <p className="font-extrabold tracking-widest text-[11px] bg-white-dark px-5 py-3 uppercase">Subjects</p>
                             <ul className="flex flex-col">
                                 {filteredSubjects.map((subject) => {
+                                    const subjectHref = role === 'admin'
+                                        ? `/admin/courses?subjectId=${subject.id}`
+                                        : `${basePath}/mentors?subjectId=${subject.id}`
+
                                     return(
                                         <li key={subject.id} className="border-b border-white-border hover:bg-white-hover last:border-b-0">
-                                            <Link href={`${basePath}/mentors?subjectId=${subject.id}`} onClick={() => setShowDropdown(false)}
+                                            <Link href={subjectHref} onClick={() => setShowDropdown(false)}
                                                   className="text-sm flex items-center px-5">
                                                 <div className="bg-purple-100 text-purple-600 p-2 rounded-lg">
                                                     <FaBookOpen className="text-lg" />
