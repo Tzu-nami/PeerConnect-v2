@@ -61,7 +61,7 @@ export default function MentorFeedbackTable({
   onView,
 }: Props) {
   return (
-    <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
+    <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
       <div className="flex flex-wrap gap-4 justify-between items-center p-5">
         <div>
           <h2 className="font-bold text-lg text-text-brown">All Feedbacks</h2>
@@ -82,7 +82,7 @@ export default function MentorFeedbackTable({
             <select
               value={subjectFilter}
               onChange={(event) => onSubjectFilter(event.target.value)}
-              className="appearance-none px-4 py-2 pr-10 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] shadow-sm cursor-pointer"
+              className="appearance-none px-4 py-2 pr-10 text-xs font-medium text-text-brown border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] shadow-sm cursor-pointer"
             >
               <option value="all">All Subjects</option>
               {subjectOptions.map((subject) => (
@@ -97,16 +97,16 @@ export default function MentorFeedbackTable({
           <button
             type="button"
             onClick={onResetFilters}
-            className="px-4 py-2 text-xs font-bold text-text-brown-light border border-cream-border rounded-lg bg-white hover:bg-cream-hover transition h-[36px] shadow-sm cursor-pointer"
+            className="px-4 py-2 text-xs font-bold text-text-brown-light border border-white-border rounded-lg bg-white hover:bg-white-hover transition h-[36px] shadow-sm cursor-pointer"
           >
             Reset
           </button>
         </div>
       </div>
 
-      <div className="border-t border-cream-border overflow-x-auto">
+      <div className="border-t border-white-border overflow-x-auto">
         <table className="w-full text-left text-sm table-fixed min-w-[760px]">
-          <thead className="border-b border-cream-border bg-cream-dark">
+          <thead className="border-b border-white-border bg-white">
             <tr>
               <th className="px-5 py-3 w-[14%]">
                 <button
