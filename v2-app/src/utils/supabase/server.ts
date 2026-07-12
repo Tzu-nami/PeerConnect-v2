@@ -1,7 +1,12 @@
 import { createServerClient, serializeCookieHeader } from "@supabase/ssr";
 import { GetServerSidePropsContext } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export function createClient(context: GetServerSidePropsContext) {
+type ServerClientContext =
+    | GetServerSidePropsContext
+    | { req: NextApiRequest; res: NextApiResponse };
+
+export function createClient(context: ServerClientContext) {
     return createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -16,8 +21,8 @@ export function createClient(context: GetServerSidePropsContext) {
                 setAll(cookiesToSet) {
                     context.res.setHeader(
                         'Set-Cookie',
-                        cookiesToSet.map(({ name, value, options }) => 
-                        serializeCookieHeader(name, value, options)
+                        cookiesToSet.map(({ name, value, options }) =>
+                            serializeCookieHeader(name, value, options)
                         )
                     );
                 }
