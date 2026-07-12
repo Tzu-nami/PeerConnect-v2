@@ -199,7 +199,7 @@ export default function StudentHistoryPage({ bookings, stats }: Props) {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4 w-full mt-5 mb-6">
       <StatCard
-        onClick={() => setActiveStatModal("total")}
+        onClick={() => handleStatusChange([])}
         label="Total Requests"
         value={stats.total}
         icon={<FaListCheck />}
@@ -207,7 +207,7 @@ export default function StudentHistoryPage({ bookings, stats }: Props) {
         iconColor="text-slate-500"
       />
         <StatCard
-          onClick={() => setActiveStatModal("pending")}
+          onClick={() => handleStatusChange(["pending"])}
           label="Pending Requests"
           value={stats.pending}
           icon={<FaHourglassHalf />}
@@ -215,13 +215,23 @@ export default function StudentHistoryPage({ bookings, stats }: Props) {
           iconColor="text-yellow-500"
         />
         <StatCard
-          onClick={() => setActiveStatModal("completed")}
+          onClick={() => handleStatusChange(["completed"])}
           label="Completed Sessions"
           value={stats.completed}
           icon={<FaCircleCheck />}
           borderColor="border-l-blue-600"
           iconColor="text-blue-600"
         />
+
+        <StatCard
+          onClick={() => handleStatusChange(["cancelled"])}
+          label="Cancelled Requests"
+          value={stats.cancelled}
+          icon={<FaBan />}
+          borderColor="border-l-red-500"
+          iconColor="text-red-500"
+        />
+
         <StatCard
           onClick={() => setActiveStatModal("hours")}
           label="Total Hours"
@@ -229,14 +239,6 @@ export default function StudentHistoryPage({ bookings, stats }: Props) {
           icon={<FaStopwatch />}
           borderColor="border-l-purple-600"
           iconColor="text-purple-600"
-        />
-        <StatCard
-          onClick={() => setActiveStatModal("cancelled")} 
-          label="Cancelled Requests"
-          value={stats.cancelled}
-          icon={<FaBan />}
-          borderColor="border-l-red-500"
-          iconColor="text-red-500"
         />
       </div>
 
@@ -263,54 +265,6 @@ export default function StudentHistoryPage({ bookings, stats }: Props) {
       <StudentHistoryDetailModal
         booking={selectedBooking}
         onClose={() => setSelectedBooking(null)}
-      />
-
-      <StudentHistoryStatsModal
-        isOpen={activeStatModal === "total"}
-        title="Total Requests"
-        subtitle={`${stats.total} booking request${stats.total !== 1 ? "s" : ""}`}
-        bookings={bookings}
-        onClose={() => setActiveStatModal(null)}
-        onSelect={(booking) => {
-        setActiveStatModal(null);
-        setSelectedBooking(booking);
-        }}
-      />
-
-      <StudentHistoryStatsModal
-        isOpen={activeStatModal === "pending"}
-        title="Pending Requests"
-        subtitle={`${stats.pending} pending request${stats.pending !== 1 ? "s" : ""}`}
-        bookings={bookings.filter((booking) => booking.status === "pending")}
-        onClose={() => setActiveStatModal(null)}
-        onSelect={(booking) => {
-        setActiveStatModal(null);
-        setSelectedBooking(booking);
-        }}
-      />
-
-      <StudentHistoryStatsModal
-        isOpen={activeStatModal === "completed"}
-        title="Completed Sessions"
-        subtitle={`${stats.completed} completed session${stats.completed !== 1 ? "s" : ""}`}
-        bookings={bookings.filter((booking) => booking.status === "completed")}
-        onClose={() => setActiveStatModal(null)}
-        onSelect={(booking) => {
-        setActiveStatModal(null);
-        setSelectedBooking(booking);
-        }}
-      />
-
-      <StudentHistoryStatsModal
-        isOpen={activeStatModal === "cancelled"}
-        title="Cancelled Requests"
-        subtitle={`${stats.cancelled} cancelled request${stats.cancelled !== 1 ? "s" : ""}`}
-        bookings={bookings.filter((booking) => booking.status === "cancelled")}
-        onClose={() => setActiveStatModal(null)}
-        onSelect={(booking) => {
-        setActiveStatModal(null);
-        setSelectedBooking(booking);
-        }}
       />
 
       <StudentHistoryStatsModal
