@@ -122,10 +122,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const buffer = await workbook.xlsx.writeBuffer()
 
-    const safeFilename = summary.semesterLabel.replace(/[^a-z0-9]/gi, '-');
+    const formattedSemesterLabel = TERM_LABELS[semester.term].replace(/[^a-z0-9]/gi, '-');
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    res.setHeader('Content-Disposition', `attachment; filename="LRC-Report-${safeFilename}.xlsx"`)
+    res.setHeader('Content-Disposition', `attachment; filename="LRC-Report-${formattedSemesterLabel}-AY-${semester.ay_start}-${semester.ay_start + 1}.xlsx"`)
     res.send(buffer)
 
 
