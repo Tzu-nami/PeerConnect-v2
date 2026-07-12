@@ -46,13 +46,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const subjectIds = mentorSubjects?.map(ms => ms.subject_id) || []
 
     // Fetch data from server
-    const [result1, result3, result4, result5, result6, result7, openSessionsResult] = await Promise.all([
+    const [result1, result2, result3, result4, result5, result6, result7, openSessionsResult] = await Promise.all([
         // Sessions today
         supabase
             .from('bookings')
             .select('*', { count: 'exact', head: true })
             .eq('booking_status', 'accepted')
             .eq('date', TODAY)
+            .eq('mentor_id', mentorId),
+
+        // Pending requests
+        supabase
+            .from('bookings')
+            .select('*', { count: 'exact', head: true })
+            .eq('booking_status', 'pending')
+            .gte('date', TODAY)
             .eq('mentor_id', mentorId),
 
         // Average ratings
@@ -90,8 +98,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         : Promise.resolve({ data: [] })
     ])
 
-    const sessionsToday = result1.count
-    const renderedHours = result4.data ?? 0
+    const sessionsToday        = result1.count
+    const pendingRequestsCount = result2.count
+    const renderedHours        = result4.data ?? 0
 
     // Average feedback calculation
     const feedbackData = result3.data ?? []
