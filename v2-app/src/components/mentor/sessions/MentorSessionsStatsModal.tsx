@@ -53,7 +53,17 @@ export default function MentorSessionsStatsModal({
                       </p>
                     </div>
 
-                    <StatusBadge status={session.status} />
+                    <div className="flex shrink-0 flex-col items-center gap-1">
+  <StatusBadge status={session.status} />
+
+  {showHours && (
+    <p className="text-lg font-extrabold text-up-maroon">
+      {session.durationHours === 1
+        ? "1 hr"
+        : `${Number(session.durationHours.toFixed(2))} hrs`}
+    </p>
+  )}
+</div>
                   </div>
                 </button>
               ))}

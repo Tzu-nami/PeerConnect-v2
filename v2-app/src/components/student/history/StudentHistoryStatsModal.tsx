@@ -24,7 +24,7 @@ export default function StudentHistoryStatsModal({
   return (
     <ModalBase isOpen={isOpen} onClose={onClose} maxWidth="max-w-xl">
       <div className="p-6">
-        <div className="border-b border-cream-border pb-4">
+        <div className="border-b border-white-border pb-4">
           <h2 className="text-2xl font-extrabold text-up-maroon">{title}</h2>
           <p className="text-sm text-text-brown-light mt-1">{subtitle}</p>
         </div>
@@ -37,7 +37,7 @@ export default function StudentHistoryStatsModal({
                   key={booking.id}
                   type="button"
                   onClick={() => onSelect(booking)}
-                  className="w-full text-left rounded-lg border border-cream-border bg-cream px-4 py-3 hover:bg-cream-hover transition cursor-pointer"
+                  className="w-full text-left rounded-lg border border-white-border bg-white px-4 py-3 hover:bg-white-hover transition cursor-pointer"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
@@ -53,7 +53,17 @@ export default function StudentHistoryStatsModal({
                       </p>
                     </div>
 
-                    <StatusBadge status={booking.status} />
+                    <div className="flex shrink-0 flex-col items-center gap-1">
+  <StatusBadge status={booking.status} />
+
+  {showHours && (
+    <p className="text-lg font-extrabold text-up-maroon">
+      {booking.durationHours === 1
+        ? "1 hr"
+        : `${Number(booking.durationHours.toFixed(2))} hrs`}
+    </p>
+  )}
+</div>
                   </div>
                 </button>
               ))}
@@ -69,7 +79,7 @@ export default function StudentHistoryStatsModal({
           <button
             type="button"
             onClick={onClose}
-            className="w-full px-5 py-2 rounded-lg border border-cream-border bg-white text-sm font-bold text-text-brown hover:bg-cream-hover transition cursor-pointer"
+            className="w-full px-5 py-2 rounded-lg border border-white-border bg-white text-sm font-bold text-text-brown hover:bg-white-hover transition cursor-pointer"
           >
             Close
           </button>
