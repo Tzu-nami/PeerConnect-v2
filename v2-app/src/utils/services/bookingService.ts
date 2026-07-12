@@ -1,5 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import type { BookingMentor, MentorAvailability, MentorBookedSlot, RecentBooking, ActiveBooking } from '@/types/bookings';
+import type { BookingMentor, MentorAvailability, MentorBookedSlot, RecentBooking, ActiveBooking, CompletedBookingForFeedback } from '@/types/bookings';
 
 export async function getStudentBookingPageData(supabase: SupabaseClient, userId: string) {
     const [
@@ -86,8 +86,9 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
             end:   `${String(endDt.getHours()).padStart(2,'0')}:${String(endDt.getMinutes()).padStart(2,'0')}`,
         };
     });
-  let recentBookings: RecentBooking[] = [];
-  let activeBooking: ActiveBooking | null = null;
+    let recentBookings: RecentBooking[] = [];
+    let activeBooking: ActiveBooking | null = null;
+    let completedBookingForFeedback: CompletedBookingForFeedback | null = null;
 
     if (studentProfile) {
         const { data: recent } = await supabase
@@ -121,7 +122,7 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
             .eq('student_id', studentProfile.id)
             .in('booking_status', ['pending', 'accepted'])
             .order('created_at', { ascending: false })
-            .limit(1)
+            .limit(5)
             .maybeSingle();
 
         if (active) {
@@ -132,12 +133,43 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
                 topic: active.topic ?? '',
                 mentor_name: (active.mentor_profiles as any)?.user_profiles
                 ? `${((active.mentor_profiles as any).user_profiles.lastName ?? '').toUpperCase()}, ${(active.mentor_profiles as any).user_profiles.firstName ?? ''}`
-                : '', // Handled by fallback in ActiveBookingCard
+                : '',
                 mode: (active.tutorial_modes as any)?.mode ?? '—',
                 date: new Date(active.date).toISOString().split('T')[0],
                 start_time: new Date(active.schedule_start).toTimeString().substring(0,5),
                 end_time:   new Date(active.schedule_end).toTimeString().substring(0,5),
                 status: active.booking_status as 'pending' | 'accepted',
+            };
+        }
+
+        const { data: completedRows } = await supabase
+            .from('bookings')
+            .select(`
+                id, date, topic,
+                subjects(code, name),
+                mentor_profiles(user_profiles(firstName, lastName)),
+                feedback(id)
+            `)
+            .eq('student_id', studentProfile.id)
+            .eq('booking_status', 'completed')
+            .order('created_at', { ascending: false });
+        const missingFeedbackRow = (completedRows || []).find((b: any) => {
+            return !b.feedback || (Array.isArray(b.feedback) && b.feedback.length === 0);
+        });
+        if (missingFeedbackRow) {
+            const subj = missingFeedbackRow.subjects as any;
+            const mentorProf = missingFeedbackRow.mentor_profiles as any;
+            const userProf = mentorProf?.user_profiles;
+
+            completedBookingForFeedback = {
+                id: missingFeedbackRow.id,
+                subject_code: subj?.code ?? '—',
+                subject_name: subj?.name ?? '',
+                mentor_name: userProf
+                    ? `${(userProf.lastName ?? '').toUpperCase()}, ${userProf.firstName ?? ''}`
+                    : 'Any',
+                date: new Date(missingFeedbackRow.date).toISOString().split('T')[0],
+                topic: missingFeedbackRow.topic ?? '',
             };
         }
     }
@@ -155,6 +187,7 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
         studentProfile: studentProfile ?? null,
         recentBookings,
         activeBooking,
+        completedBookingForFeedback,
         bookingsEnabled: systemSettings?.bookings_enabled ?? true,
         disabledMessage: systemSettings?.disabled_message ?? null,
     };

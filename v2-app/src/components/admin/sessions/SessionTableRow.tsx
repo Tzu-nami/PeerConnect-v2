@@ -1,4 +1,3 @@
-import { FaEye, FaPen, FaBan } from 'react-icons/fa6';
 import { MdCancel, MdEdit } from 'react-icons/md';
 import type { AdminSession } from '@/types/admin';
 import StatusBadge from '@/components/ui/StatusBadge';

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 interface ModalBaseProps {
@@ -21,8 +21,10 @@ export default function ModalBase({
     maxWidth = 'max-w-4xl'
 }: ModalBaseProps) {
 
-    const mountedRef = useRef(false)
-    useEffect(() => { mountedRef.current = true }, [])
+    const [mounted, setMounted] = useState(false)
+    useEffect(() => { 
+        setMounted(true) 
+    }, [])
 
     // Lock scroll
     useEffect(() => {
@@ -44,7 +46,7 @@ export default function ModalBase({
         return () => document.removeEventListener('keydown', handleKeyDown)
     }, [isOpen, closeOnEscape, onClose])
 
-    if (!isOpen) return null
+    if (!mounted || !isOpen) return null
 
     return createPortal(
         <div

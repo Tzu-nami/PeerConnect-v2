@@ -14,6 +14,10 @@ import Pagination from "@/components/ui/Pagination";
 import StatCard from "@/components/ui/StatCard";
 import { createClient } from "@/utils/supabase/server";
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole";
+import EditSessionModal from '@/components/admin/sessions/EditSessionModal';
+import CancelSessionModal from '@/components/admin/sessions/CancelSessionModal';
+import UpdateSessionStatusModal, {StatusAction} from "@/components/mentor/sessions/UpdateSessionStatusModal";
+import { toast } from "sonner";
 import { getRecentSemesters } from '@/utils/services/sessionService';
 import {Semester} from "@/types/semester";
 import { useRouter } from "next/router";
@@ -29,6 +33,10 @@ export type MentorSessionSortKey =
 export type MentorSessionRow = {
   id: string;
   groupIds: string[];
+  group_ids: string[];
+  start: string;
+  end: string;
+  mentor: string;
   student: string;
   studentNames: string;
   email: string;
@@ -47,6 +55,7 @@ export type MentorSessionRow = {
   degreeProgram: string;
   status: string;
   isOpen: boolean;
+  isAny: boolean;
 };
 
 type Props = {
@@ -160,6 +169,9 @@ export default function MentorSessionsPage({ sessions, stats, semesters, selecte
     useState<MentorSessionRow | null>(null);
   const [activeStatModal, setActiveStatModal] =
     useState<ActiveStatModal>(null);
+  const [editSession, setEditSession] = useState<MentorSessionRow | null>(null);
+  const [cancelSession, setCancelSession] = useState<MentorSessionRow | null>(null);
+  const [statusModalConfig, setStatusModalConfig] = useState<{ session: MentorSessionRow, action: StatusAction } | null>(null);
 
     const router = useRouter()
 
@@ -238,9 +250,13 @@ export default function MentorSessionsPage({ sessions, stats, semesters, selecte
     setCurrentPage(1);
   }
 
+  const handleRefresh = () => {
+    router.replace(router.asPath);
+  };
+
   return (
     <>
-      <div className="border-b border-cream-border">
+      <div className="border-b border-white-border">
         <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">
           Tutorial Sessions
         </h1>
@@ -292,22 +308,28 @@ export default function MentorSessionsPage({ sessions, stats, semesters, selecte
         />
       </div>
 
-        <MentorSessionsTable
-            sessions={paginatedSessions}
-            totalCount={filteredSessions.length}
-            searchQuery={searchQuery}
-            onSearch={handleSearch}
-            statusFilters={statusFilters}
-            onStatusChange={handleStatusChange}
-            availableStatuses={availableStatuses}
-            sortCol={sortCol}
-            sortDir={sortDir}
-            onSort={handleSort}
-            onView={setSelectedSession}
-            semesters={semesters}
-            selectedSemesterId={selectedSemesterId}
-            onSemesterChange={handleSemesterChange}
-        />
+      <MentorSessionsTable
+        sessions={paginatedSessions}
+        totalCount={filteredSessions.length}
+        searchQuery={searchQuery}
+        onSearch={handleSearch}
+        statusFilters={statusFilters}
+        onStatusChange={handleStatusChange}
+        availableStatuses={availableStatuses}
+        sortCol={sortCol}
+        sortDir={sortDir}
+        onSort={handleSort}
+        onView={setSelectedSession}
+        onEdit={(session) => setEditSession(session)}
+        onCancel={(session) => setCancelSession(session)}
+        onAccept={(s) => setStatusModalConfig({ session: s, action: s.isOpen ? 'claim' : 'accepted' })}
+        onReject={(s) => setStatusModalConfig({ session: s, action: 'rejected' })}
+        onComplete={(s) => setStatusModalConfig({ session: s, action: 'completed' })}
+        onNoShow={(s) => setStatusModalConfig({ session: s, action: 'no_show' })}
+        semesters={semesters}
+        selectedSemesterId={selectedSemesterId}
+        onSemesterChange={handleSemesterChange}
+      />
 
       <Pagination
         currentPage={currentPage}
@@ -381,6 +403,33 @@ export default function MentorSessionsPage({ sessions, stats, semesters, selecte
         }}
       />
 
+      <EditSessionModal
+        isOpen={!!editSession}
+        session={editSession}
+        onClose={() => setEditSession(null)}
+        onSuccess={() => { handleRefresh(); setEditSession(null); toast.success("Hours updated succefully."); }}
+      />
+
+      <CancelSessionModal
+        isOpen={!!cancelSession}
+        session={cancelSession}
+        onClose={() => setCancelSession(null)}
+        onSuccess={() => { handleRefresh(); setCancelSession(null); toast.success("Session has been cancelled."); }}
+      />
+
+      <UpdateSessionStatusModal
+        isOpen={!!statusModalConfig}
+        session={statusModalConfig?.session || null}
+        action={statusModalConfig?.action || null}
+        onClose={() => setStatusModalConfig(null)}
+        onSuccess={(actionType) => {
+          handleRefresh();
+          setStatusModalConfig(null);
+          const messages = { claim: 'claimed', accepted: 'accepted', rejected: 'rejected', completed: 'completed', no_show: 'marked as a no show' };
+          toast.success(`Session successfully ${messages[actionType]}!`);
+        }}
+      />
+
     </>
   );
 }
@@ -432,6 +481,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
       schedule_end,
       mentor_id,
       subject_id,
+      is_any,
       student_profiles!student_id (
         student_num,
         year_levels ( name ),
@@ -490,13 +540,21 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
   const groupedBookings = groupBookings([...(assignedRows ?? []), ...openRows]);
 
   const sessions: MentorSessionRow[] = groupedBookings.map((group) => {
-    const firstBooking = group[0];
+    // Filter out cancelled members in group sessions
+    const activeMembers = group.filter((b: any) => b.booking_status !== 'cancelled');
+    const displayGroup = activeMembers.length > 0 ? activeMembers : group;
+    const firstBooking = displayGroup[0];
     const durationHours = getDurationHours(
       firstBooking.schedule_start,
       firstBooking.schedule_end
     );
 
-    const studentProfiles = group
+    const startDate = new Date(firstBooking.schedule_start);
+    const endDate = new Date(firstBooking.schedule_end);
+    const startStr = `${String(startDate.getHours()).padStart(2, '0')}:${String(startDate.getMinutes()).padStart(2, '0')}`;
+    const endStr = `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
+
+    const studentProfiles = displayGroup
       .map((booking: any) => booking.student_profiles)
       .filter(Boolean);
 
@@ -521,12 +579,16 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     return {
       id: String(firstBooking.id),
       groupIds: group.map((booking: any) => String(booking.id)),
+      group_ids: group.map((booking: any) => String(booking.id)),
+      start: startStr,
+      end: endStr,
+      mentor: 'You',
       student:
-        group.length > 1
-          ? `${group.length} Students (Group)`
+        displayGroup.length > 1
+          ? `${displayGroup.length} Students (Group)`
           : studentNames || "Unknown",
       studentNames: studentNames || "Unknown",
-      email: group.length > 1 ? "Multiple Emails" : emails || "-",
+      email: displayGroup.length > 1 ? "Multiple Emails" : emails || "-",
       emails: emails || "-",
       subject: firstBooking.subjects?.code ?? "-",
       subjectName: firstBooking.subjects?.name ?? "-",
@@ -544,10 +606,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
       mode: firstBooking.tutorial_modes?.mode
         ? cleanMode(firstBooking.tutorial_modes.mode)
         : "-",
-      yearLevel: studentProfiles[0]?.year_levels?.name ?? "N/A",
-      degreeProgram: studentProfiles[0]?.degree_programs?.name ?? "N/A",
+      yearLevel: studentProfiles
+        .map((s: any) => s?.year_levels?.name ?? "N/A")
+        .join(", "),
+      degreeProgram: studentProfiles
+        .map((s: any) => s?.degree_programs?.name ?? "N/A")
+        .join(", "),
       status: firstBooking.booking_status ?? "-",
       isOpen: firstBooking.mentor_id === null,
+      isAny: firstBooking.is_any ?? false,
     };
   });
 

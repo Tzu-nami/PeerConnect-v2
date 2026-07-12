@@ -20,16 +20,22 @@ type Props = {
   sortDir: SortDirection;
   onSort: (col: MentorSessionSortKey) => void;
   onView: (session: MentorSessionRow) => void;
+  onEdit: (session: MentorSessionRow) => void;
+  onCancel: (session: MentorSessionRow) => void;
+  onAccept: (session: MentorSessionRow) => void;
+  onReject: (session: MentorSessionRow) => void;
+  onComplete: (session: MentorSessionRow) => void;
+  onNoShow: (session: MentorSessionRow) => void;
     semesters: Semester[];
     selectedSemesterId: string | null;
     onSemesterChange: (id: string) => void;
 };
 
-function formatStatus(status: string) {
-  return status === "no_show"
-    ? "No Show"
-    : status.charAt(0).toUpperCase() + status.slice(1).replace("_", " ");
-}
+const getFilterLabel = (status: string) => {
+  if (status === 'no_show') return 'No Show';
+  if (status === 'rejected') return 'Unavailable';
+  return status.charAt(0).toUpperCase() + status.slice(1);
+};
 
 function SortIcon({
   col,
@@ -40,12 +46,12 @@ function SortIcon({
   sortCol: MentorSessionSortKey;
   sortDir: SortDirection;
 }) {
-  if (sortCol !== col) return <MdUnfoldMore className="text-text-brown-light" />;
+  if (sortCol !== col) return <MdUnfoldMore className="text-text-muted" />;
 
   return sortDir === "asc" ? (
-    <MdArrowUpward className="text-text-brown" />
+    <MdArrowUpward className="text-text-primary" />
   ) : (
-    <MdArrowDownward className="text-text-brown" />
+    <MdArrowDownward className="text-text-primary" />
   );
 }
 
@@ -61,6 +67,12 @@ export default function MentorSessionsTable({
   sortDir,
   onSort,
   onView,
+  onEdit,
+  onCancel,
+  onAccept,
+  onReject,
+  onComplete,
+  onNoShow,
     semesters,
     selectedSemesterId,
     onSemesterChange
@@ -76,11 +88,11 @@ export default function MentorSessionsTable({
   }
 
   return (
-    <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
+    <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
       <div className="flex flex-wrap gap-4 justify-between items-center p-5">
         <div>
-          <h2 className="font-bold text-lg text-text-brown">All Sessions</h2>
-          <p className="text-sm text-text-brown-light font-medium">
+          <h2 className="font-bold text-lg text-text-primary">All Sessions</h2>
+          <p className="text-sm text-text-muted font-medium">
             {totalCount} Session{totalCount !== 1 ? "s" : ""} found
           </p>
         </div>
@@ -103,13 +115,13 @@ export default function MentorSessionsTable({
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="px-4 py-2 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-muted focus:ring-text-muted/30 transition-shadow h-[36px] min-w-[150px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
             >
               <span>
                 {statusFilters.length === 0
-                  ? "All Statuses"
+                  ? 'All Statuses'
                   : statusFilters.length === 1
-                    ? formatStatus(statusFilters[0])
+                    ? getFilterLabel(statusFilters[0])
                     : `${statusFilters.length} Selected`}
               </span>
               <MdKeyboardArrowDown
@@ -126,20 +138,20 @@ export default function MentorSessionsTable({
                   onClick={() => setIsDropdownOpen(false)}
                 />
 
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-cream-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
                   {availableStatuses.map((status) => (
                     <label
                       key={status}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-cream cursor-pointer transition"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white cursor-pointer transition"
                     >
                       <input
                         type="checkbox"
                         checked={statusFilters.includes(status)}
                         onChange={() => toggleStatus(status)}
-                        className="w-4 h-4 text-up-maroon border-cream-border rounded focus:ring-up-maroon/30 cursor-pointer"
+                        className="w-4 h-4 text-up-maroon border-white-border rounded focus:ring-up-maroon/30 cursor-pointer"
                       />
                       <span className="text-sm font-bold text-slate-700">
-                        {formatStatus(status)}
+                        {getFilterLabel(status)}
                       </span>
                     </label>
                   ))}
@@ -150,17 +162,17 @@ export default function MentorSessionsTable({
         </div>
       </div>
 
-      <div className="border-t border-cream-border overflow-x-auto">
+      <div className="border-t border-white-border overflow-x-auto">
         <table className="w-full text-left text-sm table-fixed min-w-[900px]">
-          <thead className="border-b border-cream-border bg-cream-dark">
+          <thead className="border-b border-white-border bg-white-dark">
             <tr>
-              <th className="px-5 py-3 w-[17%]">
+              <th className="px-5 py-3 w-[20%]">
                 <button
                   onClick={() => onSort("date")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "date"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-muted"
                   }`}
                 >
                   Date & Time
@@ -171,10 +183,10 @@ export default function MentorSessionsTable({
               <th className="px-5 py-3 w-[20%]">
                 <button
                   onClick={() => onSort("student")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "student"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-muted"
                   }`}
                 >
                   Student
@@ -186,13 +198,13 @@ export default function MentorSessionsTable({
                 </button>
               </th>
 
-              <th className="px-5 py-3 w-[18%]">
+              <th className="px-5 py-3 w-[20%]">
                 <button
                   onClick={() => onSort("subject")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "subject"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-muted"
                   }`}
                 >
                   Subject
@@ -207,10 +219,10 @@ export default function MentorSessionsTable({
               <th className="px-5 py-3 w-[15%]">
                 <button
                   onClick={() => onSort("mode")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "mode"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-muted"
                   }`}
                 >
                   Mode
@@ -221,16 +233,21 @@ export default function MentorSessionsTable({
               <th className="px-5 py-3 w-[15%] text-center">
                 <button
                   onClick={() => onSort("status")}
-                  className={`flex items-center justify-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer mx-auto ${
+                  className={`flex items-center justify-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer mx-auto ${
                     sortCol === "status"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-muted"
                   }`}
                 >
                   Status
                   <SortIcon col="status" sortCol={sortCol} sortDir={sortDir} />
                 </button>
               </th>
+
+              <th className="px-5 py-3 w-[10%] text-xs font-bold text-text-muted uppercase tracking-wider text-center">
+                Actions
+              </th>
+
             </tr>
           </thead>
 
@@ -243,16 +260,26 @@ export default function MentorSessionsTable({
                 </tr>
             ) : sessions.length > 0 ? (
                 sessions.map((session) => (
-                    <MentorSessionsTableRow key={session.id} session={session} onView={onView} />
+                    <MentorSessionsTableRow
+                        key={session.id}
+                        session={session}
+                        onView={onView}
+                        onEdit={onEdit}
+                        onCancel={onCancel}
+                        onAccept={onAccept}
+                        onReject={onReject}
+                        onComplete={onComplete}
+                        onNoShow={onNoShow}
+                    />
                 ))
             ) : (
                 <tr>
-                    <td colSpan={5} className="text-center py-12 text-sm text-text-brown-light italic">
+                    <td colSpan={5} className="text-center py-12 text-sm text-text-muted italic">
                         <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
                     </td>
                 </tr>
             )}
-            </tbody>
+          </tbody>
         </table>
       </div>
     </div>

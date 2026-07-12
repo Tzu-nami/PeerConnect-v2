@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { getServerSideUserRole } from '@/utils/getServerSideUserRole';
@@ -12,8 +12,9 @@ import StudentProfilePanel from '@/components/student/bookings/StudentProfilePan
 import RecentBookingsPanel from '@/components/student/bookings/RecentBookingsPanel';
 import BookingForm from '@/components/student/bookings/BookingForm';
 import ConfirmModal from '@/components/ui/ConfirmModal';
+import FeedbackModal from '@/components/student/bookings/FeedbackModal';
 
-import type { BookingMentor, MentorAvailability, MentorBookedSlot, MentorSubjectLink, TutorialMode, College, DegreeProgram, YearLevel, StudentProfile, RecentBooking, ActiveBooking } from '@/types/bookings';
+import type { BookingMentor, MentorAvailability, MentorBookedSlot, MentorSubjectLink, TutorialMode, College, DegreeProgram, YearLevel, StudentProfile, RecentBooking, ActiveBooking, CompletedBookingForFeedback } from '@/types/bookings';
 import type { Subject } from '@/types/mentor';
 
 interface BookingPageProps {
@@ -30,41 +31,26 @@ interface BookingPageProps {
     recentBookings: RecentBooking[];
     activeBooking: ActiveBooking | null;
     lockedMentorId?: string;
-    userRole?: string
+    userRole?: string;
+    completedBookingForFeedback: CompletedBookingForFeedback | null;
     bookingsEnabled: boolean;
     disabledMessage: string | null;
 }
 
-export default function StudentBookingsPage({ mentors, availabilities, bookedSlots, mentorSubjects, subjects, tutorialModes, colleges, degreePrograms, yearLevels, studentProfile: initialProfile, recentBookings,  activeBooking, lockedMentorId, userRole, bookingsEnabled, disabledMessage }: BookingPageProps) {
+export default function StudentBookingsPage({ mentors, availabilities, bookedSlots, mentorSubjects, subjects, tutorialModes, colleges, degreePrograms, yearLevels, studentProfile: initialProfile, recentBookings,  activeBooking, lockedMentorId, userRole, completedBookingForFeedback, bookingsEnabled, disabledMessage }: BookingPageProps) {
     const router = useRouter();
     const [profile, setProfile]           = useState(initialProfile);
     const [showCancelConfirm, setShowCancelConfirm] = useState(false);
     const [cancelLoading, setCancelLoading]         = useState(false);
+    const [feedbackBooking, setFeedbackBooking] = useState(completedBookingForFeedback);
 
-    const [isWaitingForBookingUpdate, setIsWaitingForBookingUpdate] = useState(false);
-
-
-    useEffect(() => {
-        if (isWaitingForBookingUpdate && activeBooking) {
-        toast.success("Your session has been booked and is now pending approval.");
-        setIsWaitingForBookingUpdate(false);
-        }
-    }, [activeBooking, isWaitingForBookingUpdate]);
-
-    // Note: hindi ko mapagana yung auto refresh pagka submit booking forms
     const handleRefresh = () => {
-        router.replace(
-            { pathname: router.pathname, query: { ...router.query, t: Date.now() } },
-            router.asPath,
-            { scroll: false }
-        );
-    };
+        router.replace(router.asPath);
+    }
 
     const handleBookingSuccess = () => {
-        toast.success("Booking requested! Refreshing page...");
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000); 
+        toast.success("Your session has been booked and is now pending approval.");
+        handleRefresh();
     };
 
     const handleCancel = async () => {
@@ -84,6 +70,12 @@ export default function StudentBookingsPage({ mentors, availabilities, bookedSlo
             setCancelLoading(false);
         }
     };
+
+    const handleFeedbackDone = () => {
+        setFeedbackBooking(null);
+        toast.success('Thank you for your feedback. You may now request a new session.');
+
+    }
     return (
         <div>
             {!profile && (
@@ -169,6 +161,13 @@ export default function StudentBookingsPage({ mentors, availabilities, bookedSlo
                 onConfirm={handleCancel}
                 onCancel={() => setShowCancelConfirm(false)}
             />
+            {feedbackBooking && (
+                <FeedbackModal
+                    isOpen={!!feedbackBooking}
+                    booking={feedbackBooking}
+                    onDone={handleFeedbackDone}
+                />
+            )}
         </div>
     );
 }

@@ -51,6 +51,8 @@
     /* Others */
     --color-white-complement:     #E6FEFF;
     --color-white-triadic:        #F8F2FA;
+    --color-text-white-complement:#BCA613;
+    --color-text-white-light:     #8D93A0;
     --color-day-available:        #D1FAE5;
     --color-day-unavailable:      #F8FAFC;
     --color-book-hover:           #2D5C47;

@@ -57,6 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const isGroupBooking = cleanEmails.length > 0;
     const groupId = isGroupBooking ? v4() : null;
 
+    // Create booking
     const bookingData = {
         student_id:      profile.id,
         mentor_id:       resolvedMentorId,
@@ -69,6 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         booking_status:  'pending',
         group_id:        groupId,
         semester_id:     currentSemester.id,
+        is_any:          isAny,
     };
 
     const { error } = await supabase
@@ -101,7 +103,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
     }
-
-
   return res.status(201).json({ ok: true });
 }

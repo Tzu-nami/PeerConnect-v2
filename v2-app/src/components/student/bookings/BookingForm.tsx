@@ -138,71 +138,77 @@ export default function BookingForm({
         return subjects.filter((s) => mentorCanTeach.includes(String(s.id)));
     }, [isMentorLocked, lockedMentorId, mentorSubjects, subjects]);
 
-    // Date error handlings
-    const validateDate = useCallback((value: string) => {
+    // Availability error handlings
+    useEffect(() => {
         setDateError('');
-        if (!value) return;
-        const d = new Date(value + 'T00:00:00');
-        if (d.getDay() === 0) { setDateError('The session cannot be on a Sunday.'); return; }
-        if (form.mentor_id && form.mentor_id !== 'any') {
-            const day = getDayOfWeek(value);
-            const avails = availabilities.filter(
-                (a) => a.mentorProfile_id === form.mentor_id && a.day_of_week === day
-            );
-            if (avails.length === 0) setDateError('This mentor is not available on this day.');
-        }
-    }, [form.mentor_id, availabilities]);
-
-    // Time error handlings
-    const validateTime = useCallback((start: string, end: string) => {
         setStartTimeError('');
         setEndTimeError('');
+        const { mentor_id, date, schedule_start: start, schedule_end: end } = form;
 
+        // Date errors
+        if (date) {
+            const d = new Date(date + 'T00:00:00');
+            if (d.getDay() === 0) {
+                setDateError('The session cannot be on a Sunday.');
+            } else if (mentor_id && mentor_id !== 'any') {
+                const day = getDayOfWeek(date);
+                const avails = availabilities.filter(
+                    (a) => a.mentorProfile_id === mentor_id && a.day_of_week === day
+                );
+                if (avails.length === 0) setDateError('This mentor is not available on this day.');
+            }
+        }
+
+        // Time errors
         if (start && (start < SESSION_MIN || start >= SESSION_MAX)) {
-            setStartTimeError('Sessions must be scheduled between 8:00 AM and 6:00 PM.'); return;
+            setStartTimeError('Sessions must be scheduled between 8:00 AM and 6:00 PM.');
         }
         if (end && (end <= SESSION_MIN || end > SESSION_MAX)) {
-            setEndTimeError('Sessions must be scheduled between 8:00 AM and 6:00 PM.'); return;
+            setEndTimeError('Sessions must be scheduled between 8:00 AM and 6:00 PM.');
         }
         if (start && end && end <= start) {
-            setEndTimeError('End time must be later than start time.'); return;
+            setEndTimeError('End time must be later than start time.');
         }
-        // Mentor schedule fit check
-        if (form.mentor_id && form.mentor_id !== 'any' && form.date) {
-            const dayChosen = getDayOfWeek(form.date);
+
+        // Schedule conflict errors
+        if (mentor_id && mentor_id !== 'any' && date) {
+            const dayChosen = getDayOfWeek(date);
             const avails = availabilities.filter(
-                (a) => a.mentorProfile_id === form.mentor_id && a.day_of_week === dayChosen
+                (a) => a.mentorProfile_id === mentor_id && a.day_of_week === dayChosen
             );
-            if (avails.length > 0 && (start || end)) {
-                if (start && end) {
-                    const fits = avails.some(
-                        (a) => a.start_time.substring(0,5) <= start && a.end_time.substring(0,5) >= end
-                    );
-                    if (!fits) {
-                        const startFits = avails.some((a) => start >= a.start_time.substring(0,5) && start < a.end_time.substring(0,5));
-                        const endFits   = avails.some((a) => end > a.start_time.substring(0,5) && end <= a.end_time.substring(0,5));
-                        if (!startFits) setStartTimeError('Start time does not fit the mentor schedule.');
-                        if (!endFits)   setEndTimeError('End time does not fit the mentor schedule.');
+            
+            // Schedule fit check
+            if (avails.length > 0 && start && end && end > start && start >= SESSION_MIN && end <= SESSION_MAX) {
+                const fits = avails.some(
+                    (a) => a.start_time.substring(0,5) <= start && a.end_time.substring(0,5) >= end
+                );
+                if (!fits) {
+                    const startFits = avails.some((a) => start >= a.start_time.substring(0,5) && start < a.end_time.substring(0,5));
+                    const endFits   = avails.some((a) => end > a.start_time.substring(0,5) && end <= a.end_time.substring(0,5));
+                    if (!startFits) setStartTimeError('Start time does not fit the mentor schedule.');
+                    if (!endFits)   setEndTimeError('End time does not fit the mentor schedule.');
+                    if (startFits && endFits && !fits) {
+                        setStartTimeError('Time span crosses an unavailable period.');
+                        setEndTimeError('Time span crosses an unavailable period.');
                     }
                 }
             }
-        }
 
-        // Conflict check
-        if (form.mentor_id && form.mentor_id !== 'any' && form.date && (start || end)) {
-            const conflicts = bookedSlots.filter((b) => {
-                if (b.mentor_id !== form.mentor_id) return false;
-                if (b.date !== form.date) return false;
-                if (start && end) return b.start < end && b.end > start;
-                return false;
-            });
-            if (conflicts.length > 0) {
-                const msg = `This mentor already has a booked session`;
-                if (!startTimeError && start) setStartTimeError(msg);
-                if (!endTimeError && end)     setEndTimeError(msg);
+            // Check already booked conflicts
+            if (start && end) {
+                const conflicts = bookedSlots.filter((b) => {
+                    if (b.mentor_id !== mentor_id) return false;
+                    if (b.date !== date) return false;
+                    return b.start < end && b.end > start;
+                });
+                if (conflicts.length > 0) {
+                    const msg = 'This mentor already has a booked session at this time.';
+                    setStartTimeError((prev) => prev || msg);
+                    setEndTimeError((prev) => prev || msg);
+                }
             }
         }
-    }, [form.mentor_id, form.date, availabilities, bookedSlots, startTimeError, endTimeError]);
+    }, [form.mentor_id, form.date, form.schedule_start, form.schedule_end, availabilities, bookedSlots]);
 
     // Validations api
     const handleValidate = async () => {
@@ -335,8 +341,6 @@ export default function BookingForm({
                         endTimeError={endTimeError}
                         errors={errors}
                         updateField={updateField}
-                        validateDate={validateDate}
-                        validateTime={validateTime}
                     />
 
                     {/* Topic */}

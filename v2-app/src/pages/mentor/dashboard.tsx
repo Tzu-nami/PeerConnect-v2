@@ -47,8 +47,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         .single()
     const mentorId = mentorProfile?.id
 
+    // Get mentor's subjects
+    const { data: mentorSubjects } = await supabase
+        .from('mentor_subjects')
+        .select('subject_id')
+        .eq('mentor_id', mentorId)
+    const subjectIds = mentorSubjects?.map(ms => ms.subject_id) || []
+
     // Fetch data from server
-    const [result1, result2, result3, result4, result5, result6, result7] = await Promise.all([
+    const [result1, result2, result3, result4, result5, result6, result7, openSessionsResult] = await Promise.all([
         // Sessions today
         supabase
             .from('bookings')
@@ -93,11 +100,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         supabase
             .from('subjects')
             .select('id, code, name'),
+
+        // ANY sessions
+        subjectIds.length > 0 
+        ? supabase.from('bookings').select(`
+            id, topic, date, schedule_start, schedule_end, booking_status,
+            subjects ( code ), tutorial_modes ( mode ),
+            student_profiles!student_id ( user_profiles ( firstName, lastName ) )
+            `).is('mentor_id', null).eq('booking_status', 'pending').gte('date', TODAY).in('subject_id', subjectIds)
+        : Promise.resolve({ data: [] })
     ])
 
-    const sessionsToday = result1.count
-    const pendingRequests = result2.count
-    const renderedHours = result4.data ?? 0
+    const sessionsToday        = result1.count
+    const pendingRequestsCount = result2.count
+    const renderedHours        = result4.data ?? 0
 
     // Average feedback calculation
     const feedbackData = result3.data ?? []
@@ -110,7 +126,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         : 0
 
     // Booking data
-    const sessionList = (result5.data ?? []).map((booking) => ({
+    const assignedSessions = (result5.data ?? []).map((booking: any) => ({
         id: booking.id,
         topic: booking.topic,
         date: booking.date,
@@ -120,8 +136,31 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         subject: booking.subject_code,
         mode: booking.tutorial_mode,
         mentorName: booking.mentor_name,
-        studentName: booking.student_name
+        studentName: booking.student_name,
+        isOpen: false
     }))
+
+    // First come first serve bookings
+    const openSessions = (openSessionsResult.data ?? []).map((booking: any) => ({
+        id: booking.id,
+        topic: booking.topic,
+        date: booking.date,
+        scheduleStart: booking.schedule_start,
+        scheduleEnd: booking.schedule_end,
+        bookingStatus: booking.booking_status,
+        subject: booking.subjects?.code ?? '-',
+        mode: booking.tutorial_modes?.mode ?? '-',
+        mentorName: 'Any',
+        studentName: booking.student_profiles?.user_profiles 
+            ? `${booking.student_profiles.user_profiles.firstName} ${booking.student_profiles.user_profiles.lastName}`.trim()
+            : 'Unknown',
+        isOpen: true
+    }))
+    const sessionList = [...assignedSessions, ...openSessions]
+
+    // Pending requests
+    const pendingSessions = sessionList.filter((session) => session.bookingStatus === 'pending')
+    const pendingRequests = pendingSessions.length
 
     // Mentor data
     const mentorList = (result6.data ?? []).map((mentor) => ({
@@ -146,8 +185,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         return groupedByDate
     }, {} as Record<string, SessionList[]>)
 
-    const pendingSessions = sessionList.filter((session) => session.bookingStatus === 'pending')
-
     return {
         props: {
             sessionsToday: sessionsToday ?? 0,
@@ -168,9 +205,9 @@ interface MentorDashboardProps {
     pendingRequests: number
     averageRatings: number
     renderedHours: number
-    sessionList: SessionList[]
-    sessionsByDate: Record<string, SessionList[]>
-    pendingSessions: SessionList[]
+    sessionList: (SessionList & { isOpen: boolean })[]
+    sessionsByDate: Record<string, (SessionList & { isOpen: boolean })[]>
+    pendingSessions: (SessionList & { isOpen: boolean })[]
     mentorList: MentorList[]
     subjectList: SubjectList[]
 }
@@ -233,7 +270,13 @@ export default function MentorDashboardProps({ sessionList, sessionsByDate, pend
                         pendingSessions={pendingSessions}
                         onSuccess={(status) => {
                             router.replace(router.asPath)
-                            toast.success(status === 'accepted' ? 'Session accepted.' : 'Session rejected')
+                            if (status === 'claim') {
+                                toast.success('Session claimed.')
+                            } else if (status === 'accepted') {
+                                toast.success('Session accepted.')
+                            } else {
+                                toast.success('Session rejected.')
+                            }
                         }}
                     />
                 </div>
