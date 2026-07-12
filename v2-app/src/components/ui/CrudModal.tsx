@@ -5,7 +5,7 @@ interface Props {
     open: boolean;
     title: React.ReactNode;
     subtitle?: string;
-    onClose: () => void;
+    onClose?: () => void;
     footer?: React.ReactNode;
     children: React.ReactNode;
     maxWidth?:  'max-w-4xl' | 'max-w-xl' | 'max-w-md'
@@ -23,8 +23,8 @@ export default function CrudModal({
     return (
         <ModalBase
             isOpen={open}
-            onClose={onClose}
-            closeOnOutsideClick
+            onClose={onClose || (() => {})}
+            closeOnOutsideClick={!!onClose}
             maxWidth={maxWidth}
         >
             {/* Header */}
