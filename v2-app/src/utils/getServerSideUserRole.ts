@@ -13,6 +13,5 @@ export async function getServerSideUserRole(context: GetServerSidePropsContext) 
         .eq('id', user.id)
         .single()
 
-    console.log('userRole:', profile?.role)
     return profile?.role ?? null
 }
