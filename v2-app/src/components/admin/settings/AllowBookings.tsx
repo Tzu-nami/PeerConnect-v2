@@ -6,9 +6,10 @@ import { toast } from "sonner"
 interface AllowBookingsProps {
     initialEnabled: boolean
     initialDisableMessage: string
+    hasActiveSemester: boolean
 }
 
-export default function AllowBookings({ initialEnabled, initialDisableMessage  }: AllowBookingsProps) {
+export default function AllowBookings({ initialEnabled, initialDisableMessage, hasActiveSemester  }: AllowBookingsProps) {
     // States
     const [enabled, setEnabled] = useState(initialEnabled)
     const [disableMessage, setDisableMessage] = useState(initialDisableMessage ?? '')
@@ -34,22 +35,34 @@ export default function AllowBookings({ initialEnabled, initialDisableMessage  }
         if (savingError) return toast.error('Failed to save settings')
 
         toast.success('Settings saved!')
+        window.location.reload()
     }
 
     return(
         <div className="bg-white rounded-xl border border-white-border shadow-sm p-6 flex flex-col gap-5 max-w-xl mt-5">
-            <p className="text-sm font-bold text-text-primary uppercase tracking-wider">Booking system</p>
+            <p className="font-bold text-text-primary uppercase tracking-wider">Booking system</p>
 
             <div className="flex items-center justify-between">
                 <div>
-                    <p className="font-semibold">Allow Bookings</p>
-                    <p className="text-sm text-text-muted">Enable or disable student booking submissions</p>
+                    <div className="flex items-center gap-2">
+                        <p className="font-semibold">Allow Bookings</p>
+                        {!hasActiveSemester && (
+                            <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                                Locked
+                            </span>
+                        )}
+                    </div>
+                    <p className="text-sm text-text-muted">
+                        {hasActiveSemester
+                            ? 'Enable or disable student booking submissions'
+                            : 'Bookings are locked until a new semester is set up.'}
+                    </p>
                 </div>
-                <button onClick={() => setEnabled(!enabled)} className="text-3xl cursor-pointer">
-                    {enabled
-                        ? <FaToggleOn className="text-green-600" />
-                        : <FaToggleOff className="text-text-muted" />
-                    }
+                <button
+                    onClick={() => hasActiveSemester && setEnabled(!enabled)}
+                    disabled={!hasActiveSemester}
+                    className="text-3xl cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                    {enabled ? <FaToggleOn className="text-green-600" /> : <FaToggleOff className="text-text-muted" /> }
                 </button>
             </div>
 
