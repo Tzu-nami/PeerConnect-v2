@@ -7,6 +7,9 @@ import Pagination from "@/components/ui/Pagination";
 import { getRatingLabel } from "@/utils/getRatingLabel";
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole";
 import { createClient } from "@/utils/supabase/server";
+import { getRecentSemesters } from '@/utils/services/sessionService';
+import {Semester} from "@/types/semester";
+import { useRouter } from "next/router";
 
 export type SortDirection = "asc" | "desc";
 export type MentorFeedbackSortKey =
@@ -40,6 +43,8 @@ export type MentorFeedbackRow = {
 
 type Props = {
   feedbacks: MentorFeedbackRow[];
+    semesters: Semester[];
+    selectedSemesterId: string | null;
 };
 
 const ITEMS_PER_PAGE = 8;
@@ -92,18 +97,23 @@ function getSortValue(row: MentorFeedbackRow, key: MentorFeedbackSortKey) {
   return String(row[key] ?? "").toLowerCase();
 }
 
-export default function MentorFeedbacksPage({ feedbacks }: Props) {
+export default function MentorFeedbacksPage({ feedbacks, semesters, selectedSemesterId }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("all");
   const [sortCol, setSortCol] = useState<MentorFeedbackSortKey>("date");
   const [sortDir, setSortDir] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedFeedback, setSelectedFeedback] =
-    useState<MentorFeedbackRow | null>(null);
+  const [selectedFeedback, setSelectedFeedback] = useState<MentorFeedbackRow | null>(null);
+
+    const router = useRouter()
 
   const subjectOptions = useMemo(() => {
     return [...new Set(feedbacks.map((fb) => fb.subject).filter(Boolean))].sort();
   }, [feedbacks]);
+
+    const handleSemesterChange = (semesterId: string) => {
+        router.push({ pathname: router.pathname, query: { semester: semesterId } });
+    };
 
   const filteredFeedbacks = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -180,20 +190,23 @@ export default function MentorFeedbacksPage({ feedbacks }: Props) {
         </p>
       </div>
 
-      <MentorFeedbackTable
-        feedbacks={paginatedFeedbacks}
-        totalCount={filteredFeedbacks.length}
-        searchQuery={searchQuery}
-        onSearch={handleSearch}
-        subjectOptions={subjectOptions}
-        subjectFilter={subjectFilter}
-        onSubjectFilter={handleSubjectFilter}
-        onResetFilters={resetFilters}
-        sortCol={sortCol}
-        sortDir={sortDir}
-        onSort={handleSort}
-        onView={setSelectedFeedback}
-      />
+        <MentorFeedbackTable
+            feedbacks={paginatedFeedbacks}
+            totalCount={filteredFeedbacks.length}
+            searchQuery={searchQuery}
+            onSearch={handleSearch}
+            subjectOptions={subjectOptions}
+            subjectFilter={subjectFilter}
+            onSubjectFilter={handleSubjectFilter}
+            onResetFilters={resetFilters}
+            sortCol={sortCol}
+            sortDir={sortDir}
+            onSort={handleSort}
+            onView={setSelectedFeedback}
+            semesters={semesters}
+            selectedSemesterId={selectedSemesterId}
+            onSemesterChange={handleSemesterChange}
+        />
 
       <Pagination
         currentPage={currentPage}
@@ -209,9 +222,7 @@ export default function MentorFeedbacksPage({ feedbacks }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   const supabase = createClient(context);
   const userRole = await getServerSideUserRole(context);
 
@@ -224,9 +235,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     };
   }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
     return {
@@ -237,34 +246,31 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     };
   }
 
+    const semesters = await getRecentSemesters(supabase);
+    const currentSemester = semesters.find(s => s.is_current);
+    const selectedSemesterId = (context.query.semester as string) ?? currentSemester?.id ?? null;
+
   const { data: mentorProfile } = await supabase
     .from("mentor_profiles")
     .select("id")
     .eq("user_id", user.id)
     .single();
 
-  if (!mentorProfile) {
-    return {
-      props: {
-        feedbacks: [],
-      },
-    };
-  }
+    if (!mentorProfile) {
+        return { props: { feedbacks: [], semesters, selectedSemesterId } };
+    }
 
   const { data: bookingRows } = await supabase
     .from("bookings")
     .select("id")
-    .eq("mentor_id", mentorProfile.id);
+    .eq("mentor_id", mentorProfile.id)
+      .eq("semester_id", selectedSemesterId);
 
   const bookingIds = (bookingRows ?? []).map((booking: any) => booking.id);
 
-  if (bookingIds.length === 0) {
-    return {
-      props: {
-        feedbacks: [],
-      },
-    };
-  }
+    if (bookingIds.length === 0) {
+        return { props: { feedbacks: [], semesters, selectedSemesterId } };
+    }
 
   const { data: feedbackRows } = await supabase
     .from("feedback")
@@ -301,6 +307,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   return {
     props: {
       feedbacks,
+        semesters,
+        selectedSemesterId,
     },
   };
 };

@@ -1,17 +1,11 @@
-import {
-  MdArrowDownward,
-  MdArrowUpward,
-  MdKeyboardArrowDown,
-  MdUnfoldMore,
-} from "react-icons/md";
+import { MdArrowDownward, MdArrowUpward, MdKeyboardArrowDown, MdUnfoldMore } from "react-icons/md";
 
 import SearchBar from "@/components/ui/SearchBar";
 import MentorFeedbackTableRow from "./MentorFeedbackTableRow";
-import type {
-  MentorFeedbackRow,
-  MentorFeedbackSortKey,
-  SortDirection,
-} from "@/pages/mentor/feedbacks";
+import type { MentorFeedbackRow, MentorFeedbackSortKey, SortDirection } from "@/pages/mentor/feedbacks";
+import {Semester} from "@/types/semester";
+import SemesterFilter from "@/components/admin/SemesterFilter";
+import EmptyState from "@/components/ui/charts/EmptyState";
 
 type Props = {
   feedbacks: MentorFeedbackRow[];
@@ -26,6 +20,9 @@ type Props = {
   sortDir: SortDirection;
   onSort: (col: MentorFeedbackSortKey) => void;
   onView: (feedback: MentorFeedbackRow) => void;
+    semesters: Semester[];
+    selectedSemesterId: string | null;
+    onSemesterChange: (id: string) => void;
 };
 
 function SortIcon({
@@ -59,6 +56,9 @@ export default function MentorFeedbackTable({
   sortDir,
   onSort,
   onView,
+    semesters,
+    selectedSemesterId,
+    onSemesterChange
 }: Props) {
   return (
     <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
@@ -78,6 +78,12 @@ export default function MentorFeedbackTable({
             className="w-56"
           />
 
+            <SemesterFilter
+                semesters={semesters}
+                selected={selectedSemesterId}
+                onChange={onSemesterChange}
+            />
+
           <div className="relative">
             <select
               value={subjectFilter}
@@ -91,7 +97,6 @@ export default function MentorFeedbackTable({
                 </option>
               ))}
             </select>
-            <MdKeyboardArrowDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xl text-slate-400" />
           </div>
 
           <button
@@ -174,27 +179,26 @@ export default function MentorFeedbackTable({
             </tr>
           </thead>
 
+
+
           <tbody>
-            {feedbacks.length > 0 ? (
-              feedbacks.map((feedback) => (
-                <MentorFeedbackTableRow
-                  key={feedback.id}
-                  feedback={feedback}
-                  onView={onView}
-                />
-              ))
-            ) : (
+          {!selectedSemesterId ? (
               <tr>
-                <td
-                  colSpan={5}
-                  className="text-center py-12 text-sm text-text-brown-light italic"
-                >
-                  <p className="text-sm font-semibold text-slate-500">
-                    No feedbacks match your filters.
-                  </p>
-                </td>
+                  <td colSpan={5}>
+                      <EmptyState />
+                  </td>
               </tr>
-            )}
+          ) : feedbacks.length > 0 ? (
+              feedbacks.map((feedback) => (
+                  <MentorFeedbackTableRow key={feedback.id} feedback={feedback} onView={onView} />
+              ))
+          ) : (
+              <tr>
+                  <td colSpan={5} className="text-center py-12 text-sm text-text-brown-light italic">
+                      <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
+                  </td>
+              </tr>
+          )}
           </tbody>
         </table>
       </div>

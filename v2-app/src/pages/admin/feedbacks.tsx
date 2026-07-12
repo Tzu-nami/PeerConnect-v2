@@ -10,6 +10,9 @@ import Pagination from "@/components/ui/Pagination";
 // Utilities
 import { createClient } from "@/utils/supabase/server";
 import { getServerSideUserRole } from "@/utils/getServerSideUserRole";
+import { getRecentSemesters } from '@/utils/services/sessionService';
+import {Semester} from "@/types/semester";
+import { useRouter } from "next/router";
 
 export type SortKey =
   | "date"
@@ -51,6 +54,8 @@ type Props = {
     sessions: number;
     avg: string;
   };
+    semesters: Semester[];
+    selectedSemesterId: string | null;
 };
 
 const ITEMS_PER_PAGE = 8;
@@ -111,22 +116,26 @@ function getSortValue(row: FeedbackRow, key: SortKey) {
   return String(row[key] ?? "").toLowerCase();
 }
 
-export default function AdminFeedbacksPage({ feedbacks, stats }: Props) {
+export default function AdminFeedbacksPage({ feedbacks, stats, semesters, selectedSemesterId     }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [mentorFilter, setMentorFilter] = useState("all");
   const [ratingFilter, setRatingFilter] = useState("all");
   const [sortCol, setSortCol] = useState<SortKey>("date");
   const [sortDir, setSortDir] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedFeedback, setSelectedFeedback] = useState<FeedbackRow | null>(
-    null
-  );
+  const [selectedFeedback, setSelectedFeedback] = useState<FeedbackRow | null>(null);
+
+    const router = useRouter()
 
   const mentorOptions = useMemo(() => {
     return [...new Set(feedbacks.map((fb) => fb.mentor_name).filter(Boolean))].sort();
   }, [feedbacks]);
 
-  const filteredFeedbacks = useMemo(() => {
+    const handleSemesterChange = (semesterId: string) => {
+        router.push({ pathname: router.pathname, query: { semester: semesterId } });
+    };
+
+    const filteredFeedbacks = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
     return feedbacks
@@ -228,6 +237,9 @@ export default function AdminFeedbacksPage({ feedbacks, stats }: Props) {
         sortDir={sortDir}
         onSort={handleSort}
         onView={setSelectedFeedback}
+        semesters={semesters}
+        selectedSemesterId={selectedSemesterId}
+        onSemesterChange={handleSemesterChange}
       />
 
       <Pagination
@@ -244,9 +256,7 @@ export default function AdminFeedbacksPage({ feedbacks, stats }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   const supabase = createClient(context);
   const userRole = await getServerSideUserRole(context);
 
@@ -259,33 +269,37 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     };
   }
 
-  const [
-    { data: feedbackRows },
-    { data: bookingRows },
-    { data: mentorRows },
-    { data: profileRows },
-    { count: completedSessions },
-  ] = await Promise.all([
-    supabase
-      .from("feedback")
-      .select("*")
-      .order("date_submitted", { ascending: false }),
+    const semesters = await getRecentSemesters(supabase);
+    const currentSemester = semesters.find(s => s.is_current);
+    const selectedSemesterId = (context.query.semester as string) ?? currentSemester?.id ?? null;
 
-    supabase
-      .from("bookings")
-      .select(
-        "id, mentor_id, student_id, date, schedule_start, schedule_end, booking_status"
-      ),
-
-    supabase.from("mentor_profiles").select("id, user_id"),
-
-    supabase.from("user_profiles").select("id, firstName, lastName"),
-
-    supabase
-      .from("bookings")
-      .select("id", { count: "exact", head: true })
-      .eq("booking_status", "completed"),
-  ]);
+    const [
+        { data: feedbackRows },
+        { data: bookingRows },
+        { data: mentorRows },
+        { data: profileRows },
+        { count: completedSessions },
+    ] = await Promise.all([
+        supabase
+            .from("feedback")
+            .select("*")
+            .order("date_submitted", { ascending: false }),
+        supabase
+            .from("bookings")
+            .select("id, mentor_id, student_id, date, schedule_start, schedule_end, booking_status")
+            .eq("semester_id", selectedSemesterId),
+        supabase
+            .from("mentor_profiles")
+            .select("id, user_id"),
+        supabase
+            .from("user_profiles")
+            .select("id, firstName, lastName"),
+        supabase
+            .from("bookings")
+            .select("id", { count: "exact", head: true })
+            .eq("booking_status", "completed")
+            .eq("semester_id", selectedSemesterId),
+    ]);
 
   const bookingsById = new Map(
     (bookingRows ?? []).map((booking: any) => [String(booking.id), booking])
@@ -299,52 +313,54 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     (profileRows ?? []).map((profile: any) => [String(profile.id), profile])
   );
 
-  const feedbacks: FeedbackRow[] = (feedbackRows ?? []).map((fb: any) => {
-    const booking = fb.booking_id
-      ? bookingsById.get(String(fb.booking_id))
-      : null;
+    const feedbacks: FeedbackRow[] = (feedbackRows ?? [])
+        .filter((fb: any) => fb.booking_id && bookingsById.has(String(fb.booking_id)))
+        .map((fb: any) => {
+            const booking = fb.booking_id
+                ? bookingsById.get(String(fb.booking_id))
+                : null;
 
-    const mentor = booking?.mentor_id
-      ? mentorsById.get(String(booking.mentor_id))
-      : fb.mentor_id
-        ? mentorsById.get(String(fb.mentor_id))
-        : null;
+            const mentor = booking?.mentor_id
+                ? mentorsById.get(String(booking.mentor_id))
+                : fb.mentor_id
+                    ? mentorsById.get(String(fb.mentor_id))
+                    : null;
 
-    const profile = mentor?.user_id
-      ? profilesById.get(String(mentor.user_id))
-      : null;
+            const profile = mentor?.user_id
+                ? profilesById.get(String(mentor.user_id))
+                : null;
 
-    const mentorName = profile
-      ? `${profile.lastName ?? ""}, ${profile.firstName ?? ""}`
-          .replace(/^,\s*/, "")
-          .trim()
-      : "-";
+            const mentorName = profile
+                ? `${profile.lastName ?? ""}, ${profile.firstName ?? ""}`
+                    .replace(/^,\s*/, "")
+                    .trim()
+                : "-";
 
-    const avg = getAverage(fb);
+            const avg = getAverage(fb);
 
-    return {
-      id: String(fb.id),
-      mentor_name: mentorName || "-",
-      subject: fb.subject || "-",
-      topic: fb.topic || "-",
-      date_submitted: fb.date_submitted ?? null,
-      date_formatted: formatDate(fb.date_submitted ?? null),
-      feedback: fb.feedback || "-",
-      has_feedback: !!fb.feedback,
-      avg,
-      avgLabel: getRatingLabel(avg),
-      q1: fb.q1 ?? null,
-      q2: fb.q2 ?? null,
-      q3: fb.q3 ?? null,
-      q4: fb.q4 ?? null,
-      q5: fb.q5 ?? null,
-      q6: fb.q6 ?? null,
-      q7: fb.q7 ?? null,
-      q8: fb.q8 ?? null,
-      q9: fb.q9 ?? null,
-      q10: fb.q10 ?? null,
-    };
-  });
+            return {
+                id: String(fb.id),
+                mentor_name: mentorName || "-",
+                subject: fb.subject || "-",
+                topic: fb.topic || "-",
+                date_submitted: fb.date_submitted ?? null,
+                date_formatted: formatDate(fb.date_submitted ?? null),
+                feedback: fb.feedback || "-",
+                has_feedback: !!fb.feedback,
+                avg,
+                avgLabel: getRatingLabel(avg),
+                q1: fb.q1 ?? null,
+                q2: fb.q2 ?? null,
+                q3: fb.q3 ?? null,
+                q4: fb.q4 ?? null,
+                q5: fb.q5 ?? null,
+                q6: fb.q6 ?? null,
+                q7: fb.q7 ?? null,
+                q8: fb.q8 ?? null,
+                q9: fb.q9 ?? null,
+                q10: fb.q10 ?? null,
+            };
+        });
 
   const averages = feedbacks
     .map((fb) => fb.avg)
@@ -363,6 +379,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
         sessions: completedSessions ?? 0,
         avg: overallAverage.toFixed(1),
       },
+        semesters,
+        selectedSemesterId,
     },
   };
 };

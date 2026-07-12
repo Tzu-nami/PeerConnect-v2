@@ -1,15 +1,10 @@
 import SearchBar from "@/components/ui/SearchBar";
 import FeedbackTableRow from "@/components/admin/feedbacks/FeedbackTableRow";
-import type {
-  FeedbackRow,
-  SortDirection,
-  SortKey,
-} from "@/pages/admin/feedbacks";
-import {
-  MdArrowDownward,
-  MdArrowUpward,
-  MdUnfoldMore,
-} from "react-icons/md";
+import type { FeedbackRow, SortDirection, SortKey } from "@/pages/admin/feedbacks";
+import { MdArrowDownward, MdArrowUpward, MdUnfoldMore } from "react-icons/md";
+import {Semester} from "@/types/semester";
+import SemesterFilter from "@/components/admin/SemesterFilter";
+import EmptyState from "@/components/ui/charts/EmptyState";
 
 type FeedbackTableProps = {
   feedbacks: FeedbackRow[];
@@ -26,6 +21,9 @@ type FeedbackTableProps = {
   sortDir: SortDirection;
   onSort: (col: SortKey) => void;
   onView: (feedback: FeedbackRow) => void;
+    semesters: Semester[];
+    selectedSemesterId: string | null;
+    onSemesterChange: (id: string) => void;
 };
 
 const ratingOptions = ["Excellent", "Good", "Average", "Poor", "N/A"];
@@ -65,6 +63,9 @@ export default function FeedbackTable({
   sortDir,
   onSort,
   onView,
+  semesters,
+  selectedSemesterId,
+  onSemesterChange
 }: FeedbackTableProps) {
   const headerClass =
     "flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer";
@@ -102,6 +103,12 @@ export default function FeedbackTable({
             placeholder="Search feedback..."
             className="w-56"
           />
+
+            <SemesterFilter
+                semesters={semesters}
+                selected={selectedSemesterId}
+                onChange={onSemesterChange}
+            />
 
           <select
             value={mentorFilter}
@@ -163,26 +170,25 @@ export default function FeedbackTable({
             </tr>
           </thead>
 
-          <tbody>
-            {feedbacks.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={6}
-                  className="text-center py-12 text-sm text-text-brown-light italic"
-                >
-                  No feedback found.
-                </td>
-              </tr>
+            <tbody>
+            {!selectedSemesterId ? (
+                <tr>
+                    <td colSpan={6}>
+                        <EmptyState />
+                    </td>
+                </tr>
+            ) : feedbacks.length > 0 ? (
+                feedbacks.map((feedback) => (
+                    <FeedbackTableRow key={feedback.id} feedback={feedback} onView={onView} />
+                ))
             ) : (
-              feedbacks.map((feedback) => (
-                <FeedbackTableRow
-                  key={feedback.id}
-                  feedback={feedback}
-                  onView={onView}
-                />
-              ))
+                <tr>
+                    <td colSpan={6} className="text-center py-12 text-sm text-text-brown-light italic">
+                        <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
+                    </td>
+                </tr>
             )}
-          </tbody>
+            </tbody>
         </table>
       </div>
     </div>
