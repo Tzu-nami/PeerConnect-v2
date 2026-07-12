@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner"
-import { useRouter } from "next/router"
 
 // Components
 import ConfirmModal from "@/components/ui/ConfirmModal"
@@ -15,9 +14,9 @@ import { FiAlertTriangle, FiCheckCircle } from "react-icons/fi"
 import {createClient} from "@/utils/supabase/client";
 
 interface SemesterSetupProps {
-    currentSemester: string
-    currentAcadYear: number
-    currentSemStart: string
+    currentSemester: string | undefined
+    currentAcadYear: number | undefined
+    currentSemStart: string | undefined
     isCurrentActive: boolean
 }
 
@@ -25,14 +24,13 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
     // Value states
     const [semester, setSemester] = useState(currentSemester ?? '')
     const [acadYear, setAcadYear] = useState(currentAcadYear ?? 2026)
-    const [semStart, setSemStart] = useState(currentSemStart)
+    const [semStart, setSemStart] = useState(currentSemStart ?? '')
 
     // Function states
     const [loading, setLoading] = useState(false)
     const [confirmAction, setConfirmAction] = useState<'save' | 'end' | null>(null)
 
     const supabase = createClient()
-    const router = useRouter()
 
     // Reset state after refresh
     useEffect(() => {
@@ -57,7 +55,7 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
             return
         }
         toast.success('Semester saved successfully.')
-        window.location.reload()
+        window.location.href = window.location.pathname
     }
 
     // Handles ending the semester
@@ -72,7 +70,7 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
             return
         }
         toast.success('Semester ended.')
-        window.location.reload()
+        window.location.href = window.location.pathname
     }
 
     return(
@@ -167,6 +165,5 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                 onConfirm={handleEndSemester}
             />
         </div>
-
     )
 }
