@@ -31,6 +31,7 @@ import { SatisfactionData } from "@/types/satisfactionData"
 import { createClient } from "@/utils/supabase/server"
 import { TODAY } from "@/utils/formatTime"
 import { getRatingLabel } from "@/utils/getRatingLabel"
+import {SubjectList} from "@/types/subjectList";
 
 
 // Database connection
@@ -47,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const hasActiveSemester = semesterId !== null
 
     // Fetch data from server
-    const [result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12] = await Promise.all([
+    const [result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13] = await Promise.all([
         // Total mentors
         supabase
             .from('mentor_profiles')
@@ -97,6 +98,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .from('mentor_details')
             .select('*'),
 
+        // Subject list
+        supabase
+            .from('subjects')
+            .select('id, code, name'),
+
         // Top mentors
         supabase.rpc('get_top_mentors', { p_semester_id: semesterId }),
 
@@ -115,10 +121,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const totalPendingSessions = result3.count
     const totalStudents = result5.count
     const staffList = result7.data ?? []
-    const topMentors = result9.data ?? []
-    const topSubjects = result10.data ?? []
-    const collegeActivity = result11.data ?? []
-    const monthlyTrends = result12.data ?? []
+    const topMentors = result10.data ?? []
+    const topSubjects = result11.data ?? []
+    const collegeActivity = result12.data ?? []
+    const monthlyTrends = result13.data ?? []
+
+    // Subject data
+    const subjectList = (result9.data ?? []).map((subject) => ({
+        id: subject.id,
+        code: subject.code,
+        name: subject.name
+    }))
 
     // Average feedback calculation
     const feedbackData = result4.data ?? []
@@ -175,6 +188,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             staffList,
             sessionList,
             mentorList,
+            subjectList,
             topMentors,
             topSubjects,
             collegeActivity,
@@ -195,6 +209,7 @@ interface AdminDashboardProps {
     staffList: StaffList[]
     sessionList: SessionList[]
     mentorList: MentorList[]
+    subjectList: SubjectList[]
     topMentors: TopMentor[]
     topSubjects: TopSubject[]
     collegeActivity: CollegeActivity[]
@@ -204,7 +219,7 @@ interface AdminDashboardProps {
     hasActiveSemester: boolean
 }
 
-export default function AdminDashboard({ totalMentors, totalSessionsToday, totalPendingSessions, totalFeedbackAverage, totalStudents, staffList, sessionList, mentorList, topMentors, topSubjects, collegeActivity, monthlyTrends, sessionsByDate, satisfactionData, hasActiveSemester }: AdminDashboardProps) {
+export default function AdminDashboard({ totalMentors, totalSessionsToday, totalPendingSessions, totalFeedbackAverage, totalStudents, staffList, sessionList, mentorList, subjectList, topMentors, topSubjects, collegeActivity, monthlyTrends, sessionsByDate, satisfactionData, hasActiveSemester }: AdminDashboardProps) {
     // Stat cards
     const cards = dashboardDataConfig['admin'].cards
     const gridCols = dashboardDataConfig['admin'].gridCols
@@ -224,8 +239,8 @@ export default function AdminDashboard({ totalMentors, totalSessionsToday, total
     return (
         <>
             {/* Global search */}
-            <GlobalSearch mentorList={mentorList} sessionList={sessionList} staffList={staffList}
-                          role="admin" placeholder="Search mentors, staff, or sessions..." />
+            <GlobalSearch mentorList={mentorList} sessionList={sessionList} staffList={staffList} subjectList={subjectList}
+                          role="admin" placeholder="Search mentors, staff, subjects, or sessions..." />
 
             {/* Stat cards */}
             <div className={`grid ${gridCols} gap-4 w-full`}>
