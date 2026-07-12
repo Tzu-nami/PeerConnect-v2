@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect  } from 'react';
 import { useRouter } from 'next/router';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { createClient as createServerClient } from '@/utils/supabase/server';
@@ -36,6 +36,19 @@ export default function AdminSessionsPage({ initialSessions, counts, semesters, 
     const handleSemesterChange = (semesterId: string) => {
         router.push({ pathname: router.pathname, query: { semester: semesterId } });
     };
+
+    // Open session modal from URL query
+    useEffect(() => {
+        const sessionId = router.query.sessionId
+
+        if (sessionId && typeof sessionId === 'string' && initialSessions.length > 0) {
+            const found = initialSessions.find((session) => session.id === sessionId)
+
+            if (found) {
+                setViewSession(found)
+            }
+        }
+    }, [router.query, initialSessions])
 
   // Table
   const [search, setSearch] = useState('');
