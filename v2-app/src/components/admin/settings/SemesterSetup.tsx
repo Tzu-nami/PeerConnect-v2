@@ -138,7 +138,7 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
 
             <button onClick={() => setConfirmAction('end')}
                     disabled={loading || !isCurrentActive}
-                    className="px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer">
+                    className="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer">
                 End Current Semester
             </button>
 
@@ -147,8 +147,9 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                 onCancel={() => setConfirmAction(null)}
                 title="Save this semester?"
                 message="This will set the entered term as the new current semester. Once saved, the semestral details cannot be edited unless it is ended first."
-                icon={<FiCheckCircle className="text-up-maroon" size={40} />}
+                icon={<FiCheckCircle className="text-green-600 text-5xl" />}
                 confirmLabel="Save"
+                confirmClassName="bg-green-600 hover:bg-green-700"
                 loading={loading}
                 onConfirm={handleSave}
             />
@@ -158,7 +159,7 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                 onCancel={() => setConfirmAction(null)}
                 title="End the current semester?"
                 message="This will close the active semester until a new one is set up."
-                icon={<FiAlertTriangle className="text-amber-600" size={40} />}
+                icon={<FiAlertTriangle className="text-red-600 text-5xl" />}
                 confirmLabel="End Semester"
                 confirmClassName="bg-red-600 hover:bg-red-700"
                 loading={loading}
