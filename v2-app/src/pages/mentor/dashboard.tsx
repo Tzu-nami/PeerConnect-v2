@@ -30,6 +30,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const { data: { user } } = await supabase.auth.getUser()
     const userId = user?.id
 
+    // Get current semester
+    const { data: currentSemester } = await supabase
+        .from('semesters')
+        .select('id')
+        .eq('is_current', true)
+        .single()
+
+    const semesterId = currentSemester?.id ?? null
+
     // Get mentor ID
     const { data: mentorProfile } = await supabase
         .from('mentor_profiles')
@@ -46,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .select('*', { count: 'exact', head: true })
             .eq('booking_status', 'accepted')
             .eq('date', TODAY)
+            .eq('semester_id', semesterId)
             .eq('mentor_id', mentorId),
 
         // Pending requests
@@ -54,21 +64,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .select('*', { count: 'exact', head: true })
             .eq('booking_status', 'pending')
             .gte('date', TODAY)
+            .eq('semester_id', semesterId)
             .eq('mentor_id', mentorId),
 
         // Average ratings
         supabase
             .from('feedback_details')
             .select('average_rating')
+            .eq('semester_id', semesterId)
             .eq('mentor_id', mentorId),
 
         // Rendered hours
-        supabase.rpc('get_rendered_hours', { p_mentor_id: mentorId }),
+        supabase.rpc('get_rendered_hours', { p_mentor_id: mentorId, p_semester_id: semesterId }),
 
         // Session list
         supabase
             .from('booking_details')
             .select('*')
+            .eq('semester_id', semesterId)
             .eq('mentor_id', mentorId),
 
         // Mentor list

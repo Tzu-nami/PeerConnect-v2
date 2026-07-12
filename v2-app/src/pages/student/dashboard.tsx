@@ -29,6 +29,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const { data: { user } } = await supabase.auth.getUser()
     const userId = user?.id
 
+    // Get current semester
+    const { data: currentSemester } = await supabase
+        .from('semesters')
+        .select('id')
+        .eq('is_current', true)
+        .single()
+
+    const semesterId = currentSemester?.id ?? null
+
     // Get student ID
     const { data: studentProfile } = await supabase
         .from('student_profiles')
@@ -45,6 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .select('*', { count: 'exact', head: true })
             .eq('booking_status', 'accepted')
             .eq('date', TODAY)
+            .eq('semester_id', semesterId)
             .eq('student_id', studentId),
 
         // Pending requests
@@ -53,6 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .select('*', { count: 'exact', head: true })
             .eq('booking_status', 'pending')
             .gte('date', TODAY)
+            .eq('semester_id', semesterId)
             .eq('student_id', studentId),
 
         // Completed sessions
@@ -60,16 +71,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .from('bookings')
             .select('*', { count: 'exact', head: true })
             .eq('booking_status', 'completed')
+            .eq('semester_id', semesterId)
             .eq('student_id', studentId),
 
         // Favorite subject
-        supabase.rpc('get_favorite_subject', { p_student_id: studentId }),
+        supabase.rpc('get_favorite_subject', { p_student_id: studentId, p_semester_id: semesterId }),
 
         // Session list
         supabase
             .from('booking_details')
             .select('*')
             .eq('student_id', studentId)
+            .eq('semester_id', semesterId)
             .order('date', { ascending: true })
             .order('schedule_start', { ascending: true }),
 
