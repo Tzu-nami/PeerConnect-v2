@@ -18,7 +18,7 @@ export default function QuickActions() {
                     </Link>
                 </div>
 
-                <Link href="/" className="w-full flex gap-2 items-center justify-center border border-white-border rounded-md py-2 hover:bg-white-hover cursor-pointer">
+                <Link href="/admin/settings" className="w-full flex gap-2 items-center justify-center border border-white-border rounded-md py-2 hover:bg-white-hover cursor-pointer">
                     <FaFileAlt className="text-base" />
                     <span className="font-semibold">Generate Report</span>
                 </Link>
