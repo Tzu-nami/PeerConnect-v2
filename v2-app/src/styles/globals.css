@@ -114,6 +114,55 @@ body {
   content: "LRC PeerConnect";
 }
 
+select {
+    appearance: base-select;
+    display: inline-flex;
+    align-items: center;
+}
+
+::picker(select) {
+    appearance: base-select;
+    border: 2px solid var(--color-white-border);
+    box-shadow: 0 12px 30px #0003;
+    border-radius: 12px;
+    background-color: var(--color-white-complement);
+    padding: 0.6rem;
+}
+
+select::picker-icon {
+    display: none;
+}
+
+select option {
+    padding: 8px 12px;
+    border-radius: 0.5rem;
+    font-size: 14px;
+    color: #000000;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+select option:checked {
+    padding: 8px 12px;
+    border-radius: 0.5rem;
+    font-size: 14px;
+    background-color: #7B1113;
+    cursor: pointer;
+    color: white;
+    transition: all 0.15s ease;
+}
+
+select option::checkmark {
+    color: white;
+    text-align: right;
+}
+
+@supports not(appearance: base-select) {
+    select {
+        appearance: none;
+    }
+}
+
 .activities-pagination .swiper-pagination-bullet {
     width: 8px;
     height: 8px;
