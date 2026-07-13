@@ -79,10 +79,14 @@
         transform: translateY(0);
     }
 }
-    @keyframes slide-down {
-        0% { transform: translateY(-5); opacity: 0; }
-        100% { transform: translateY(0); opacity: 1; }
-      }
+@keyframes slide-down {
+    0% { transform: translateY(-5); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes l1 {
+    to { background-size: 120% 100%; }
+}
 
 html {
     scroll-behavior: smooth;
@@ -92,6 +96,22 @@ body {
     background: var(--color-white-surface);
     color: var(--color-text-primary);
     font-family: Nunito, sans-serif;
+}
+
+.loader {
+    width: fit-content;
+    font-size: 60px;
+    font-family: 'Palatino Linotype', sans-serif;
+    text-transform: uppercase;
+    color: #0000;
+    -webkit-text-stroke: 1.5px #7B1113;
+    background: conic-gradient(#7B1113 0 0) 0/0% 100% no-repeat text;
+    -webkit-background-clip: text;
+    animation: l1 1s linear infinite;
+}
+
+.loader:before {
+  content: "LRC PeerConnect";
 }
 
 .activities-pagination .swiper-pagination-bullet {
