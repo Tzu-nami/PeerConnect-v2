@@ -51,7 +51,7 @@
     /* Others */
     --color-white-complement:     #E6FEFF;
     --color-white-complement-hover: #CFE4E5;
-    --color-white-triadic:        #F8F2FA;
+    --color-white-triadic:        #FFE7E6;
     --color-text-white-complement:#BCA613;
     --color-text-white-light:     #8D93A0;
     --color-day-available:        #D1FAE5;
@@ -148,6 +148,11 @@ select option {
     color: #000000;
     cursor: pointer;
     transition: all 0.15s ease;
+}
+
+select option:disabled {
+    background-color: white;
+    cursor: disabled;
 }
 
 select option:checked {

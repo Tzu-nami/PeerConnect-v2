@@ -128,9 +128,9 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                         type="button"
                                         disabled={locked}
                                         onClick={() => handleCollegeChange(c.id)}
-                                        className={`py-2 px-2 text-xs font-bold rounded-lg border transition-colors ${
+                                        className={`py-2 px-2 text-xs font-semibold rounded-lg border transition-colors ${
                                             form.college_id === c.id
-                                                ? 'bg-white-complement text-text-primary border-white-dot shadow-sm'
+                                                ? 'bg-white-complement text-text-primary border-white-dot'
                                                 : 'bg-white text-text-primary border-white-border hover:bg-white-hover disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-white'
                                         }`}
                                     >
@@ -174,9 +174,9 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                                 setForm((f) => ({ ...f, yearLevel_id: y.id })); 
                                                 setErrors((err) => ({ ...err, yearLevel_id: '' })); 
                                             }}
-                                            className={`py-2 px-1 text-xs font-bold rounded-lg border transition-colors ${
+                                            className={`py-2 px-1 text-xs font-semibold rounded-lg border transition-colors ${
                                                 String(form.yearLevel_id) === String(y.id)
-                                                    ? 'bg-white-complement text-text-primary border-white-dot shadow-sm'
+                                                    ? 'bg-white-complement text-text-primary border-white-dot'
                                                     : 'bg-white text-text-primary border-white-border hover:bg-white-hover disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-white'
                                             }`}
                                         >
