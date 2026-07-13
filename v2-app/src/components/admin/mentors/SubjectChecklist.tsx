@@ -25,7 +25,7 @@ export default function SubjectChecklist({ subjects, selected, onChange, error }
                                 id={`subject-${s.id}`}
                                 checked={selected.includes(s.id)}
                                 onChange={() => toggle(s.id)}
-                                className="rounded border-white-border text-btn-brown focus:ring-btn-brown w-4 h-4 cursor-pointer flex-shrink-0" 
+                                className="rounded border-white-border text-btn-gray focus:ring-btn-gray w-4 h-4 cursor-pointer flex-shrink-0" 
                             />
                             <label htmlFor={`subject-${s.id}`} className="flex items-center gap-3 ml-3 py-2.5 cursor-pointer flex-1">
                                 <span className="text-xs font-bold text-text-primary w-20">{s.code}</span>

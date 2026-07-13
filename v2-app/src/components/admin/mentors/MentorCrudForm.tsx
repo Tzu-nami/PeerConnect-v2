@@ -76,7 +76,7 @@ export default function MentorCrudForm({
                                 {emailError && <p className="text-xs text-red-600 font-medium">{emailError}</p>}
                                 {errors.upMail && <p className="text-xs text-red-600 font-medium">{errors.upMail}</p>}
                                 <button type="button" onClick={onCheckEmail} disabled={isCheckingEmail}
-                                    className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
+                                    className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
                                     {isCheckingEmail ? <>Verifying...</> : 'Find Email'}
                                 </button>
                     

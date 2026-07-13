@@ -193,7 +193,7 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                 <button
                                 type="button"
                                 onClick={() => setLocked(false)}
-                                className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md"
+                                className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md"
                                 >
                                     Edit Profile
                                 </button>
@@ -202,7 +202,7 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                 type="button"
                                 onClick={handleSave}
                                 disabled={!hasChanges || !isComplete || loading}
-                                className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md"
+                                className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md"
                                 >
                                     {loading ? (
                                         <>

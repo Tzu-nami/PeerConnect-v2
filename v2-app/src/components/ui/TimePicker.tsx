@@ -164,7 +164,7 @@ export default function TimePicker({ value, onChange, placeholder = "Select time
               <button
                 key={p} type="button" onClick={() => changePeriod(p)}
                 className={`flex-1 py-1.5 rounded-lg border text-xs font-bold text-center transition-all ${
-                  period === p ? 'bg-btn-brown border-slate-800 text-white shadow-sm' : 'bg-white border-gray-200 text-gray-500 hover:bg-white-hover cursor-pointer'
+                  period === p ? 'bg-btn-gray border-slate-800 text-white shadow-sm' : 'bg-white border-gray-200 text-gray-500 hover:bg-white-hover cursor-pointer'
                 }`}
               >
                 {p}
