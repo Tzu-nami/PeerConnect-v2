@@ -54,7 +54,7 @@ export function buildSummarySheet(workbook: ExcelJS.Workbook, summary: any) {
 
     // Student + mentor details
     addSectionTitle('Engagement');
-    addSummaryRow('Total Hours Rendered', summary.totalHours, true);
+    addSummaryRow('Total Hours Rendered', summary.totalHours);
     addSummaryRow('Unique Students Served', summary.uniqueStudents);
     addSummaryRow('Total Active Mentors', summary.activeMentors);
 
