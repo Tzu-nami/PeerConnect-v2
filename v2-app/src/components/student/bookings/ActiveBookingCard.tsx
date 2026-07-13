@@ -14,7 +14,7 @@ export default function ActiveBookingCard({ booking, onCancel }: ActiveBookingCa
     });
 
     return (
-        <div className="bg-cream rounded-xl overflow-hidden mb-6 border border-cream-border">
+        <div className="bg-white rounded-xl overflow-hidden mb-6 border border-white-border">
             {/* Banner */}
             <div className={`flex items-start gap-4 p-6 ${isPending ? 'bg-yellow-100' : 'bg-green-100'}`}>
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl flex-shrink-0 ${isPending ? 'bg-yellow-200 text-yellow-700' : 'bg-green-200 text-green-600'}`}>
@@ -50,13 +50,13 @@ export default function ActiveBookingCard({ booking, onCancel }: ActiveBookingCa
                         { label: 'Time',         value: `${format12hrTime(booking.start_time)} – ${format12hrTime(booking.end_time)}` },
                     ].map(({ label, value }) => (
                         <div key={label} className="min-w-0">
-                            <label className="block text-[10px] font-bold text-text-brown-light uppercase tracking-wider mb-0.5">{label}</label>
-                            <p className="text-sm font-medium text-text-brown truncate">{value}</p>
+                            <label className="block text-[10px] font-bold text-text-white-light uppercase tracking-wider mb-0.5">{label}</label>
+                            <p className="text-sm font-medium text-text-primary truncate">{value}</p>
                         </div>
                     ))}
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-cream-border flex flex-wrap items-center justify-between gap-3">
+                <div className="mt-6 pt-5 border-t border-white-border flex flex-wrap items-center justify-between gap-3">
                     <p className="flex items-center gap-2 text-xs font-bold text-gray-500">
                         <FaCircleInfo className="text-gray-400 flex-shrink-0 text-sm" />
                         You may cancel this booking at any time.

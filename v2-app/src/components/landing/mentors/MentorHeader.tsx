@@ -10,7 +10,7 @@ export default function MentorHeader() {
                     Meet the Mentors
                 </h1>
             </div>
-            <div className="text-text-brown leading-7 border-l-0 md:border-l border-up-green pl-0 md:pl-5 self-center animate-fade-up">
+            <div className="text-text-primary leading-7 border-l-0 md:border-l border-up-green pl-0 md:pl-5 self-center animate-fade-up">
                 Our peer mentors are trained UPB students ready to help you succeed academically.
                 Browse available mentors, check their subjects and schedules, then log in to book a session.
             </div>

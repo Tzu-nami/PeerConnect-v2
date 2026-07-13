@@ -44,7 +44,7 @@ export default function LandingNavbar({ userRole }: { userRole: string | null })
                                    className="w-[50px] md:w-[75px] h-[50px] md:h-[75px] object-contain"/>
                         </div>
                         <div className="leading-tight">
-                            <span className="block text-[13px] md:text-[20px] font-body font-medium text-cream/70 tracking-widest uppercase">UPB LRC</span>
+                            <span className="block text-[13px] md:text-[20px] font-body font-medium text-white/70 tracking-widest uppercase">UPB LRC</span>
                             <span className="block text-[8px] md:text-[15px] font-semibold text-up-yellow-light tracking-wider">PeerConnect</span>
                         </div>
                     </Link>
@@ -58,7 +58,7 @@ export default function LandingNavbar({ userRole }: { userRole: string | null })
                             <li key={link.name}>
                                 <Link href={link.href}
                                       className={`whitespace-nowrap lg:text-sm xl:text-base font-medium tracking-widest uppercase transition-colors duration-200 no-underline 
-                                      ${isActive ? 'text-up-yellow-light font-bold' : 'text-cream/75 hover:text-up-yellow-light'}`}>
+                                      ${isActive ? 'text-up-yellow-light font-bold' : 'text-white/75 hover:text-up-yellow-light'}`}>
                                     {link.name}
                                 </Link>
                             </li>
@@ -80,15 +80,15 @@ export default function LandingNavbar({ userRole }: { userRole: string | null })
 
                     {/* Hamburger menu dropdown */}
                     {open && (
-                        <div className="lg:hidden fixed top-[60px] md:top-[83px] left-0 right-0 z-40 bg-up-maroon-dark border-t border-cream/10">
+                        <div className="lg:hidden fixed top-[60px] md:top-[83px] left-0 right-0 z-40 bg-up-maroon-dark border-t border-white/10">
                             <ul className="flex flex-col gap-2 px-6 md:px-7 py-2 md:py-4 list-none">
                                 {navLinks.map((link) => {
                                     const isActive = router.pathname === link.href;
                                     return (
                                         <li key={link.name}>
                                             <Link href={link.href} onClick={() => setOpen(false)}
-                                                  className={`block text-[10px] md:text-[15px] py-0.5 md:py-3 font-medium tracking-widest uppercase transition-colors duration-200 no-underline border-b border-cream/10
-                                            ${isActive ? 'text-up-yellow-light font-bold' : 'text-cream/75 hover:text-up-yellow-light'}`}>
+                                                  className={`block text-[10px] md:text-[15px] py-0.5 md:py-3 font-medium tracking-widest uppercase transition-colors duration-200 no-underline border-b border-white/10
+                                            ${isActive ? 'text-up-yellow-light font-bold' : 'text-white/75 hover:text-up-yellow-light'}`}>
                                                 {link.name}
                                             </Link>
                                         </li>

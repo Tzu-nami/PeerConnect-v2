@@ -37,7 +37,7 @@ export default function FeedbackDetailModal({
     <ModalBase isOpen={!!feedback} onClose={onClose}>
       {feedback && (
         <>
-          <div className="flex items-center justify-between px-6 py-4 border-b border-cream-border">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-white-border">
             <div>
               <h2 className="text-lg font-extrabold text-up-maroon">
                 Session Feedback Details
@@ -57,34 +57,34 @@ export default function FeedbackDetailModal({
 
           <div className="px-6 py-5 overflow-y-auto">
             <div className="mb-5">
-              <p className="text-xs font-bold text-text-brown-light uppercase tracking-wider">
+              <p className="text-xs font-bold text-text-white-light uppercase tracking-wider">
                 Session Details
               </p>
 
               <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                <div className="rounded-lg border border-cream-border bg-cream-dark px-3 py-2">
-                  <p className="text-xs text-text-brown-light font-bold uppercase">
+                <div className="rounded-lg border border-white-border bg-white-complement px-3 py-2">
+                  <p className="text-xs text-text-white-light font-bold uppercase">
                     Date
                   </p>
-                  <p className="font-semibold text-text-brown">
+                  <p className="font-semibold text-text-primary">
                     {feedback.date_formatted}
                   </p>
                 </div>
 
-                <div className="rounded-lg border border-cream-border bg-cream-dark px-3 py-2">
-                  <p className="text-xs text-text-brown-light font-bold uppercase">
+                <div className="rounded-lg border border-white-border bg-white-complement px-3 py-2">
+                  <p className="text-xs text-text-white-light font-bold uppercase">
                     Subject
                   </p>
-                  <p className="font-semibold text-text-brown">
+                  <p className="font-semibold text-text-primary">
                     {feedback.subject}
                   </p>
                 </div>
 
-                <div className="rounded-lg border border-cream-border bg-cream-dark px-3 py-2">
-                  <p className="text-xs text-text-brown-light font-bold uppercase">
+                <div className="rounded-lg border border-white-border bg-white-complement px-3 py-2">
+                  <p className="text-xs text-text-white-light font-bold uppercase">
                     Rating
                   </p>
-                  <p className="font-semibold text-text-brown">
+                  <p className="font-semibold text-text-primary">
                     {feedback.avg !== null
                       ? `${feedback.avg.toFixed(1)} / 5 - ${feedback.avgLabel}`
                       : "No score"}
@@ -92,16 +92,16 @@ export default function FeedbackDetailModal({
                 </div>
               </div>
 
-              <div className="mt-3 rounded-lg border border-cream-border px-3 py-2">
-                <p className="text-xs text-text-brown-light font-bold uppercase">
+              <div className="mt-3 rounded-lg bg-white-complement border border-white-border px-3 py-2">
+                <p className="text-xs text-text-white-light font-bold uppercase">
                   Topic
                 </p>
-                <p className="text-sm text-text-brown">{feedback.topic}</p>
+                <p className="text-sm text-text-primary">{feedback.topic}</p>
               </div>
             </div>
 
             {feedback.avg !== null && (
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5">
+              <div className="bg-white border border-slate-200 rounded-xl p-4 mb-5">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                     Average Score - Q1 to Q9
@@ -139,7 +139,7 @@ export default function FeedbackDetailModal({
               Likert Scale (1 = Strongly Disagree, 5 = Strongly Agree)
             </p>
 
-            <div className="divide-y divide-cream-border border-y border-cream-border">
+            <div className="divide-y divide-white-border border-y border-white-border">
               {questions.map((question, index) => {
                 const key = `q${index + 1}` as keyof FeedbackRow;
                 const score = feedback[key] as number | null;
@@ -149,11 +149,11 @@ export default function FeedbackDetailModal({
                     key={question}
                     className="grid grid-cols-[28px_1fr_auto] gap-3 py-3 items-center"
                   >
-                    <div className="w-6 h-6 rounded-full bg-cream-dark text-text-brown-light text-xs font-bold flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-white-dark text-text-white-light text-xs font-bold flex items-center justify-center">
                       {index + 1}
                     </div>
 
-                    <div className="text-sm text-text-brown">{question}</div>
+                    <div className="text-sm text-text-primary">{question}</div>
 
                     <div className="flex items-center gap-1.5">
                       {score === null ? (
@@ -181,11 +181,11 @@ export default function FeedbackDetailModal({
               })}
 
               <div className="grid grid-cols-[28px_1fr_auto] gap-3 py-3 items-center">
-                <div className="w-6 h-6 rounded-full bg-cream-dark text-text-brown-light text-xs font-bold flex items-center justify-center">
+                <div className="w-6 h-6 rounded-full bg-white-dark text-text-white-light text-xs font-bold flex items-center justify-center">
                   10
                 </div>
 
-                <div className="text-sm text-text-brown">
+                <div className="text-sm text-text-primary">
                   The peer mentor started the session on time.
                 </div>
 
@@ -208,7 +208,7 @@ export default function FeedbackDetailModal({
             </p>
 
             {feedback.has_feedback ? (
-              <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm text-slate-700 leading-6 whitespace-pre-wrap">
+              <div className="rounded-xl bg-white-dark border border-slate-200 p-4 text-sm text-slate-700 leading-6 whitespace-pre-wrap">
                 {feedback.feedback}
               </div>
             ) : (

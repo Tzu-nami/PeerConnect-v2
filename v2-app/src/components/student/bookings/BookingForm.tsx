@@ -45,7 +45,7 @@ function StepHeader({ n, label }: { n: number; label: React.ReactNode }) {
             <span className="w-4 h-4 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">
                 {n}
             </span>
-            <p className="text-xs font-bold pl-2.5 text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+            <p className="text-xs font-bold pl-2.5 text-text-white-light uppercase tracking-wider flex items-center gap-2">
                 {label}
             </p>
             <span className="text-red-500">*</span>
@@ -261,11 +261,11 @@ export default function BookingForm({
     
     const isSubmitDisabled = !hasProfile || !!dateError || !!startTimeError || !!endTimeError || !form.subject_id || !form.topic || !form.tutorialMode_id || !form.date || !form.schedule_start || !form.schedule_end || !form.mentor_id || validating;
 
-    const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50";
+    const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50";
 
     return (
         <div>
-            <div className="px-4 sm:px-6 pb-6 pt-4 rounded-lg bg-cream rounded-xl border border-cream-border overflow-hidden">
+            <div className="px-4 sm:px-6 pb-6 pt-4 rounded-lg bg-white rounded-xl border border-white-border overflow-hidden">
                 <div className="space-y-3">
                     {/* Tutorial Mode */}
                     <div>
@@ -281,8 +281,8 @@ export default function BookingForm({
                                     }}
                                     className={`py-3 px-2 text-xs font-bold rounded-lg border transition-colors ${
                                         form.tutorialMode_id === m.id
-                                            ? 'bg-cream-complement text-text-brown border-cream-dot shadow-sm'
-                                            : 'bg-white text-text-brown border-cream-border hover:bg-cream-hover disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-cream'
+                                            ? 'bg-white-complement text-text-primary border-white-dot shadow-sm'
+                                            : 'bg-white text-text-primary border-white-border hover:bg-white-hover disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-white'
                                     }`}
                                 >
                                     {m.mode}
@@ -308,7 +308,7 @@ export default function BookingForm({
                         <select
                             value={form.subject_id}
                             onChange={(e) => { updateField('subject_id', e.target.value); if (!isMentorLocked) updateField('mentor_id', ''); }}
-                            className={`${inputClass} ${!form.subject_id ? 'text-slate-400' : 'text-text-brown'}`}
+                            className={`${inputClass} ${!form.subject_id ? 'text-slate-400' : 'text-text-primary'}`}
                         >
                             <option value="" disabled>--- Select a Subject ---</option>
                             {filteredSubjects.map((s) => (
@@ -352,7 +352,7 @@ export default function BookingForm({
                             placeholder="e.g. Integration by Parts."
                             maxLength={255}
                             rows={3}
-                            className={`${inputClass} text-text-brown resize-y break-words overflow-y-auto`}
+                            className={`${inputClass} text-text-primary resize-y break-words overflow-y-auto`}
                         />
                         {errors.topic && <p className="mt-1 text-xs text-red-600">{errors.topic}</p>}
                     </div>
@@ -363,7 +363,7 @@ export default function BookingForm({
                             type="button"
                             onClick={handleValidate}
                             disabled={isSubmitDisabled}
-                            className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md"
+                            className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md"
                         >
                         {validating ? (
                             <>

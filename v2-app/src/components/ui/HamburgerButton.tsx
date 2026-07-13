@@ -5,7 +5,7 @@ interface HamburgerButtonProps {
 
 function HamburgerLine({ className }: { className?: string }) {
     return (
-        <span className={`block w-6 h-[1px] md:h-[2px] bg-cream/70 transition-all duration-300 ${className ?? ''}`} />
+        <span className={`block w-6 h-[1px] md:h-[2px] bg-white/70 transition-all duration-300 ${className ?? ''}`} />
     )
 }
 

@@ -110,7 +110,7 @@ export default function AdminMentorsPage({ initialMentors, subjects, stats }: Pr
   return (
     <div>
       {/* Header */}
-      <div className="border-cream-border">
+      <div className="border-white-border">
         <div>
           <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">Mentor Management</h1>
           <p className="text-xs md:text-sm xl:text-base font-medium text-slate-500 mt-1 mb-3">LRC Registry of Peer Mentors</p>

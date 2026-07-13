@@ -89,8 +89,8 @@ export default function EditCourseModal({ isOpen, onClose, onSuccess, subject }:
                 onClose={onClose} maxWidth="max-w-md"
                 footer={
                 <div className="flex gap-3">
-                    <button onClick={onClose} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark transition cursor-pointer">Cancel</button>
-                    <button onClick={handleValidate} disabled={loading || !hasChanges || isValidating} className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
+                    <button onClick={onClose} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark transition cursor-pointer">Cancel</button>
+                    <button onClick={handleValidate} disabled={loading || !hasChanges || isValidating} className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
                     {isValidating ? 'Validating...' : 'Save Changes'}
                     </button>
                 </div>
@@ -99,12 +99,12 @@ export default function EditCourseModal({ isOpen, onClose, onSuccess, subject }:
                 <div className="space-y-4">
                     <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Subject Code <span className="text-red-500">*</span></label>
-                        <input type="text" value={form.code} onChange={(e) => setForm(f => ({ ...f, code: e.target.value }))} className="w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition" maxLength={20} />
+                        <input type="text" value={form.code} onChange={(e) => setForm(f => ({ ...f, code: e.target.value }))} className="w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition" maxLength={20} />
                         {errors.code && <p className="mt-1 text-xs text-red-600">{errors.code}</p>}
                     </div>
                     <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Subject Name <span className="text-red-500">*</span></label>
-                        <input type="text" value={form.name} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} className="w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition" maxLength={255}/>
+                        <input type="text" value={form.name} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} className="w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition" maxLength={255}/>
                         {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
                     </div>
                 </div>

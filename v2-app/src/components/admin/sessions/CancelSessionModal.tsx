@@ -56,26 +56,26 @@ export default function CancelSessionModal({ isOpen, session, onClose, onSuccess
       isOpen={isOpen}
       title="Cancel Tutorial Session"
       message={
-        <div className="text-left bg-cream p-4 rounded-xl border border-cream-border text-xs text-text-brown space-y-2 mt-4">
+        <div className="text-left bg-white p-4 rounded-xl border border-white-border text-xs text-text-primary space-y-2 mt-4">
           <p className="text-sm text-center font-medium text-slate-600 mb-2 normal-case">
             Are you sure you want to cancel this session? This action cannot be undone.
           </p>
           <div className="flex justify-between">
-            <span className="font-bold text-text-brown-light uppercase tracking-wider">Student:</span>
+            <span className="font-bold text-text-white-light uppercase tracking-wider">Student:</span>
             <span className="font-semibold text-slate-700 truncate max-w-[70%]" title={session.studentNames || session.student}>
               {session.student}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="font-bold text-text-brown-light uppercase tracking-wider">Mentor:</span>
+            <span className="font-bold text-text-white-light uppercase tracking-wider">Mentor:</span>
             <span className="font-semibold text-slate-700">{session.mentor}</span>
           </div>
           <div className="flex justify-between">
-            <span className="font-bold text-text-brown-light uppercase tracking-wider">Subject:</span>
+            <span className="font-bold text-text-white-light uppercase tracking-wider">Subject:</span>
             <span className="font-semibold text-slate-700">{session.subject}</span>
           </div>
           <div className="flex justify-between">
-            <span className="font-bold text-text-brown-light uppercase tracking-wider">Schedule:</span>
+            <span className="font-bold text-text-white-light uppercase tracking-wider">Schedule:</span>
             <span className="font-semibold text-slate-700 text-right">{session.date}<br/>{session.time}</span>
           </div>
         </div>

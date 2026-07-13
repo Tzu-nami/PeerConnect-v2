@@ -29,7 +29,7 @@ export default function ConfirmBookingModal({
     
     // Confirm message
     const confirmBody = (
-        <div className="text-left bg-cream p-4 rounded-xl border border-cream-border text-xs text-text-brown space-y-2 mt-4">
+        <div className="text-left bg-white p-4 rounded-xl border border-white-border text-xs text-text-primary space-y-2 mt-4">
             {[
                 { label: 'Subject:', value: subjects.find((s) => String(s.id) === String(form.subject_id))?.code ?? 'N/A' },
                 { label: 'Topic:',   value: form.topic },
@@ -39,8 +39,8 @@ export default function ConfirmBookingModal({
                 { label: 'Time:',    value: form.schedule_start && form.schedule_end ? `${format12hrTime(form.schedule_start)} – ${format12hrTime(form.schedule_end)}` : 'N/A' },
             ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between gap-4">
-                    <span className="text-text-brown-light font-bold shrink-0 uppercase tracking-wider">{label}</span>
-                    <span className="font-bold text-text-brown truncate">{value}</span>
+                    <span className="text-text-white-light font-bold shrink-0 uppercase tracking-wider">{label}</span>
+                    <span className="font-bold text-text-primary truncate">{value}</span>
                 </div>
             ))}
         </div>
@@ -52,7 +52,7 @@ export default function ConfirmBookingModal({
             title="Confirm booking request?"
             message={
                 <>
-                    <p className="text-sm text-center font-medium text-text-brown-light mb-2 normal-case">
+                    <p className="text-sm text-center font-medium text-text-white-light mb-2 normal-case">
                         Please review your session details. Your request will be reviewed by the peer mentor.
                     </p>
                     {confirmBody}

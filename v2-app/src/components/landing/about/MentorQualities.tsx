@@ -14,10 +14,10 @@ interface MentorQualitiesProps {
 
 export default function MentorQualities({ imageURL }: MentorQualitiesProps) {
     return (
-        <section className="py-16 border-b border-cream-border animate-fade-up [animation-delay:275ms]">
+        <section className="py-16 border-b border-white-border animate-fade-up [animation-delay:275ms]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                 {/* Image */}
-                <div className="aspect-[4/3] bg-cream-dark border border-cream-border overflow-hidden order-last lg:order-first">
+                <div className="aspect-[4/3] bg-white-dark border border-white-border overflow-hidden order-last lg:order-first">
                     <img
                         src={imageURL ?? ''}
                         alt="Our Mentors"
@@ -30,7 +30,7 @@ export default function MentorQualities({ imageURL }: MentorQualitiesProps) {
                     <div className="text-up-green text-xs font-bold tracking-widest uppercase mb-4">
                         Who are Mentors?
                     </div>
-                    <p className="text-text-brown leading-7 mb-6">
+                    <p className="text-text-primary leading-7 mb-6">
                         Peer mentors are trained UPB students who have excelled in their fields. They undergo preparation to guide fellow students through academic challenges in a supportive, relatable environment.
                     </p>
 
@@ -40,7 +40,7 @@ export default function MentorQualities({ imageURL }: MentorQualitiesProps) {
                                 <span className="text-up-maroon text-2xl flex-shrink-0">
                                     {item.icon}
                                 </span>
-                                <div className="text-sm text-text-brown">{item.text}</div>
+                                <div className="text-sm text-text-primary">{item.text}</div>
                             </div>
                         ))}
                     </div>

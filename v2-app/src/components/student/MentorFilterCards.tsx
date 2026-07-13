@@ -19,11 +19,11 @@ export default function MentorFilterCards({
 }: Props) {
     return (
         <div>
-            <div className="mb-3 pb-1 border-b border-cream-border animate-[slideDown_0.3s_ease]" />
+            <div className="mb-3 pb-1 border-b border-white-border animate-[slideDown_0.3s_ease]" />
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
 
                 {/* Filtered results */}
-                <span className="text-sm font-medium text-text-brown-light">Showing {resultCount} mentor{resultCount !== 1 ? 's' : ''}    
+                <span className="text-sm font-medium text-text-white-light">Showing {resultCount} mentor{resultCount !== 1 ? 's' : ''}    
                 </span>
 
                 <div className="flex flex-wrap items-center gap-3">
@@ -36,13 +36,13 @@ export default function MentorFilterCards({
                     />
 
                     {/* Day filters */}
-                    <div className="flex items-center gap-2 bg-white p-1 rounded-lg border border-cream-border shadow-sm h-[36px]">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-text-brown-light pl-2 pr-1">Day</span>
+                    <div className="flex items-center gap-2 bg-white p-1 rounded-lg border border-white-border shadow-sm h-[36px]">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-text-white-light pl-2 pr-1">Day</span>
                         <div className="flex gap-1">
                             <button
                                 onClick={() => onDayChange('')}
                                 className={`px-3 py-1 text-xs font-bold rounded transition ${
-                                    selectedDay === '' ? 'bg-up-maroon text-white shadow-md' : 'bg-white text-slate-600 border border-cream-border hover:bg-gray-100 cursor-pointer'
+                                    selectedDay === '' ? 'bg-up-maroon text-white shadow-md' : 'bg-white text-slate-600 border border-white-border hover:bg-gray-100 cursor-pointer'
                                 }`}
                                 >
                                     All
@@ -52,7 +52,7 @@ export default function MentorFilterCards({
                                     key={day}
                                     onClick={() => onDayChange(day)}
                                     className={`px-3 py-1 text-xs font-bold rounded transition ${
-                                    selectedDay === day ? 'bg-up-maroon text-white shadow-md' : 'bg-white text-slate-600 border border-cream-border hover:bg-gray-100 cursor-pointer'
+                                    selectedDay === day ? 'bg-up-maroon text-white shadow-md' : 'bg-white text-slate-600 border border-white-border hover:bg-gray-100 cursor-pointer'
                                 }`}
                                 >
                                     {day}
@@ -66,7 +66,7 @@ export default function MentorFilterCards({
                         <select 
                             value={selectedSubject} 
                             onChange={(e) => onSubjectChange(e.target.value)}
-                            className="pr-3 py-1.5 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 h-[36px] transition-shadow truncate w-45 cursor-pointer">
+                            className="pr-3 py-1.5 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 h-[36px] transition-shadow truncate w-45 cursor-pointer">
                                 <option value="" className="">All Subjects</option>
                                 {subjects.map((s) => (
                                     <option key={s.id} value={s.id}>{s.code}</option>

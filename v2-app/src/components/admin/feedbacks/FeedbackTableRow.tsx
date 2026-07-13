@@ -23,13 +23,13 @@ export default function FeedbackTableRow({
   return (
     <tr
       onClick={() => onView(feedback)}
-      className="border-t border-cream-border hover:bg-cream-hover transition cursor-pointer group"
+      className="border-t border-white-border hover:bg-white-hover transition cursor-pointer group"
     >
-      <td className="px-5 py-6 text-xs font-semibold text-text-brown">
+      <td className="px-5 py-6 text-xs font-semibold text-text-primary">
         {feedback.date_formatted}
       </td>
 
-      <td className="px-5 py-6 text-xs font-semibold text-text-brown">
+      <td className="px-5 py-6 text-xs font-semibold text-text-primary">
         <span className="truncate block">{feedback.mentor_name}</span>
       </td>
 
@@ -39,13 +39,13 @@ export default function FeedbackTableRow({
         </span>
       </td>
 
-      <td className="px-5 py-6 text-xs text-text-brown-light">
+      <td className="px-5 py-6 text-xs text-text-white-light">
         <span className="truncate block" title={feedback.topic}>
           {feedback.topic}
         </span>
       </td>
 
-      <td className="px-5 py-6 text-xs text-text-brown-light">
+      <td className="px-5 py-6 text-xs text-text-white-light">
         <span className="truncate block" title={feedback.feedback}>
           {feedback.feedback}
         </span>

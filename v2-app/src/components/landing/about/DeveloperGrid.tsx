@@ -17,19 +17,19 @@ export default function DeveloperGrid() {
             <div className="text-up-green text-xs font-bold tracking-widest uppercase mb-4">
                 Developed By
             </div>
-            <div className="border border-cream-border divide-y divide-cream-border">
+            <div className="border border-white-border divide-y divide-white-border">
                 {rows.map((pair, rowIdx) => (
-                    <div key={rowIdx} className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-cream-border">
+                    <div key={rowIdx} className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white-border">
                         {pair.map((dev) => (
                             <div key={dev.name} className="px-5 py-4">
                                 <div className="font-medium text-sm">{dev.name}</div>
-                                <div className="text-xs text-text-brown-light mt-1">{dev.course}</div>
+                                <div className="text-xs text-text-white-light mt-1">{dev.course}</div>
                             </div>
                         ))}
                     </div>
                 ))}
             </div>
-            <div className="text-xs text-text-brown-light tracking-wide mt-3">
+            <div className="text-xs text-text-white-light tracking-wide mt-3">
                 University of the Philippines Baguio | 2025 - 2026
             </div>
         </section>

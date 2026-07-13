@@ -63,7 +63,7 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
             <HeadDesc />
 
             {/* Image */}
-            <div className="w-full h-64 md:h-96 bg-cream-dark border-b border-cream-border overflow-hidden animate-fade-up [animation-delay:100ms]">
+            <div className="w-full h-64 md:h-96 bg-white-dark border-b border-white-border overflow-hidden animate-fade-up [animation-delay:100ms]">
                 <img
                     src={images['about_banner'] ?? ''}
                     alt="LRC PeerConnect"
@@ -86,7 +86,7 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
                 <MentorQualities imageURL={images['mentors_staffs']} />
 
                 {/* FAQs */}
-                <section className="py-10 border-b border-cream-border animate-fade-up [animation-delay:300ms]">
+                <section className="py-10 border-b border-white-border animate-fade-up [animation-delay:300ms]">
                     <div className="text-up-green text-xs font-bold tracking-widest uppercase mb-4">
                         Common Questions
                     </div>

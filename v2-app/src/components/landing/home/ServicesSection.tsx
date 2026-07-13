@@ -16,7 +16,7 @@ export default function ServicesSection({ imageURL }: ServicesSectionProps) {
             href: "/services#one-on-one",
             img: imageURL['one_on_one'],
             alt: "One on One Sessions",
-            border: "border-b sm:border-b-0 sm:border-r border-cream-dark",
+            border: "border-b sm:border-b-0 sm:border-r border-white-dark",
         },
         {
             title: "Group Sessions",
@@ -24,7 +24,7 @@ export default function ServicesSection({ imageURL }: ServicesSectionProps) {
             href: "/services#group-session",
             img: imageURL['group_session'],
             alt: "Group Sessions",
-            border: "border-b sm:border-b-0 sm:border-r border-cream-dark",
+            border: "border-b sm:border-b-0 sm:border-r border-white-dark",
         },
         {
             title: "Review Classes",
@@ -32,7 +32,7 @@ export default function ServicesSection({ imageURL }: ServicesSectionProps) {
             href: "/services#review-classes",
             img: imageURL['review_class'],
             alt: "Review Classes",
-            border: "border-b sm:border-b-0 border-cream-dark",
+            border: "border-b sm:border-b-0 border-white-dark",
         },
 
     ]
@@ -51,9 +51,9 @@ export default function ServicesSection({ imageURL }: ServicesSectionProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0">
                 {services.map((service) => {
                     return(
-                        <Link key={service.title} href={service.href} className={`group flex flex-col px-4 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-10 transition-colors hover:bg-cream-dark/30 ${service.border}`}>
+                        <Link key={service.title} href={service.href} className={`group flex flex-col px-4 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-10 transition-colors hover:bg-white-dark/30 ${service.border}`}>
                             <div className="relative w-full h-32 sm:h-44 md:h-48 mb-3 sm:mb-5">
-                                <Image src={service.img ?? ''} alt={service.alt} fill className="object-cover rounded-sm border border-cream-border" />
+                                <Image src={service.img ?? ''} alt={service.alt} fill className="object-cover rounded-sm border border-white-border" />
                             </div>
                             <div className="text-sm sm:text-base md:text-[15px] lg:text-[18px] xl:text-[22px] text-up-maroon font-medium mb-1 md:mb-2">{service.title}</div>
                             <div className="text-[11px] sm:text-sm lg:text-base leading-5 sm:leading-7 font-light text-gray-600 mb-2 md:mb-3">{service.description}</div>

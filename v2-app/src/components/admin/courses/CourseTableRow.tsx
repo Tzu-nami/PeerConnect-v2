@@ -10,17 +10,17 @@ interface CourseTableRowProps {
 
 export default function CourseTableRow({ subject, onView, onEdit, onDelete }: CourseTableRowProps) {
     return (
-        <tr onClick={() => onView(subject)} className="border-t border-cream-border hover:bg-cream-hover transition cursor-pointer group">
+        <tr onClick={() => onView(subject)} className="border-t border-white-border hover:bg-white-hover transition cursor-pointer group">
             {/* Info */}
             <td className="px-5 py-4 align-middle">
-                <p className="font-bold text-text-brown text-sm truncate" title={subject.code}>
+                <p className="font-bold text-text-primary text-sm truncate" title={subject.code}>
                     {subject.code}
                 </p>
             </td>
-            <td className="px-5 py-4 align-middle text-sm text-text-brown-light truncate" title={subject.name}>
+            <td className="px-5 py-4 align-middle text-sm text-text-white-light truncate" title={subject.name}>
                 {subject.name}
             </td>
-            <td className="px-5 py-4 align-middle text-sm text-text-brown-light truncate" title={subject.mentors.map(s => s.name).join('\n')}>
+            <td className="px-5 py-4 align-middle text-sm text-text-white-light truncate" title={subject.mentors.map(s => s.name).join('\n')}>
                 {subject.mentorCount} {subject.mentorCount === 1 ? 'Mentor' : 'Mentors'}
             </td>
             <td className="px-5 py-4 align-middle text-sm text-center relative">

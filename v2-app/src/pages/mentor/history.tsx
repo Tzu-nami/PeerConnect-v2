@@ -199,7 +199,7 @@ export default function MentorHistoryPage({ bookings, stats, semesters, selected
 
   return (
     <>
-      <div className="border-b border-cream-border">
+      <div className="border-b border-white-border">
         <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">
           Booking History
         </h1>

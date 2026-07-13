@@ -10,24 +10,24 @@ interface MentorTableRowProps {
 
 export default function MentorTableRow({ mentor, onView, onEdit, onDelete }: MentorTableRowProps) {
     return (
-        <tr onClick={() => onView(mentor)} className="border-t border-cream-border hover:bg-cream-hover transition cursor-pointer group">
+        <tr onClick={() => onView(mentor)} className="border-t border-white-border hover:bg-white-hover transition cursor-pointer group">
             {/* Info */}
             <td className="px-5 py-4 align-middle">
-                <p className="font-bold text-text-brown text-sm truncate">
+                <p className="font-bold text-text-primary text-sm truncate">
                     {mentor.lastName.toUpperCase()}, {mentor.firstName} {mentor.middleInitial}
                 </p>
-                <p className="text-[10px] text-text-brown-light mt-0.5 truncate">
+                <p className="text-[10px] text-text-white-light mt-0.5 truncate">
                     {mentor.yearLevel} — {mentor.degreeProgram}
                 </p>
             </td>
             
             {/* Student Num */}
-            <td className="px-5 py-4 align-middle text-sm text-text-brown-light">
+            <td className="px-5 py-4 align-middle text-sm text-text-white-light">
                 {mentor.student_num}
             </td>
             
             {/* Email */}
-            <td className="px-5 py-4 align-middle text-sm text-text-brown-light truncate">
+            <td className="px-5 py-4 align-middle text-sm text-text-white-light truncate">
                 {mentor.email}
             </td>
             
@@ -40,7 +40,7 @@ export default function MentorTableRow({ mentor, onView, onEdit, onDelete }: Men
                         </span>
                     ))}
                     {mentor.subjects.length > 3 && (
-                        <span className="bg-cream text-text-brown px-2 py-0.5 rounded text-[10px] font-bold border border-cream-border" title={mentor.subjects.slice(3).map(s => s.code).join(', ')}>
+                        <span className="bg-white text-text-primary px-2 py-0.5 rounded text-[10px] font-bold border border-white-border" title={mentor.subjects.slice(3).map(s => s.code).join(', ')}>
                             +{mentor.subjects.length - 3}
                         </span>
                     )}

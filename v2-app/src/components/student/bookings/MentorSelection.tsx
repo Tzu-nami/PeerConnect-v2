@@ -33,7 +33,7 @@ export default function MentorSelection({
             <div>
                 <div className="flex items-center mb-2">
                     <span className="w-4 h-4 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">3</span>
-                    <p className="text-xs font-bold pl-2.5 text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+                    <p className="text-xs font-bold pl-2.5 text-text-white-light uppercase tracking-wider flex items-center gap-2">
                         Preferred Mentor
                     </p>
                     <span className="text-red-500">*</span>
@@ -42,7 +42,7 @@ export default function MentorSelection({
                     value={mentor_id}
                     disabled={isMentorLocked}
                     onChange={(e) => { updateField('mentor_id', e.target.value); }}
-                    className={`w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50 ${!mentor_id ? 'text-slate-400' : 'text-text-brown'}`}
+                    className={`w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50 ${!mentor_id ? 'text-slate-400' : 'text-text-primary'}`}
                 >
                     <option value="" disabled>
                         {filteredMentors.length === 0
@@ -50,7 +50,7 @@ export default function MentorSelection({
                             : '--- Select a mentor ---'}
                     </option>
                     {filteredMentors.length > 0 && !isMentorLocked && (
-                        <option value="any" className="bg-cream-complement">ANY (Alerts all available mentors)</option>
+                        <option value="any" className="bg-white-complement">ANY (Alerts all available mentors)</option>
                     )}
                     {filteredMentors.map((m) => (
                         <option key={m.profile_id} value={m.profile_id}>{m.name}</option>
@@ -73,7 +73,7 @@ export default function MentorSelection({
 
             {/* ANY */}
             {mentor_id === 'any' && filteredMentors.length > 0 && (
-                <div className="mt-3 p-4 bg-cream-complement border border-cream-border rounded-lg animate-[slide-down_0.6s_ease-out]">
+                <div className="mt-3 p-4 bg-white-complement border border-white-border rounded-lg animate-[slide-down_0.6s_ease-out]">
                     <p className="text-sm font-bold text-blue-900">
                         First Come First Serve
                     </p>

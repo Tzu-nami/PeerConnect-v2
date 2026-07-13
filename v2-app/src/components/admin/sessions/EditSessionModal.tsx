@@ -12,7 +12,7 @@ interface EditSessionModalProps {
   onSuccess: () => void;
 }
 
-const inputClass = "w-full pl-8 pr-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition shadow-sm";
+const inputClass = "w-full pl-8 pr-3 py-2 text-sm rounded-lg border border-white-border bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition shadow-sm";
 
 export default function EditSessionModal({ isOpen, session, onClose, onSuccess }: EditSessionModalProps) {
   const [startTime, setStartTime] = useState('');
@@ -106,14 +106,14 @@ export default function EditSessionModal({ isOpen, session, onClose, onSuccess }
             <button 
               onClick={onClose} 
               disabled={isSubmitting}
-              className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark transition cursor-pointer"
+              className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark transition cursor-pointer"
             >
               Cancel
             </button>
             <button 
               onClick={() => setShowConfirm(true)} 
               disabled={!hasChanges || isSubmitting || computeNewDuration() === 'Invalid Range'}
-              className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
+              className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
             >
               Save Changes
             </button>
@@ -121,28 +121,28 @@ export default function EditSessionModal({ isOpen, session, onClose, onSuccess }
         }
       >
         {/* Details */}
-        <div className="grid grid-cols-2 gap-y-4 gap-x-3 bg-cream p-4 rounded-xl border border-cream-border mb-2">
+        <div className="grid grid-cols-2 gap-y-4 gap-x-3 bg-white p-4 rounded-xl border border-white-border mb-2">
           <div>
-            <p className="text-[10px] font-bold text-text-brown-light uppercase mb-0.5">Student</p>
+            <p className="text-[10px] font-bold text-text-white-light uppercase mb-0.5">Student</p>
             <p className="text-xs font-bold text-slate-700 truncate" title={session.studentNames || session.student}>{session.student}</p>
           </div>
           <div>
-            <p className="text-[10px] font-bold text-text-brown-light uppercase mb-0.5">Mentor</p>
+            <p className="text-[10px] font-bold text-text-white-light uppercase mb-0.5">Mentor</p>
             <p className="text-xs font-bold text-slate-700 truncate" title={session.mentor}>{session.mentor}</p>
           </div>
           <div>
-            <p className="text-[10px] font-bold text-text-brown-light uppercase mb-0.5">Subject</p>
+            <p className="text-[10px] font-bold text-text-white-light uppercase mb-0.5">Subject</p>
             <p className="text-xs font-bold text-slate-700 truncate" title={`${session.subject} - ${session.subjectName}`}>{session.subject}</p>
           </div>
           <div>
-            <p className="text-[10px] font-bold text-text-brown-light uppercase mb-0.5">Date</p>
+            <p className="text-[10px] font-bold text-text-white-light uppercase mb-0.5">Date</p>
             <p className="text-xs font-bold text-slate-700">{session.date}</p>
           </div>
         </div>
 
         {/* Hours */}
         <div className="pt-2">
-          <p className="text-[10px] font-bold text-text-brown-light uppercase tracking-wider mb-3">Update Schedule</p>
+          <p className="text-[10px] font-bold text-text-white-light uppercase tracking-wider mb-3">Update Schedule</p>
           
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -166,8 +166,8 @@ export default function EditSessionModal({ isOpen, session, onClose, onSuccess }
             <p className="text-xs text-red-500 font-bold mt-3 bg-red-50 p-2 rounded-lg border border-red-100 text-center">{error}</p>
           )}
 
-          <div className={`mt-4 border rounded-lg px-4 py-3 flex items-center justify-between transition-colors ${computeNewDuration() === 'Invalid Range' ? 'bg-red-50 border-red-200' : 'bg-cream-dark border-cream-border'}`}>
-            <span className={`text-[10px] font-bold uppercase tracking-wider ${computeNewDuration() === 'Invalid Range' ? 'text-red-500' : 'text-text-brown-light'}`}>New Duration</span>
+          <div className={`mt-4 border rounded-lg px-4 py-3 flex items-center justify-between transition-colors ${computeNewDuration() === 'Invalid Range' ? 'bg-red-50 border-red-200' : 'bg-white-complement border-white-border'}`}>
+            <span className={`text-[10px] font-bold uppercase tracking-wider ${computeNewDuration() === 'Invalid Range' ? 'text-red-500' : 'text-text-white-light'}`}>New Duration</span>
             <span className={`text-sm font-bold ${computeNewDuration() === 'Invalid Range' ? 'text-red-700' : 'text-up-maroon'}`}>{computeNewDuration()}</span>
           </div>
         </div>

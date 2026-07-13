@@ -112,7 +112,7 @@ export default function AdminSessionsPage({ initialSessions, counts, semesters, 
     return (
         <div>
             {/* Header */}
-            <div className="border-cream-border">
+            <div className="border-white-border">
                 <div>
                     <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">
                         Session Management

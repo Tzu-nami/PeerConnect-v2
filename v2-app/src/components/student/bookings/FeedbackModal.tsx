@@ -239,7 +239,7 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
                             placeholder="Share your thoughts about the session — what went well, what could be improved, or any other comments for your mentor..."
                             rows={5}
                             maxLength={2000}
-                            className="w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50 resize-y break-words overflow-y-auto"
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50 resize-y break-words overflow-y-auto"
                         />
                         <p className="text-xs text-text-white-light mt-1 text-right">{form.feedback.length} / 2000</p>
                         {errors.feedback && <p className="mt-1 text-xs text-red-600">{errors.feedback}</p>}

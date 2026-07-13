@@ -9,7 +9,7 @@ export default function StaffHeader() {
                     Meet the Staff
                 </h1>
             </div>
-            <div className="text-text-brown leading-7 border-l-0 md:border-l border-up-green pl-0 md:pl-5 self-center animate-fade-up">
+            <div className="text-text-primary leading-7 border-l-0 md:border-l border-up-green pl-0 md:pl-5 self-center animate-fade-up">
                 The LRC staff oversee and manage the PeerConnect platform, ensuring that every session runs smoothly and that students get the support they need.
             </div>
         </section>

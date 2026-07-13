@@ -24,9 +24,9 @@ export default function MentorSessionsStatsModal({
   return (
     <ModalBase isOpen={isOpen} onClose={onClose} maxWidth="max-w-xl">
       <div className="p-6">
-        <div className="border-b border-cream-border pb-4">
+        <div className="border-b border-white-border pb-4">
           <h2 className="text-2xl font-extrabold text-up-maroon">{title}</h2>
-          <p className="text-sm text-text-brown-light mt-1">{subtitle}</p>
+          <p className="text-sm text-text-white-light mt-1">{subtitle}</p>
         </div>
 
         <div className="mt-4 max-h-[420px] overflow-y-auto">
@@ -37,18 +37,18 @@ export default function MentorSessionsStatsModal({
                   key={session.id}
                   type="button"
                   onClick={() => onSelect(session)}
-                  className="w-full text-left rounded-lg border border-cream-border bg-cream px-4 py-3 hover:bg-cream-hover transition cursor-pointer"
+                  className="w-full text-left rounded-lg border border-white-border bg-white px-4 py-3 hover:bg-white-hover transition cursor-pointer"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="font-bold text-sm text-text-brown truncate">
+                      <p className="font-bold text-sm text-text-primary truncate">
                         {session.subject} - {session.topic}
                       </p>
-                      <p className="text-xs text-text-brown-light mt-1">
+                      <p className="text-xs text-text-white-light mt-1">
                         {session.date} •{" "}
                         {showHours ? session.durationText : session.time}
                       </p>
-                      <p className="text-xs text-text-brown-light mt-1 truncate">
+                      <p className="text-xs text-text-white-light mt-1 truncate">
                         Student: {session.student}
                       </p>
                     </div>
@@ -79,7 +79,7 @@ export default function MentorSessionsStatsModal({
           <button
             type="button"
             onClick={onClose}
-            className="w-full px-5 py-2 rounded-lg border border-cream-border bg-white text-sm font-bold text-text-brown hover:bg-cream-hover transition cursor-pointer"
+            className="w-full px-5 py-2 rounded-lg border border-white-border bg-white text-sm font-bold text-text-primary hover:bg-white-hover transition cursor-pointer"
           >
             Close
           </button>

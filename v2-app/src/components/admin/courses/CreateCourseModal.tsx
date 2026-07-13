@@ -11,7 +11,7 @@ interface CreateCourseModalProps {
   onSuccess: () => void;
 }
 
-const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition";
+const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition";
 
 export default function CreateCourseModal({ isOpen, onClose, onSuccess }: CreateCourseModalProps) {
   const supabase = createClient();
@@ -96,14 +96,14 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
             {hasInput ? (
               <button 
                 onClick={handleReset} 
-                className="flex-1 px-4 py-2 text-sm font-semibold text-text-brown bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer transition"
+                className="flex-1 px-4 py-2 text-sm font-semibold text-text-primary bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer transition"
               >
                 Reset Form
               </button>
             ) : (
               <button 
                 onClick={onClose} 
-                className="flex-1 px-4 py-2 text-sm font-semibold text-text-brown bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer transition"
+                className="flex-1 px-4 py-2 text-sm font-semibold text-text-primary bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer transition"
               >
                 Cancel
               </button>
@@ -111,7 +111,7 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
             <button 
               onClick={handleValidate} 
               disabled={loading || !isFormComplete || isValidating}
-              className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
+              className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
             >
               {isValidating ? 'Validating...' : 'Add Subject'}
             </button>
@@ -120,7 +120,7 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-[10px] font-bold text-text-brown-light uppercase mb-1">Subject Code <span className="text-red-500">*</span></label>
+            <label className="block text-[10px] font-bold text-text-white-light uppercase mb-1">Subject Code <span className="text-red-500">*</span></label>
             <input 
               type="text" 
               value={form.code} 
@@ -132,7 +132,7 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
             {errors.code && <p className="mt-1 text-xs text-red-600">{errors.code}</p>}
           </div>
           <div>
-            <label className="block text-[10px] font-bold text-text-brown-light uppercase mb-1">Subject Name <span className="text-red-500">*</span></label>
+            <label className="block text-[10px] font-bold text-text-white-light uppercase mb-1">Subject Name <span className="text-red-500">*</span></label>
             <input 
               type="text" 
               value={form.name} 

@@ -8,7 +8,7 @@ interface SessionStatDetailsProps {
 }
 
 export default function SessionStatDetails({ sessions, showHours }: SessionStatDetailsProps) {
-  const valueClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-cream-dark text-slate-700 flex items-center gap-4"
+  const valueClass = "w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white-complement text-slate-700 flex items-center gap-4"
   
   if (sessions.length === 0) {
     return <p className="text-xs text-gray-400 italic py-6 text-center">No sessions found in this category.</p>;
@@ -32,16 +32,16 @@ export default function SessionStatDetails({ sessions, showHours }: SessionStatD
           
           {/* Info */}
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-text-brown tracking-wider truncate" title={`${s.subject} — ${s.topic}`}>
+            <p className="text-sm font-bold text-text-primary tracking-wider truncate" title={`${s.subject} — ${s.topic}`}>
               {s.subject} — {s.topic}
             </p>
-            <p className="text-xs text-text-brown-light tracking-wider truncate py-0.5" title={`${s.student}`}>
+            <p className="text-xs text-text-white-light tracking-wider truncate py-0.5" title={`${s.student}`}>
               <span className="font-bold">Student: </span>{s.student}
             </p>
-            <p className="text-xs text-text-brown-light tracking-wider truncate" title={`${s.mentor}`}>
+            <p className="text-xs text-text-white-light tracking-wider truncate" title={`${s.mentor}`}>
               <span className="font-bold">Mentor: </span>{s.mentor}
             </p>
-            <p className="text-xs text-text-brown-light tracking-wider truncate py-0.5">
+            <p className="text-xs text-text-white-light tracking-wider truncate py-0.5">
               {s.date}, {s.time}
             </p>
           </div>

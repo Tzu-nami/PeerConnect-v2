@@ -24,20 +24,20 @@ interface CourseTableProps {
 }
 
 function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sortDir: 'asc' | 'desc' }) {
-    if (sortCol !== col) return <MdUnfoldMore className="text-text-brown-light" />;
-    return sortDir === 'asc' ? <MdArrowUpward className="text-text-brown" /> : <MdArrowDownward className="text-text-brown" />;
+    if (sortCol !== col) return <MdUnfoldMore className="text-text-white-light" />;
+    return sortDir === 'asc' ? <MdArrowUpward className="text-text-primary" /> : <MdArrowDownward className="text-text-primary" />;
 }
 
 export default function CourseTable({ 
     subjects, totalCount, searchQuery, onSearch, selectedMentor, availableMentors, onMentorSelect, onAddSubject, onView, onEdit, onDelete, sortCol, sortDir, onSort
 }: CourseTableProps) {
     return (
-        <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
+        <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
             {/* Header and search */}
             <div className="flex flex-wrap gap-4 justify-between items-center p-5">
                 <div>
-                    <h2 className="font-bold text-lg text-text-brown">Subject List</h2>
-                    <p className="text-sm text-text-brown-light font-medium">
+                    <h2 className="font-bold text-lg text-text-primary">Subject List</h2>
+                    <p className="text-sm text-text-white-light font-medium">
                         {totalCount} Subject{totalCount !==1 ? 's' : ''} found
                     </p>
                 </div>
@@ -52,7 +52,7 @@ export default function CourseTable({
                     <select
                         value={selectedMentor}
                         onChange={(e) => onMentorSelect(e.target.value)}
-                        className="pr-3 py-1.5 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 h-[36px] transition-shadow truncate w-45 cursor-pointer"
+                        className="pr-3 py-1.5 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 h-[36px] transition-shadow truncate w-45 cursor-pointer"
                     >
                         <option value="">All Mentors</option>
                         {availableMentors.map(mentorName => (
@@ -62,7 +62,7 @@ export default function CourseTable({
                         ))}
                     </select>
                     <button onClick={onAddSubject} 
-                        className="flex gap-2 items-center text-cream text-sm font-semibold px-4 py-2 rounded-lg bg-btn-brown hover:bg-btn-brown-hover shadow-md cursor-pointer transition">
+                        className="flex gap-2 items-center text-white text-sm font-semibold px-4 py-2 rounded-lg bg-btn-brown hover:bg-btn-brown-hover shadow-md cursor-pointer transition">
                         <MdLibraryAdd />
                         Add Subject
                     </button>
@@ -70,26 +70,26 @@ export default function CourseTable({
             </div>
 
             {/* Table */}
-            <div className="border-t border-cream-border overflow-x-auto">
+            <div className="border-t border-white-border overflow-x-auto">
                 <table className="w-full text-left text-sm table-fixed min-w-[800px]">
-                    <thead className="border-b border-cream-border bg-cream-dark">
+                    <thead className="border-b border-white-border bg-white-dark">
                         <tr>
                             <th className="px-5 py-3">
-                                <button onClick={() => onSort('code')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'code' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                                <button onClick={() => onSort('code')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'code' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                                     Subject Code <SortIcon col="code" sortCol={sortCol} sortDir={sortDir} />
                                 </button>
                             </th>
                             <th className="px-5 py-3 w-[35%]">
-                                <button onClick={() => onSort('name')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'name' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                                <button onClick={() => onSort('name')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'name' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                                     Subject Name <SortIcon col="name" sortCol={sortCol} sortDir={sortDir} />
                                 </button>
                             </th>
                             <th className="px-5 py-3 w-[30%]">
-                                <button onClick={() => onSort('mentorCount')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'mentorCount' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                                <button onClick={() => onSort('mentorCount')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'mentorCount' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                                     No. of Mentors <SortIcon col="mentorCount" sortCol={sortCol} sortDir={sortDir} />
                                 </button>
                             </th>
-                            <th className="px-5 py-3 w-[10%] text-xs font-bold text-text-brown-light uppercase tracking-wider text-center">
+                            <th className="px-5 py-3 w-[10%] text-xs font-bold text-text-white-light uppercase tracking-wider text-center">
                                 Actions
                             </th>
                         </tr>
@@ -97,7 +97,7 @@ export default function CourseTable({
                     <tbody>
                         {subjects.length === 0 ? (
                             <tr>
-                                <td colSpan={4} className="text-center py-12 text-sm text-text-brown-light italic">No subjects found.</td>
+                                <td colSpan={4} className="text-center py-12 text-sm text-text-white-light italic">No subjects found.</td>
                             </tr>
                         ) : (
                             subjects.map((sub) => (

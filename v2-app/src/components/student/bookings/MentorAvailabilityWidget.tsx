@@ -99,13 +99,13 @@ export default function MentorAvailabilityWidget({
   })();
 
   return (
-    <div className="mt-4 p-4 bg-white border border-cream-border rounded-lg animate-[slide-down_0.6s_ease-out]">
-      <p className="text-[10px] font-bold text-text-brown uppercase tracking-widest mb-1 text-center">
+    <div className="mt-4 p-4 bg-white border border-white-border rounded-lg animate-[slide-down_0.6s_ease-out]">
+      <p className="text-[10px] font-bold text-text-primary uppercase tracking-widest mb-1 text-center">
         Mentor's Availability & Booked Slots
       </p>
 
       {/* Week schedule */}
-      <div className="mb-3 text-center text-xs font-medium text-text-brown bg-cream-dark rounded py-1.5 flex items-center justify-center">
+      <div className="mb-3 text-center text-xs font-medium text-text-primary bg-white-complement rounded py-1.5 flex items-center justify-center">
         <MdEvent className="mr-1.5 text-xl" />
         <span>Week of {weekBannerLabel}</span>
       </div>
@@ -117,7 +117,7 @@ export default function MentorAvailabilityWidget({
 
           return (
             <div key={col.key}>
-              <div className={`text-center text-[10px] font-bold py-1 border border-cream-border rounded-lg mb-1 ${col.isChosen ? 'text-green-700 bg-green-50 border-emerald-100' : 'text-text-brown-light'}`}>
+              <div className={`text-center text-[10px] font-bold py-1 border border-white-border rounded-lg mb-1 ${col.isChosen ? 'text-green-700 bg-green-50 border-emerald-100' : 'text-text-white-light'}`}>
                 <span>{col.label}</span>
                 <span className="block text-[9px] font-normal">{col.dayNum}</span>
               </div>

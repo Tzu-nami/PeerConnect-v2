@@ -38,7 +38,7 @@ export default function SessionDetailModal({ isOpen, session, onClose }: Session
         <div className="flex justify-end w-full">
           <button 
             onClick={onClose} 
-            className="px-6 py-2 text-sm font-semibold text-cream bg-slate-800 hover:bg-black rounded-lg shadow-md transition cursor-pointer"
+            className="px-6 py-2 text-sm font-semibold text-white bg-up-maroon hover:bg-black rounded-lg shadow-md transition cursor-pointer"
           >
             Close
           </button>
@@ -48,8 +48,8 @@ export default function SessionDetailModal({ isOpen, session, onClose }: Session
       <div className="space-y-6">
         
         {/* 1. Header Card (Date, Time, Status) */}
-        <div className="bg-cream p-4 rounded-xl border border-cream-border flex items-start gap-4">
-          <div className="w-10 h-10 rounded-full bg-white border border-cream-border flex items-center justify-center text-up-maroon flex-shrink-0 mt-0.5">
+        <div className="bg-white-complement p-4 rounded-xl border border-white-border flex items-start gap-4">
+          <div className="w-10 h-10 rounded-full bg-white border border-white-border flex items-center justify-center text-up-maroon flex-shrink-0 mt-0.5">
             <FaCalendarDays className="text-lg" />
           </div>
           <div className="flex-1 min-w-0">
@@ -68,7 +68,7 @@ export default function SessionDetailModal({ isOpen, session, onClose }: Session
 
         {/* 2. People Section */}
         <div className="space-y-3">
-          <p className="text-[10px] font-bold text-text-brown-light uppercase tracking-wider border-b border-cream-border pb-1">Participants</p>
+          <p className="text-[10px] font-bold text-text-white-light uppercase tracking-wider border-b border-white-border pb-1">Participants</p>
           
           <div className="flex items-start gap-3">
             <FaUserGraduate className="text-slate-400 mt-0.5" />
@@ -95,7 +95,7 @@ export default function SessionDetailModal({ isOpen, session, onClose }: Session
 
         {/* 3. Subject Section */}
         <div className="space-y-3">
-          <p className="text-[10px] font-bold text-text-brown-light uppercase tracking-wider border-b border-cream-border pb-1">Tutorial Info</p>
+          <p className="text-[10px] font-bold text-text-white-light uppercase tracking-wider border-b border-white-border pb-1">Tutorial Info</p>
           
           <div className="grid grid-cols-2 gap-y-4 gap-x-3">
             <div>

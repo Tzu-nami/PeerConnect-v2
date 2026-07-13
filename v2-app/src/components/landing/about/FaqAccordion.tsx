@@ -20,9 +20,9 @@ function FaqItem({ faq, theme }: { faq: FaqData, theme: 'about' | 'services'}) {
     // CSS change depending on tab
     const itemClasses = isServices ? "py-5" : "px-5 py-4";
     const buttonClasses = isServices ? "w-full flex justify-between items-center text-left text-white font-semibold text-lg cursor-pointer" :
-    "font-medium text-text-brown mb-1 w-full flex justify-between items-center text-left cursor-pointer";
+    "font-medium text-text-primary mb-1 w-full flex justify-between items-center text-left cursor-pointer";
     const answerClasses = isServices ? "mt-3 text-white/70 leading-7" : 
-    "mt-2 text-sm text-text-brown-light leading-6";
+    "mt-2 text-sm text-text-white-light leading-6";
 
     return (
         <div className={itemClasses}>
@@ -51,7 +51,7 @@ export default function FaqAccordion({ faqs, theme = 'about' }: FaqAccordionProp
 
     // Border based on home tab
     const containerClasses = isServices ? "flex flex-col divide-y divide-white/20" :
-    "border border-cream-border divide-y divide-cream-border";
+    "border border-white-border divide-y divide-white-border";
     return (
         <div className={containerClasses}>
             {faqs.map((faq, idx) => (

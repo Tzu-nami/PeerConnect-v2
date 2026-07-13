@@ -30,7 +30,7 @@ interface Props {
     isCheckingEmail?: boolean;
 } 
 
-const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"
+const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"
 
 export default function MentorCrudForm({
     mode, formState, subjects, errors, onFormChange, onCheckEmail, emailError, isCheckingEmail,
@@ -76,7 +76,7 @@ export default function MentorCrudForm({
                                 {emailError && <p className="text-xs text-red-600 font-medium">{emailError}</p>}
                                 {errors.upMail && <p className="text-xs text-red-600 font-medium">{errors.upMail}</p>}
                                 <button type="button" onClick={onCheckEmail} disabled={isCheckingEmail}
-                                    className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
+                                    className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
                                     {isCheckingEmail ? <>Verifying...</> : 'Find Email'}
                                 </button>
                     
@@ -98,14 +98,14 @@ export default function MentorCrudForm({
                             <div className="space-y-3">
                                 <div className="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-text-brown-light uppercase tracking-wider mb-1.5">First Name</label>
+                                        <label className="block text-[10px] font-bold text-text-white-light uppercase tracking-wider mb-1.5">First Name</label>
                                         <input type="text" value={formState.firstName ?? ''} onChange={(e) => onFormChange({ firstName: e.target.value })}
                                             className={inputClass} maxLength={255} 
                                         />
                                         {errors.firstName && <span className="text-[10px] text-red-500 font-medium">{errors.firstName}</span>}
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-text-brown-light uppercase tracking-wider mb-1.5">Last Name</label>
+                                        <label className="block text-[10px] font-bold text-text-white-light uppercase tracking-wider mb-1.5">Last Name</label>
                                         <input type="text" value={formState.lastName ?? ''} onChange={(e) => onFormChange({ lastName: e.target.value })}
                                             className={inputClass} maxLength={255} 
                                         />
@@ -114,15 +114,15 @@ export default function MentorCrudForm({
                                 </div>
                                 <div className="grid grid-cols-[60px_1fr] gap-3">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-text-brown-light uppercase tracking-wider mb-1.5">M.I.</label>
+                                        <label className="block text-[10px] font-bold text-text-white-light uppercase tracking-wider mb-1.5">M.I.</label>
                                         <input type="text" value={formState.middleInitial ?? ''} onChange={(e) => onFormChange({ middleInitial: e.target.value })}
                                             className={inputClass} maxLength={2} 
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-text-brown-light uppercase tracking-wider mb-1.5">UP Mail (Locked)</label>
+                                        <label className="block text-[10px] font-bold text-text-white-light uppercase tracking-wider mb-1.5">UP Mail (Locked)</label>
                                         <input type="text" disabled value={formState.lockedEmail ?? ''}
-                                            className={`${inputClass} text-text-brown-light`} 
+                                            className={`${inputClass} text-text-white-light`} 
                                         />
                                     </div>
                                 </div>
@@ -148,7 +148,7 @@ export default function MentorCrudForm({
                     <div className="flex flex-col mt-2">
                         <div 
                             onClick={() => fileInputRef.current?.click()}
-                            className="w-full aspect-square max-w-[375px] rounded-xl border-2 border-dashed border-cream-border bg-cream-dark flex flex-col items-center justify-center cursor-pointer hover:bg-cream-hover hover:border-cream-complement transition overflow-hidden relative group bg-white shadow-sm"
+                            className="w-full aspect-square max-w-[375px] rounded-xl border-2 border-dashed border-white-border bg-white flex flex-col items-center justify-center cursor-pointer hover:bg-white-hover hover:border-white-complement transition overflow-hidden relative group bg-white shadow-sm"
                         >
                             {previewUrl ? (
                             <>
@@ -183,7 +183,7 @@ export default function MentorCrudForm({
             {/* Availabilities */}
             <div>
                 <StepHeader n={4} label="Availability Schedule" />
-                <div className="p-4 rounded-xl border border-cream-border">
+                <div className="p-4 rounded-xl border border-white-border">
                     <AvailabilityScheduler
                         rows={formState.availabilities}
                         onChange={(rows) => onFormChange({ availabilities: rows })}
@@ -201,7 +201,7 @@ function StepHeader({ n, label }: { n: number; label: React.ReactNode }) {
             <span className="w-5 h-5 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">
                 {n}
             </span>
-            <p className="text-xs font-bold pl-2.5 text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+            <p className="text-xs font-bold pl-2.5 text-text-white-light uppercase tracking-wider flex items-center gap-2">
                 {label}
             </p>
             <span className="text-red-500">*</span>

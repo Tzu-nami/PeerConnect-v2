@@ -31,8 +31,8 @@ interface SessionTableProps {
 }
 
 function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sortDir: 'asc' | 'desc' }) {
-  if (sortCol !== col) return <MdUnfoldMore className="text-text-brown-light" />;
-  return sortDir === 'asc' ? <MdArrowUpward className="text-text-brown" /> : <MdArrowDownward className="text-text-brown" />;
+  if (sortCol !== col) return <MdUnfoldMore className="text-text-white-light" />;
+  return sortDir === 'asc' ? <MdArrowUpward className="text-text-primary" /> : <MdArrowDownward className="text-text-primary" />;
 }
 
 
@@ -58,12 +58,12 @@ export default function SessionTable({
   };
 
   return (
-    <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
+    <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
       {/* Header, search, filters */}
       <div className="flex flex-wrap gap-4 justify-between items-center p-5">
         <div>
-          <h2 className="font-bold text-lg text-text-brown">Session List</h2>
-          <p className="text-sm text-text-brown-light font-medium">{totalCount} Result{totalCount !==1 ? 's' : ''} found</p>
+          <h2 className="font-bold text-lg text-text-primary">Session List</h2>
+          <p className="text-sm text-text-white-light font-medium">{totalCount} Result{totalCount !==1 ? 's' : ''} found</p>
         </div>
         <div className="flex gap-3 items-center flex-wrap">
           <SearchBar 
@@ -83,7 +83,7 @@ export default function SessionTable({
             {/* Status filters */}
             <button 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="px-4 py-2 text-xs font-medium text-text-brown border border-cream-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[160px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[160px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
             >
               <span>
                 {statusFilters.length === 0 
@@ -101,17 +101,17 @@ export default function SessionTable({
                   onClick={() => setIsDropdownOpen(false)} 
                 />
                 
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-cream-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
                   {availableStatuses.map(status => (
                     <label 
                       key={status} 
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-cream cursor-pointer transition"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white cursor-pointer transition"
                     >
                       <input 
                         type="checkbox"
                         checked={statusFilters.includes(status)}
                         onChange={() => toggleStatus(status)}
-                        className="w-4 h-4 text-up-maroon border-cream-border rounded focus:ring-up-maroon/30 cursor-pointer"
+                        className="w-4 h-4 text-up-maroon border-white-border rounded focus:ring-up-maroon/30 cursor-pointer"
                       />
                       <span className="text-sm font-bold text-slate-700">
                         {getFilterLabel(status)}
@@ -126,36 +126,36 @@ export default function SessionTable({
       </div>
 
       {/* Table */}
-      <div className="border-t border-cream-border overflow-x-auto">
+      <div className="border-t border-white-border overflow-x-auto">
         <table className="w-full text-left text-sm table-fixed min-w-[800px]">
-          <thead className="border-b border-cream-border bg-cream-dark">
+          <thead className="border-b border-white-border bg-white-dark">
             <tr>
               <th className="px-5 py-3 w-[20%]">
-                <button onClick={() => onSort('date')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'date' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                <button onClick={() => onSort('date')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'date' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                   Date & Time <SortIcon col="date" sortCol={sortCol} sortDir={sortDir} />
                 </button>
               </th>
               <th className="px-5 py-3 w-[18%]">
-                <button onClick={() => onSort('student')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'student' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                <button onClick={() => onSort('student')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'student' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                   Student <SortIcon col="student" sortCol={sortCol} sortDir={sortDir} />
                 </button>
               </th>
               <th className="px-5 py-3 w-[15%]">
-                <button onClick={() => onSort('mentor')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'mentor' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                <button onClick={() => onSort('mentor')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'mentor' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                   Mentor <SortIcon col="mentor" sortCol={sortCol} sortDir={sortDir} />
                 </button>
               </th>
               <th className="px-5 py-3 w-[15%]">
-                <button onClick={() => onSort('subject')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'subject' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                <button onClick={() => onSort('subject')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'subject' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                   Subject <SortIcon col="subject" sortCol={sortCol} sortDir={sortDir} />
                 </button>
               </th>
               <th className="px-5 py-3 w-[12%] text-center">
-                <button onClick={() => onSort('status')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'status' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                <button onClick={() => onSort('status')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'status' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                   Status <SortIcon col="status" sortCol={sortCol} sortDir={sortDir} />
                 </button>
               </th>
-              <th className="px-5 py-3 w-[10%] text-xs font-bold text-text-brown-light uppercase tracking-wider text-center">
+              <th className="px-5 py-3 w-[10%] text-xs font-bold text-text-white-light uppercase tracking-wider text-center">
                 Actions
               </th>
             </tr>
@@ -179,7 +179,7 @@ export default function SessionTable({
                 ))
             ) : (
                 <tr>
-                    <td colSpan={6} className="text-center py-12 text-sm text-text-brown-light italic">
+                    <td colSpan={6} className="text-center py-12 text-sm text-text-white-light italic">
                         <p className="text-sm font-semibold text-slate-500">
                             No sessions match your filters.
                         </p>

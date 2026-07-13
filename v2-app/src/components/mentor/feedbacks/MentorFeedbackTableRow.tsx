@@ -23,7 +23,7 @@ export default function MentorFeedbackTableRow({ feedback, onView }: Props) {
       className="border-t border-white-border hover:bg-white-hover transition cursor-pointer"
     >
       <td className="px-5 py-4 align-middle">
-        <p className="font-bold text-sm text-text-brown truncate">
+        <p className="font-bold text-sm text-text-primary truncate">
           {feedback.date_formatted}
         </p>
       </td>
@@ -36,7 +36,7 @@ export default function MentorFeedbackTableRow({ feedback, onView }: Props) {
 
       <td className="px-5 py-4 align-middle">
         <p
-          className="text-sm font-semibold text-text-brown truncate"
+          className="text-sm font-semibold text-text-primary truncate"
           title={feedback.topic}
         >
           {feedback.topic}
@@ -45,7 +45,7 @@ export default function MentorFeedbackTableRow({ feedback, onView }: Props) {
 
       <td className="px-5 py-4 align-middle">
         <p
-          className="text-sm text-text-brown-light truncate"
+          className="text-sm text-text-white-light truncate"
           title={feedback.feedback}
         >
           {feedback.feedback}

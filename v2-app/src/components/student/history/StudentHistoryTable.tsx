@@ -39,12 +39,12 @@ function SortIcon({
   sortCol: StudentHistorySortKey;
   sortDir: SortDirection;
 }) {
-  if (sortCol !== col) return <MdUnfoldMore className="text-text-brown-light" />;
+  if (sortCol !== col) return <MdUnfoldMore className="text-text-white-light" />;
 
   return sortDir === "asc" ? (
-    <MdArrowUpward className="text-text-brown" />
+    <MdArrowUpward className="text-text-primary" />
   ) : (
-    <MdArrowDownward className="text-text-brown" />
+    <MdArrowDownward className="text-text-primary" />
   );
 }
 
@@ -78,8 +78,8 @@ export default function StudentHistoryTable({
     <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
       <div className="flex flex-wrap gap-4 justify-between items-center p-5">
         <div>
-          <h2 className="font-bold text-lg text-text-brown">All Bookings</h2>
-          <p className="text-sm text-text-brown-light font-medium">
+          <h2 className="font-bold text-lg text-text-primary">All Bookings</h2>
+          <p className="text-sm text-text-white-light font-medium">
             {totalCount} Session{totalCount !== 1 ? "s" : ""} found
           </p>
         </div>
@@ -102,7 +102,7 @@ export default function StudentHistoryTable({
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="px-4 py-2 text-xs font-medium text-text-brown border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
             >
               <span>
                 {statusFilters.length === 0
@@ -156,10 +156,10 @@ export default function StudentHistoryTable({
               <th className="px-5 py-3 w-[17%]">
                 <button
                   onClick={() => onSort("date")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "date"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-white-light"
                   }`}
                 >
                   Date & Time
@@ -170,10 +170,10 @@ export default function StudentHistoryTable({
               <th className="px-5 py-3 w-[18%]">
                 <button
                   onClick={() => onSort("subject")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "subject"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-white-light"
                   }`}
                 >
                   Subject
@@ -188,10 +188,10 @@ export default function StudentHistoryTable({
               <th className="px-5 py-3 w-[20%]">
                 <button
                   onClick={() => onSort("mentor")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "mentor"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-white-light"
                   }`}
                 >
                   Mentor
@@ -202,10 +202,10 @@ export default function StudentHistoryTable({
               <th className="px-5 py-3 w-[15%]">
                 <button
                   onClick={() => onSort("mode")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "mode"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-white-light"
                   }`}
                 >
                   Mode
@@ -216,10 +216,10 @@ export default function StudentHistoryTable({
               <th className="px-5 py-3 w-[15%] text-center">
                 <button
                   onClick={() => onSort("status")}
-                  className={`flex items-center justify-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer mx-auto ${
+                  className={`flex items-center justify-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer mx-auto ${
                     sortCol === "status"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-white-light"
                   }`}
                 >
                   Status
@@ -248,7 +248,7 @@ export default function StudentHistoryTable({
                 <tr>
                     <td
                         colSpan={5}
-                        className="text-center py-12 text-sm text-text-brown-light italic"
+                        className="text-center py-12 text-sm text-text-white-light italic"
                     >
                         <p className="text-sm font-semibold text-slate-500">
                             No bookings match your filters.
