@@ -13,17 +13,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const { code, name } = req.body;
 
             const { data: existing } = await supabase
-            .from('subjects').select('id').eq('code', code.trim()).maybeSingle();
+                .from('subjects').select('id, is_active').eq('code', code.trim()).maybeSingle();
 
             if (existing) {
-                return res.status(409).json({ error: 'Subject code already exists.' });
+                if (existing.is_active) {
+                     return res.status(409).json({ error: 'Subject code already exists.' });
+                } else {
+                    const { error: updateError } = await supabase
+                        .from('subjects')
+                        .update({
+                            name: name.trim(),
+                            is_active: true
+                        })
+                        .eq('id', existing.id);
+                    if (updateError) throw updateError;
+
+                    return res.status(200).json({ ok: true, message: 'Subject has been restored.' });
+                }
             }
 
             const { error: insertError } = await supabase
                 .from('subjects')
                 .insert({ 
                     code: code.trim(), 
-                    name: name.trim() 
+                    name: name.trim(),
+                    is_active: true
             });
 
             if (insertError) {

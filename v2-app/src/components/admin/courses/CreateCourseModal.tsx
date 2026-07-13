@@ -42,12 +42,22 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
 
     setIsValidating(true);
     // Check duplicate subjects
-    const isDuplicate = await checkSubjectExists(supabase, form.code);
+    const { data: existing } = await supabase
+        .from('subjects')
+        .select('is_active')
+        .eq('code', form.code.trim())
+        .maybeSingle();
 
-    if (isDuplicate) {
-      setErrors({ code: `The subject already exists.` });
-      setIsValidating(false);
-      return; 
+    if (existing) {
+        if (existing.is_active) {
+            setErrors({ code: `This subject code already exists.` });
+            setIsValidating(false);
+            return; 
+        } else {
+            setIsValidating(true);
+        }
+    } else {
+        setIsValidating(false);
     }
 
     setErrors({});

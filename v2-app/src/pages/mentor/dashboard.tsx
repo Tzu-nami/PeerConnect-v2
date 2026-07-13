@@ -94,12 +94,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         // Mentor list
         supabase
             .from('mentor_details')
-            .select('*'),
+            .select('*')
+            .eq('is_active', true),
 
         // Subject list
         supabase
             .from('subjects')
-            .select('id, code, name'),
+            .select('id, code, name')
+            .eq('is_active', true),
 
         // ANY sessions
         subjectIds.length > 0 

@@ -60,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Delete subject
             const { error: deleteError } = await supabase
                 .from('subjects')
-                .delete()
+                .update({ is_active: false })
                 .eq('id', id);
             if (deleteError) throw deleteError;
 

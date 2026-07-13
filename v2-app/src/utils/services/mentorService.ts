@@ -49,7 +49,7 @@ export async function getAdminMentorsData(supabase: SupabaseClient) {
   const [{ count: total }, { data: bookings }, { data: subjects }, { data: mentorRows }] = await Promise.all([
     supabase.from('mentor_profiles').select('*', { count: 'exact', head: true }).eq('is_active', true),
     supabase.from('bookings').select('mentor_id, booking_status, date').not('mentor_id', 'is', null),
-    supabase.from('subjects').select('id, code, name').order('code'),
+    supabase.from('subjects').select('id, code, name').order('code').eq('is_active', true),
     supabase.from('mentor_profiles').select(`
       id, user_id,
       user_profiles ( firstName, lastName, middleInitial, email, avatar,

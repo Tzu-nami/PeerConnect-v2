@@ -122,7 +122,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         getServerSideUserRole(context),
         supabase.from('mentor_profiles').select('*', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('bookings').select('*', { count: 'exact', head: true }),
-        supabase.from('subjects').select('*', { count: 'exact', head: true }),
+        supabase.from('subjects').select('*', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('staff_profiles').select('firstName, lastName, middleInitial').eq('role', 'lrc_coordinator').single(),
         supabase.from('landing_images').select('*').order('id'),
     ]);

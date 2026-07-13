@@ -48,6 +48,7 @@ export async function getAdminCourseData(supabase: SupabaseClient) {
         )
     `)
     .order('code', { ascending: true })
+    .eq('is_active', true)
     .returns<RawSubject[]>();
 
     if (error) {
