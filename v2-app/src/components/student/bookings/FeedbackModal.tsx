@@ -4,19 +4,20 @@ import type { CompletedBookingForFeedback, FeedbackFormState } from '@/types/boo
 import CrudModal from '@/components/ui/CrudModal';
 
 // Icons
-import { FaClipboardList, FaForwardStep, FaSpinner, FaPenToSquare, FaPaperPlane } from 'react-icons/fa6';
+import { FaForwardStep } from 'react-icons/fa6';
+import { MdChat, MdSend } from 'react-icons/md';
 
 // Questions
 const LIKERT_QUESTIONS = [
-{ key: 'q1', num: 1, text: 'The topics have been discussed very well.' },
-{ key: 'q2', num: 2, text: 'I have learned a lot from the Tutorial Session.' },
-{ key: 'q3', num: 3, text: 'The mentor is good enough in doing his/her tasks.' },
-{ key: 'q4', num: 4, text: 'The mentor was able to clearly explain the topics I do not understand.' },
-{ key: 'q5', num: 5, text: 'There were adequate exercises given.' },
-{ key: 'q6', num: 6, text: 'The mentor has mastery of the subject matter.' },
-{ key: 'q7', num: 7, text: 'The mentor introduces new techniques or simpler approach to the subject.' },
-{ key: 'q8', num: 8, text: 'I will recommend the Tutorial Sessions to my classmates.' },
-{ key: 'q9', num: 9, text: 'I am coming back to attend more Tutorial Sessions.' },
+    { key: 'q1', num: 1, text: 'The topics have been discussed very well.' },
+    { key: 'q2', num: 2, text: 'I have learned a lot from the Tutorial Session.' },
+    { key: 'q3', num: 3, text: 'The mentor is good enough in doing his/her tasks.' },
+    { key: 'q4', num: 4, text: 'The mentor was able to clearly explain the topics I do not understand.' },
+    { key: 'q5', num: 5, text: 'There were adequate exercises given.' },
+    { key: 'q6', num: 6, text: 'The mentor has mastery of the subject matter.' },
+    { key: 'q7', num: 7, text: 'The mentor introduces new techniques or simpler approach to the subject.' },
+    { key: 'q8', num: 8, text: 'I will recommend the Tutorial Sessions to my classmates.' },
+    { key: 'q9', num: 9, text: 'I am coming back to attend more Tutorial Sessions.' },
 ];
 const BOOL_QUESTION = { key: 'q10' as const, num: 10, text: 'The peer mentor started the session on time.' };
 const EMPTY_FORM: FeedbackFormState = {
@@ -31,10 +32,9 @@ interface FeedbackModalProps {
 
 export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModalProps) {
     const [phase, setPhase]   = useState<'prompt' | 'form'>('prompt');
-    const [step, setStep]     = useState(1);
     const [form, setForm]     = useState<FeedbackFormState>(EMPTY_FORM);
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const [loading, setLoading] = useState(false);
+    const [loadingAction, setLoadingAction] = useState<'none' | 'skip' | 'submit'>('none');
 
     // Format date to display
     const dateFormatted = new Date(booking.date + 'T00:00:00').toLocaleDateString('en-US', {
@@ -46,30 +46,28 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
         setForm((f) => ({ ...f, [key]: value }));
         setErrors((e) => ({ ...e, [key]: '' }));
     };
-    const validateStep = (s: number): boolean => {
+
+    // Validation
+    const validateForm = (): boolean => {
         const errs: Record<string, string> = {};
-        if (s === 1) {
-            ['q1','q2','q3','q4','q5'].forEach((k) => {
-                if (!form[k as keyof FeedbackFormState])
-                errs[k] = `Please rate this question.`;
-            });
-        } else if (s === 2) {
-            ['q6','q7','q8','q9'].forEach((k) => {
-                if (!form[k as keyof FeedbackFormState])
-                errs[k] = `Please rate this question.`;
-            });
-            if (form.q10 === null) errs.q10 = 'Please answer this question.';
-        }
+        ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].forEach((k) => {
+            if (!form[k as keyof FeedbackFormState]) errs[k] = `Please rate this question.`;
+        });
+        if (form.q10 === null) errs.q10 = 'Please answer this question.';
+        
         setErrors(errs);
+        
+        if (Object.keys(errs).length > 0) {
+            document.querySelector('.overflow-y-auto')?.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
         return Object.keys(errs).length === 0;
     };
-    const handleNext = () => { if (validateStep(step)) setStep((s) => s + 1); };
-    const handleBack = () => { setStep((s) => s - 1); setErrors({}); };
 
     // Submit
     const handleSubmit = async () => {
-        if (!validateStep(3)) return;
-        setLoading(true);
+        if (!validateForm()) return;
+        setLoadingAction('submit');
         try {
             const r = await fetch('/api/bookings/feedback', {
                 method: 'POST',
@@ -78,17 +76,18 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
             });
             if (!r.ok) {
                 const data = await r.json();
-                setErrors(data.errors ?? { general: 'Submission failed. Please try again.' });
+                setErrors(data.errors ?? { general: data.error || 'Submission failed. Please try again.' });
                 return;
             }
             onDone();
         } finally {
-            setLoading(false);
+            setLoadingAction('none');
         }
     };
+
     // Skip
     const handleSkip = async () => {
-        setLoading(true);
+        setLoadingAction('skip');
         try {
             await fetch('/api/bookings/feedback', {
                 method: 'POST',
@@ -97,123 +96,94 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
             });
             onDone();
         } finally {
-            setLoading(false);
+            setLoadingAction('none');
         }
     };
 
-    const ProgressBar = () => (
-        <div className="flex items-center gap-2 mb-6">
-        {[1, 2, 3].map((s) => (
-            <div
-            key={s}
-            className={`h-1.5 flex-1 rounded-full transition-colors ${
-                s < step ? 'bg-green-500' : s === step ? 'bg-green-400' : 'bg-gray-200'
-            }`}
-            />
-        ))}
-        <span className="text-[10px] font-bold text-gray-400 whitespace-nowrap">Step {step} / 3</span>
-        </div>
-    );
-
     // Session summary
     const SessionSummary = () => (
-        <div className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs mb-5">
+        <div className="bg-white-hover border border-white-border rounded-xl px-4 py-3 grid grid-cols-2 gap-x-4 gap-y-2 mb-5">
             <div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Subject</span>
-                <span className="font-semibold text-gray-700">
+                <span className="text-xs font-bold uppercase tracking-wide text-text-white-light block">Subject</span>
+                <span className="mt-1 text-sm font-semibold text-text-primary">
                 {booking.subject_code}{booking.subject_name ? ` — ${booking.subject_name}` : ''}
                 </span>
             </div>
             <div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Mentor</span>
-                <span className="font-semibold text-gray-700">{booking.mentor_name}</span>
+                <span className="text-xs font-bold uppercase tracking-wide text-text-white-light block">Mentor</span>
+                <span className="mt-1 text-sm font-semibold text-text-primary">{booking.mentor_name}</span>
             </div>
             <div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Date</span>
-                <span className="font-semibold text-gray-700">{dateFormatted}</span>
+                <span className="text-xs font-bold uppercase tracking-wide text-text-white-light block">Date</span>
+                <span className="mt-1 text-sm font-semibold text-text-primary">{dateFormatted}</span>
             </div>
             <div className="min-w-0">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Topic</span>
-                <span className="font-semibold text-gray-700 truncate block" title={booking.topic}>{booking.topic}</span>
+                <span className="text-xs font-bold uppercase tracking-wide text-text-white-light block">Topic</span>
+                <span className="mt-1 text-sm font-semibold text-text-primary" title={booking.topic}>{booking.topic}</span>
             </div>
         </div>
     );
 
-    // Title
-    const modalTitle = phase === 'prompt' ? "Session Completed!" : "Feedback Form";
-    const modalSubtitle = phase === 'prompt' 
-        ? "Your enrichment session has ended. Help us improve by sharing your experience."
-        : `Step ${step} of 3 — Please rate your enrichment session experience.`;
     const renderFooter = () => {
         if (phase === 'prompt') {
             return (
-                <div className="flex flex-col gap-3 w-full">
-                    <button
-                        type="button"
-                        onClick={() => setPhase('form')}
-                        className="w-full py-2.5 rounded-xl text-sm font-bold bg-green-600 hover:bg-green-700 text-white transition flex items-center justify-center gap-2 shadow-sm"
-                    >
-                        <FaClipboardList className="text-lg" />
-                        Answer Feedback Form
-                    </button>
-                    <button
-                        type="button"
-                        onClick={handleSkip}
-                        disabled={loading}
-                        className="w-full py-2 rounded-xl text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition flex items-center justify-center gap-2 disabled:opacity-50"
-                    >
-                        {loading ? (
-                            <><FaSpinner className="animate-spin" /> Skipping...</>
-                        ) : (
-                            <><FaForwardStep /> Skip for now</>
-                        )}
-                    </button>
-                    <p className="text-[10px] text-gray-400 text-center leading-snug">
-                        Skipping will dismiss this prompt permanently for this session.<br />
-                        You will not be asked again for this specific session.
-                    </p>
+                <div>
+                    <div className="flex gap-3">
+                        <button
+                            type="button"
+                            onClick={handleSkip}
+                            disabled={loadingAction !== 'none'}
+                            className="flex-1 flex items-center justify-center px-4 py-2 text-sm font-semibold text-text-primary bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer transition"
+                        >
+                            {loadingAction === 'skip' ? (
+                                <>Skipping...</>
+                            ) : (
+                                <>Skip for now <FaForwardStep className="ml-2"/></>
+                            )}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setPhase('form')}
+                            className="flex-1 flex justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
+                        >
+                            Answer Feedback Form
+                        </button>
+                    </div>
+                    <div className="flex gap-3 justify-center mt-4">
+                        <p className="text-[10px] text-text-muted text-center leading-snug">
+                            Skipping will dismiss this form. You will not be asked again for this specific session.
+                        </p>
+                    </div>
                 </div>
             );
         }
 
-        // Footer form
         return (
             <div className="flex gap-3 w-full">
-                {step > 1 && (
-                    <button
-                        type="button"
-                        onClick={handleBack}
-                        disabled={loading}
-                        className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition disabled:opacity-50"
-                    >
-                        Back
-                    </button>
+                <button
+                    type="button"
+                    onClick={handleSkip}
+                    disabled={loadingAction !== 'none'}
+                    className="flex-1 flex items-center justify-center px-4 py-2 text-sm font-semibold text-text-primary bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer transition"
+                >
+                    {loadingAction === 'skip' ? (
+                        <>Skipping...</>
+                    ) : (
+                        <>Skip for now <FaForwardStep className="ml-2"/></>
                     )}
-
-                    {step < 3 && (
-                    <button
-                        type="button"
-                        onClick={handleNext}
-                        className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-green-600 hover:bg-green-700 text-white transition shadow-sm"
-                    >
-                        Continue
-                    </button>
+                </button>
+                <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={loadingAction !== 'none'}
+                    className="flex-1 flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
+                >
+                    {loadingAction == 'submit' ? (
+                        <>Submitting...</>
+                    ) : (
+                        <>Submit Feedback <MdSend className="ml-2"/></>
                     )}
-
-                    {step === 3 && (
-                    <button
-                        type="button"
-                        onClick={handleSubmit}
-                        disabled={loading}
-                        className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-green-600 hover:bg-green-700 text-white transition shadow-sm disabled:opacity-50 flex items-center justify-center gap-2"
-                    >
-                        {loading ? (
-                        <><FaSpinner className="animate-spin" /> Submitting...</>
-                        ) : (
-                        <><FaPaperPlane />Submit Feedback</>
-                        )}
-                    </button>
-                )}
+                </button>
             </div>
         );
     };
@@ -221,63 +191,47 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
     return (
         <CrudModal
             open={isOpen}
-            title={modalTitle}
-            subtitle={modalSubtitle}
+            title="Feedback Form"
+            subtitle="Your enrichment session has been completed! Help us improve our tutoring services by evaluating your experience."
             maxWidth="max-w-4xl"
             footer={renderFooter()}
         >
             <SessionSummary />
+            
             {phase === 'prompt' && (
-                <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                Your session has been completed! We'd love to hear how it went.
-                Your feedback helps improve the peer mentoring program.
-                <br /><br />
-                <span className="font-semibold text-gray-700">Would you like to answer the Feedback Form?</span>
-                {' '}It only takes a minute, and it's completely optional.
+                <p className="text-sm text-text-muted">
+                    <span className="font-extrabold text-text-primary">Would you like to answer the Feedback Form?</span> This will help us give students the highest quality of our tutoring services.
                 </p>
             )}
 
             {phase === 'form' && (
-                <div className="-mt-2">
-                    <ProgressBar />
-                    {/* Q1-5 */}
-                    {step === 1 && (
-                        <LikertStep
-                        questions={LIKERT_QUESTIONS.slice(0, 5)}
+                <div className="space-y-3 mt-2">
+                    
+                    {/* Q1-9 */}
+                    <LikertStep
+                        questions={LIKERT_QUESTIONS}
                         values={form as any}
                         onChange={setRating}
                         errors={errors}
-                        />
-                    )}
-
-                    {/* Q6–Q10 */}
-                    {step === 2 && (
-                        <div className="space-y-5">
-                        <LikertStep
-                            questions={LIKERT_QUESTIONS.slice(5, 9)}
-                            values={form as any}
-                            onChange={setRating}
-                            errors={errors}
-                        />
-                        <BoolStep
-                            question={BOOL_QUESTION}
-                            value={form.q10}
-                            onChange={(v) => { setForm((f) => ({ ...f, q10: v })); setErrors((e) => ({ ...e, q10: '' })); }}
-                            error={errors.q10}
-                        />
-                        </div>
-                    )}
+                    />
+                    
+                    {/* Q10 */}
+                    <BoolStep
+                        question={BOOL_QUESTION}
+                        value={form.q10}
+                        onChange={(v) => { setForm((f) => ({ ...f, q10: v })); setErrors((e) => ({ ...e, q10: '' })); }}
+                        error={errors.q10}
+                    />
 
                     {/* Feedback remarks */}
-                    {step === 3 && (
-                        <div>
-                        <p className="text-sm font-bold text-gray-700 mb-1 flex items-center gap-2">
-                            <FaPenToSquare className="text-green-500" />
+                    <div className="pt-2 mt-5">
+                        <p className="text-sm font-semibold mb-1 leading-tight flex items-center gap-1">
+                            <MdChat className="text-blue-700" />
                             Additional Remarks
-                            <span className="font-normal text-gray-400 text-xs">(optional)</span>
+                            <span className="text-text-white-light">(optional)</span>
                         </p>
-                        <p className="text-xs text-gray-400 mb-4">
-                            Any other thoughts about the session? This is optional — you can submit without filling this in.
+                        <p className="text-xs text-text-white-light mb-4">
+                            Any other thoughts about the session? You can submit without filling this in.
                         </p>
                         <textarea
                             value={form.feedback}
@@ -285,13 +239,12 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
                             placeholder="Share your thoughts about the session — what went well, what could be improved, or any other comments for your mentor..."
                             rows={5}
                             maxLength={2000}
-                            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400 resize-none transition-shadow"
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50 resize-y break-words overflow-y-auto"
                         />
-                        <p className="text-xs text-gray-400 mt-1 text-right">{form.feedback.length} / 2000</p>
+                        <p className="text-xs text-text-white-light mt-1 text-right">{form.feedback.length} / 2000</p>
                         {errors.feedback && <p className="mt-1 text-xs text-red-600">{errors.feedback}</p>}
                         {errors.general && <p className="mt-1 text-xs text-red-600">{errors.general}</p>}
-                        </div>
-                    )}
+                    </div>
                 </div>
             )}
         </CrudModal>
