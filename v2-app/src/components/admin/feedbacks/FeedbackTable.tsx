@@ -90,7 +90,7 @@ export default function FeedbackTable({
     <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
       <div className="flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4 p-5">
         <div>
-          <h2 className="font-bold text-lg">Anonymous Student Feedbacks</h2>
+          <h2 className="font-bold text-lg">Student Feedbacks</h2>
           <p className="text-sm text-text-white-light font-medium">
             {totalCount} Feedback{totalCount !== 1 ? "s" : ""} found
           </p>
@@ -113,7 +113,7 @@ export default function FeedbackTable({
           <select
             value={mentorFilter}
             onChange={(event) => onMentorFilter(event.target.value)}
-            className="w-[120px] h-[36px] rounded-lg border-white-border text-xs text-text-primary focus:border-text-brown-light focus:ring-text-brown-light/30 truncate"
+            className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] w-[160px] shadow-sm cursor-pointer truncate"
           >
             <option value="all">All Mentors</option>
             {mentorOptions.map((mentor) => (
@@ -126,7 +126,7 @@ export default function FeedbackTable({
           <select
             value={ratingFilter}
             onChange={(event) => onRatingFilter(event.target.value)}
-            className="w-[120px] h-[36px] rounded-lg border-white-border text-xs text-text-primary focus:border-text-brown-light focus:ring-text-brown-light/30"
+            className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] w-[110px] shadow-sm cursor-pointer"
           >
             <option value="all">All Ratings</option>
             {ratingOptions.map((rating) => (
