@@ -115,7 +115,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const sessionsToday        = result1.count
     const pendingRequestsCount = result2.count
-    const renderedHours        = result4.data ?? 0
+    const rawRenderedHours = result4.data ?? 0;
+    const totalMins = Math.round(rawRenderedHours * 60);
+    const hrs = Math.floor(totalMins / 60);
+    const mins = totalMins % 60;
+    const renderedHours = `${hrs}h ${mins}m`;
 
     // Average feedback calculation
     const feedbackData = result3.data ?? []
@@ -206,7 +210,7 @@ interface MentorDashboardProps {
     sessionsToday: number
     pendingRequests: number
     averageRatings: number
-    renderedHours: number
+    renderedHours: string
     sessionList: (SessionList & { isOpen: boolean })[]
     sessionsByDate: Record<string, (SessionList & { isOpen: boolean })[]>
     pendingSessions: (SessionList & { isOpen: boolean })[]

@@ -26,7 +26,7 @@ export default function StatCard({ label, value, icon, borderColor, iconColor, h
                 </h3>
                 <p className="text-3xl font-black text-text-primary truncate mt-1"
                    title={typeof value === 'string' ? value : undefined}>
-                    {label === 'Rendered Hours' ? `${value} hrs` : value}
+                    {label === 'Rendered Hours' ? `${value}` : value}
                 </p>
             </div>
         </div>
