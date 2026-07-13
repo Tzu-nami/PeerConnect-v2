@@ -145,8 +145,8 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       durationText: `${format12hrTime(`${String(start.getHours()).padStart(2,'0')}:${String(start.getMinutes()).padStart(2,'0')}`)} - ${format12hrTime(`${String(end.getHours()).padStart(2,'0')}:${String(end.getMinutes()).padStart(2,'0')}`)} (${formatHours(diffMinutes)})`,
       durationHours,
       mode: b.tutorial_modes?.mode ? cleanMode(b.tutorial_modes.mode) : '—',
-      yearLevel: sp?.year_levels?.name ?? 'N/A',
-      degreeProgram: sp?.degree_programs?.name ?? 'N/A',
+      yearLevel: group.map(bk => bk.student_profiles?.year_levels?.name ?? 'N/A').join(', '),
+      degreeProgram: group.map(bk => bk.student_profiles?.degree_programs?.name ?? 'N/A').join(', '),
       status: derivedStatus,
       is_open: b.mentor_id === null,
     };
@@ -174,13 +174,16 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
     // Stats
     const completedSessions = sessions.filter(s => s.status === 'completed');
     const totalRawHours = completedSessions.reduce((sum, s) => sum + (s.durationHours || 0), 0);
+    const totalMins = Math.round(totalRawHours * 60);
+    const hrs = Math.floor(totalMins / 60);
+    const mins = totalMins % 60
     const counts = {
         total: sessions.length,
         accepted: sessions.filter(s => s.status === 'accepted').length,
         pending: sessions.filter(s => s.status === 'pending').length,
         completed: completedSessions.length,
         totalRawHours: totalRawHours,
-        totalHours: totalRawHours.toFixed(2)
+        totalHours: `${hrs}h ${mins}m`
     };
 
     return { sessions, counts };

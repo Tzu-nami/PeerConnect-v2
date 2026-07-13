@@ -142,8 +142,6 @@ export default function EditSessionModal({ isOpen, session, onClose, onSuccess }
 
         {/* Hours */}
         <div className="pt-2">
-          <p className="text-[10px] font-bold text-text-white-light uppercase tracking-wider mb-3">Update Schedule</p>
-          
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-[10px] font-bold text-up-maroon uppercase tracking-wider block mb-1.5">Start Time</label>
@@ -167,7 +165,7 @@ export default function EditSessionModal({ isOpen, session, onClose, onSuccess }
           )}
 
           <div className={`mt-4 border rounded-lg px-4 py-3 flex items-center justify-between transition-colors ${computeNewDuration() === 'Invalid Range' ? 'bg-red-50 border-red-200' : 'bg-white-complement border-white-border'}`}>
-            <span className={`text-[10px] font-bold uppercase tracking-wider ${computeNewDuration() === 'Invalid Range' ? 'text-red-500' : 'text-text-white-light'}`}>New Duration</span>
+            <span className={`text-[10px] font-bold uppercase tracking-wider ${computeNewDuration() === 'Invalid Range' ? 'text-red-500' : 'text-text-primary'}`}>New Duration</span>
             <span className={`text-sm font-bold ${computeNewDuration() === 'Invalid Range' ? 'text-red-700' : 'text-up-maroon'}`}>{computeNewDuration()}</span>
           </div>
         </div>

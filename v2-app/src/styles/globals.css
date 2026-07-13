@@ -50,6 +50,7 @@
 
     /* Others */
     --color-white-complement:     #E6FEFF;
+    --color-white-complement-hover: #CFE4E5;
     --color-white-triadic:        #F8F2FA;
     --color-text-white-complement:#BCA613;
     --color-text-white-light:     #8D93A0;
@@ -131,6 +132,13 @@ select {
 
 select::picker-icon {
     display: none;
+}
+
+select::selectedcontent {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 select option {
