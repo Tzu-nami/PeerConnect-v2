@@ -70,7 +70,7 @@ export default function MentorHistoryStatsModal({
                     <div className="flex shrink-0 flex-col items-center gap-1">
                       <StatusBadge status={booking.status} />
                       {showHours && (
-                        <p className="text-lg font-bold text-up-maroon">
+                        <p className="text-lg font-semibold text-up-maroon">
                           {formatDuration(booking.durationHours)}
                         </p>
                       )}

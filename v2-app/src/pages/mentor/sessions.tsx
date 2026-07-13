@@ -113,10 +113,17 @@ function getDurationHours(startValue: string | null, endValue: string | null) {
 }
 
 function formatDuration(hours: number) {
-  if (hours === 0) return "-";
-  if (hours === 1) return "1 hr";
+  if (hours === 0) return "N/A";
 
-  return `${Number(hours.toFixed(2))} hrs`;
+  const totalMinutes = Math.round(hours * 60);
+  const hrs = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+
+  let durationString = "";
+  if (hrs > 0) durationString += `${hrs} hr${hrs !== 1 ? 's' : ''}`;
+  if (mins > 0) durationString += `${hrs > 0 ? ' ' : ''}${mins} min${mins !== 1 ? 's' : ''}`;
+
+  return durationString || "0 mins";
 }
 
 function cleanMode(mode: string) {
@@ -581,10 +588,14 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     (session) => session.status === "completed"
   );
 
-  const totalHours = completedSessions.reduce(
+  const totalRawHours = completedSessions.reduce(
     (sum, session) => sum + session.durationHours,
     0
   );
+
+  const totalMins = Math.round(totalRawHours * 60);
+  const statHrs = Math.floor(totalMins / 60);
+  const statMins = totalMins % 60;
 
   return {
     props: {
@@ -596,7 +607,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         pending: sessions.filter((session) => session.status === "pending")
           .length,
         completed: completedSessions.length,
-        totalHours: totalHours.toFixed(2),
+        totalHours: `${statHrs}h ${statMins}m`,
       },
         semesters,
         selectedSemesterId,
