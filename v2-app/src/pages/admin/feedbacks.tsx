@@ -20,7 +20,8 @@ export type SortKey =
   | "subject"
   | "topic"
   | "feedback"
-  | "rating";
+  | "rating"
+  | "time";
 
 export type SortDirection = "asc" | "desc";
 
@@ -111,6 +112,11 @@ function getSortValue(row: FeedbackRow, key: SortKey) {
 
   if (key === "rating") {
     return row.avg ?? -1;
+  }
+
+  if (key === "time") {
+    const isOnTime = row.q10 === true || row.q10 === "1" || row.q10 === 1;
+    return isOnTime ? 1 : 0;
   }
 
   return String(row[key] ?? "").toLowerCase();
@@ -286,7 +292,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
             .order("date_submitted", { ascending: false }),
         supabase
             .from("bookings")
-            .select("id, mentor_id, student_id, date, schedule_start, schedule_end, booking_status")
+            .select("id, mentor_id, student_id, topic, subjects ( code, name ), date, schedule_start, schedule_end, booking_status")
             .eq("semester_id", selectedSemesterId),
         supabase
             .from("mentor_profiles")
@@ -340,12 +346,14 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 
             return {
                 id: String(fb.id),
-                mentor_name: mentorName || "-",
-                subject: fb.subject || "-",
-                topic: fb.topic || "-",
+                mentor_name: mentorName || "N/A",
+                subject: booking?.subjects?.code 
+                    ? `${booking.subjects.code}` 
+                    : "N/A",
+                topic: booking?.topic || "N/A",
                 date_submitted: fb.date_submitted ?? null,
                 date_formatted: formatDate(fb.date_submitted ?? null),
-                feedback: fb.feedback || "-",
+                feedback: fb.feedback || "N/A",
                 has_feedback: !!fb.feedback,
                 avg,
                 avgLabel: getRatingLabel(avg),
