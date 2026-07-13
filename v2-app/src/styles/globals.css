@@ -134,7 +134,7 @@ select::picker-icon {
     display: none;
 }
 
-select::selectedcontent {
+selectedcontent {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;

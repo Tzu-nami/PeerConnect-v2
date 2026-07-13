@@ -12,6 +12,20 @@ type Props = {
   onSelect: (booking: StudentHistoryRow) => void;
 };
 
+function formatDuration(hours: number) {
+  if (hours === 0) return "N/A";
+
+  const totalMinutes = Math.round(hours * 60);
+  const hrs = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+
+  let durationString = "";
+  if (hrs > 0) durationString += `${hrs} hr${hrs !== 1 ? 's' : ''}`;
+  if (mins > 0) durationString += `${hrs > 0 ? ' ' : ''}${mins} min${mins !== 1 ? 's' : ''}`;
+
+  return durationString || "0 mins";
+}
+
 export default function StudentHistoryStatsModal({
   isOpen,
   title,
@@ -37,7 +51,7 @@ export default function StudentHistoryStatsModal({
                   key={booking.id}
                   type="button"
                   onClick={() => onSelect(booking)}
-                  className="w-full text-left rounded-lg border border-white-border bg-white px-4 py-3 hover:bg-white-hover transition cursor-pointer"
+                  className="w-full text-left rounded-lg border border-white-border bg-white-complement px-4 py-3 hover:bg-white-complement-hover transition cursor-pointer"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
@@ -54,16 +68,13 @@ export default function StudentHistoryStatsModal({
                     </div>
 
                     <div className="flex shrink-0 flex-col items-center gap-1">
-  <StatusBadge status={booking.status} />
-
-  {showHours && (
-    <p className="text-lg font-extrabold text-up-maroon">
-      {booking.durationHours === 1
-        ? "1 hr"
-        : `${Number(booking.durationHours.toFixed(2))} hrs`}
-    </p>
-  )}
-</div>
+                      <StatusBadge status={booking.status} />
+                      {showHours && (
+                        <p className="text-lg font-bold text-up-maroon">
+                          {formatDuration(booking.durationHours)}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </button>
               ))}

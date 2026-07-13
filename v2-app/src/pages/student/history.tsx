@@ -35,6 +35,9 @@ export type StudentHistoryRow = {
   status: string;
   durationHours: number;
   durationText: string;
+  group_ids: string[];
+  student: string;
+  studentNames: string;
 };
 
 type Props = {
@@ -92,10 +95,17 @@ function getDurationHours(startValue: string | null, endValue: string | null) {
 }
 
 function formatDuration(hours: number) {
-  if (hours === 0) return "-";
-  if (hours === 1) return "1 hr";
+  if (hours === 0) return "N/A";
 
-  return `${Number(hours.toFixed(2))} hrs`;
+  const totalMinutes = Math.round(hours * 60);
+  const hrs = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+
+  let durationString = "";
+  if (hrs > 0) durationString += `${hrs} hr${hrs !== 1 ? 's' : ''}`;
+  if (mins > 0) durationString += `${hrs > 0 ? ' ' : ''}${mins} min${mins !== 1 ? 's' : ''}`;
+
+  return durationString || "0 mins";
 }
 
 function getSortValue(row: StudentHistoryRow, key: StudentHistorySortKey) {
@@ -279,7 +289,7 @@ export default function StudentHistoryPage({ bookings, stats, semesters, selecte
       <StudentHistoryStatsModal
         isOpen={activeStatModal === "hours"}
         title="Total Hours"
-        subtitle={`${stats.totalHours} completed hour${stats.totalHours !== "1.00" ? "s" : ""}`}
+        subtitle={`${stats.totalHours} of completed sessions`}
         bookings={bookings.filter((booking) => booking.status === "completed")}
         showHours
         onClose={() => setActiveStatModal(null)}
@@ -323,17 +333,42 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     const { data: bookingRows } = await supabase
         .from("bookings")
         .select(`
-      id, topic, booking_status, date, schedule_start, schedule_end, mentor_id,
+      id, topic, booking_status, date, schedule_start, schedule_end, mentor_id, subject_id, group_id,
       subjects ( code, name ),
       mentor_profiles!mentor_id ( user_profiles ( firstName, lastName ) ),
+      student_profiles!student_id ( user_profiles ( firstName, lastName ) ), 
       tutorial_modes ( mode )
     `)
         .eq("student_id", studentProfile.id)
         .eq("semester_id", selectedSemesterId)
         .order("date", { ascending: false });
 
-  const bookings: StudentHistoryRow[] = (bookingRows ?? []).map(
-    (booking: any) => {
+  const bookings: StudentHistoryRow[] = await Promise.all(
+    (bookingRows ?? []).map(async (booking: any) => {
+      let group_ids = [String(booking.id)];
+      const currentUser = booking.student_profiles?.user_profiles;
+      const currentName = currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : "Unknown Student";
+      let allNames = [currentName];
+      if (booking.group_id) {
+        const { data: grouped } = await supabase
+          .from("bookings")
+          .select(`
+            id,
+            student_profiles!student_id (
+              user_profiles ( firstName, lastName )
+            )
+          `)
+          .eq("group_id", booking.group_id);
+
+        if (grouped && grouped.length > 0) {
+          group_ids = grouped.map((p) => String(p.id));
+          allNames = grouped.map((p: any) => {
+            const u = p.student_profiles?.user_profiles;
+            return u ? `${u.firstName} ${u.lastName}` : "Unknown Student";
+          });
+        }
+      }
+
       const startTime = formatTime(booking.schedule_start);
       const endTime = formatTime(booking.schedule_end);
       const durationHours = getDurationHours(
@@ -353,6 +388,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         subjectName: booking.subjects?.name ?? "-",
         topic: booking.topic ?? "-",
         mentor: mentorName,
+        student: group_ids.length > 1 ? `${group_ids.length} Students (Group)` : currentName,
+        studentNames: allNames.join(', '),
         date: formatDate(booking.date ?? null),
         rawDate: booking.date ?? "",
         rawTime: booking.schedule_start
@@ -362,19 +399,24 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         mode: booking.tutorial_modes?.mode ?? "-",
         status: booking.booking_status ?? "-",
         durationHours,
-        durationText: formatDuration(durationHours),
+        durationText: `${startTime} - ${endTime} (${formatDuration(durationHours)})`,
+        group_ids,
       };
-    }
+    })
   );
 
   const completedBookings = bookings.filter(
     (booking) => booking.status === "completed"
   );
 
-  const totalHours = completedBookings.reduce(
+  const totalRawHours = completedBookings.reduce(
     (sum, booking) => sum + booking.durationHours,
     0
   );
+
+  const totalMins = Math.round(totalRawHours * 60);
+  const statHrs = Math.floor(totalMins / 60);
+  const statMins = totalMins % 60;
 
   return {
     props: {
@@ -386,7 +428,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         completed: completedBookings.length,
         cancelled: bookings.filter((booking) => booking.status === "cancelled")
           .length,
-        totalHours: totalHours.toFixed(2),
+        totalHours: `${statHrs}h ${statMins}m`,
       },
         semesters,
         selectedSemesterId,
