@@ -90,7 +90,7 @@ export default function EditCourseModal({ isOpen, onClose, onSuccess, subject }:
                 footer={
                 <div className="flex gap-3">
                     <button onClick={onClose} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark transition cursor-pointer">Cancel</button>
-                    <button onClick={handleValidate} disabled={loading || !hasChanges || isValidating} className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
+                    <button onClick={handleValidate} disabled={loading || !hasChanges || isValidating} className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition">
                     {isValidating ? 'Validating...' : 'Save Changes'}
                     </button>
                 </div>

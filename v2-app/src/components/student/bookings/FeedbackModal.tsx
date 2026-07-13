@@ -144,7 +144,7 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
                         <button
                             type="button"
                             onClick={() => setPhase('form')}
-                            className="flex-1 flex justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
+                            className="flex-1 flex justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
                         >
                             Answer Feedback Form
                         </button>
@@ -176,7 +176,7 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
                     type="button"
                     onClick={handleSubmit}
                     disabled={loadingAction !== 'none'}
-                    className="flex-1 flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
+                    className="flex-1 flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
                 >
                     {loadingAction == 'submit' ? (
                         <>Submitting...</>

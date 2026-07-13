@@ -111,7 +111,7 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
             <button 
               onClick={handleValidate} 
               disabled={loading || !isFormComplete || isValidating}
-              className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
+              className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
             >
               {isValidating ? 'Validating...' : 'Add Subject'}
             </button>

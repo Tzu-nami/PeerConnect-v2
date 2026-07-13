@@ -62,7 +62,7 @@ export default function CourseTable({
                         ))}
                     </select>
                     <button onClick={onAddSubject} 
-                        className="flex gap-2 items-center text-white text-sm font-semibold px-4 py-2 rounded-lg bg-btn-brown hover:bg-btn-brown-hover shadow-md cursor-pointer transition">
+                        className="flex gap-2 items-center text-white text-sm font-semibold px-4 py-2 rounded-lg bg-btn-gray hover:bg-btn-gray-hover shadow-md cursor-pointer transition">
                         <MdLibraryAdd />
                         Add Subject
                     </button>
