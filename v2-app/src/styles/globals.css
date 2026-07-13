@@ -100,7 +100,7 @@ body {
 
 .loader {
     width: fit-content;
-    font-size: 60px;
+    font-size: clamp(24px, 6vw, 60px);
     font-family: 'Palatino Linotype', sans-serif;
     text-transform: uppercase;
     color: #0000;
