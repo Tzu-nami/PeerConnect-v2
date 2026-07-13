@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 .neq('id', id)
                 .single();
             if (existing) {
-                return res.status(409).json({ error: 'Subject code already exists.' });
+                return res.status(409).json({ error: 'Course code already exists.' });
             }
 
             const { error } = await supabase

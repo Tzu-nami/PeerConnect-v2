@@ -49,7 +49,7 @@ export default function StudentHistoryDetailModal({ booking, onClose }: Props) {
           <DetailItem label="Duration" value={booking.durationText} />
           <DetailItem label="Tutorial Mode" value={booking.mode} />
           <DetailItem label="Mentor" value={booking.mentor} />
-          <DetailItem label="Subject Code" value={booking.subject} />
+          <DetailItem label="Course Code" value={booking.subject} />
         </div>
 
         <div className="mt-5 pt-5 border-t border-white-border">

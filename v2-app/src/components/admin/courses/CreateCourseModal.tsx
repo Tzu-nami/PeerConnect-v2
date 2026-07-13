@@ -33,8 +33,8 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
 
   const handleValidate = async () => {
     const errs: Record<string, string> = {};
-    if (!form.code.trim()) errs.code = 'Subject code is required.';
-    if (!form.name.trim()) errs.name = 'Subject name is required.';
+    if (!form.code.trim()) errs.code = 'Course code is required.';
+    if (!form.name.trim()) errs.name = 'Course name is required.';
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       return;
@@ -50,7 +50,7 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
 
     if (existing) {
         if (existing.is_active) {
-            setErrors({ code: `This subject code already exists.` });
+            setErrors({ code: `This course code already exists.` });
             setIsValidating(false);
             return; 
         } else {
@@ -130,7 +130,7 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-[10px] font-bold text-text-white-light uppercase mb-1">Subject Code <span className="text-red-500">*</span></label>
+            <label className="block text-[10px] font-bold text-text-white-light uppercase mb-1">Course Code <span className="text-red-500">*</span></label>
             <input 
               type="text" 
               value={form.code} 
@@ -142,7 +142,7 @@ export default function CreateCourseModal({ isOpen, onClose, onSuccess }: Create
             {errors.code && <p className="mt-1 text-xs text-red-600">{errors.code}</p>}
           </div>
           <div>
-            <label className="block text-[10px] font-bold text-text-white-light uppercase mb-1">Subject Name <span className="text-red-500">*</span></label>
+            <label className="block text-[10px] font-bold text-text-white-light uppercase mb-1">Course Name <span className="text-red-500">*</span></label>
             <input 
               type="text" 
               value={form.name} 

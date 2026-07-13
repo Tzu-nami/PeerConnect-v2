@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             if (existing) {
                 if (existing.is_active) {
-                     return res.status(409).json({ error: 'Subject code already exists.' });
+                     return res.status(409).json({ error: 'Course code already exists.' });
                 } else {
                     const { error: updateError } = await supabase
                         .from('subjects')

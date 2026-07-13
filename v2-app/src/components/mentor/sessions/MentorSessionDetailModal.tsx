@@ -66,7 +66,7 @@ export default function MentorSessionDetailModal({ session, onClose }: Props) {
             <DetailItem label="Tutorial Mode" value={session.mode} />
             <DetailItem label={isGroup ? "Students" : "Student"} value={<FormatList text={session.studentNames} />} />
             <DetailItem label={isGroup ? "Emails" : "Email"} value={<FormatList text={session.emails} />} />
-            <DetailItem label="Subject Code" value={session.subject} />
+            <DetailItem label="Course Code" value={session.subject} />
             <DetailItem label="Subject Name" value={session.subjectName} />
             <DetailItem label={isGroup ? "Year Levels" : "Year Level"} value={<FormatList text={session.yearLevel} />} />
             <DetailItem label={isGroup ? "Degree Programs" : "Degree Program"} value={<FormatList text={session.degreeProgram} />} />
