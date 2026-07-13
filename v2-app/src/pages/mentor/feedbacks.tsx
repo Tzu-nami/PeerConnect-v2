@@ -181,7 +181,7 @@ export default function MentorFeedbacksPage({ feedbacks, semesters, selectedSeme
 
   return (
     <>
-      <div className="border-b border-cream-border">
+      <div className="border-b border-white-border">
         <h1 className="text-xl md:text-2xl xl:text-3xl font-extrabold tracking-tight text-up-maroon">
           Student Feedbacks
         </h1>

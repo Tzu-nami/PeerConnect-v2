@@ -188,8 +188,8 @@ export default function EditMentorModal({ isOpen, onClose, onSuccess, subjects, 
         onClose={onClose}
         footer={
           <div className="flex gap-3">
-            <button onClick={onClose} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer">Cancel</button>
-            <button onClick={handleConfirm} disabled={loading || !hasChanges}className="flex-1 px-4 py-2 text-sm font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">{loading ? 'Validating...' : 'Save Changes'}</button>
+            <button onClick={onClose} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer">Cancel</button>
+            <button onClick={handleConfirm} disabled={loading || !hasChanges}className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">{loading ? 'Validating...' : 'Save Changes'}</button>
           </div>
         }
       >

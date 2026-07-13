@@ -144,7 +144,7 @@ export default function TimePicker({ value, onChange, placeholder = "Select time
       <div
         onClick={handleToggle}
         className={`w-full border rounded-lg px-3 py-2 text-xs h-10 font-medium bg-white cursor-pointer flex items-center gap-2 transition select-none ${
-          open ? 'border border-2 border-cream-border focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon' : 'border-cream-border border'
+          open ? 'border border-2 border-white-border focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon' : 'border-white-border border'
         }`}
       >
         <div className={`w-6 h-6 rounded-md flex items-center justify-center text-[11px] shrink-0 transition ${open ? 'bg-red-50 text-up-maroon' : 'bg-gray-100 text-gray-500'}`}>
@@ -157,14 +157,14 @@ export default function TimePicker({ value, onChange, placeholder = "Select time
 
       {/* Time picker pop up */}
       {open && (
-        <div className="absolute bottom-[calc(100%+8px)] left-0 bg-white border border-cream-border rounded-xl shadow-xl z-[9999] p-4 w-56 animate-fade-down origin-bottom">
+        <div className="absolute bottom-[calc(100%+8px)] left-0 bg-white border border-white-border rounded-xl shadow-xl z-[9999] p-4 w-56 animate-fade-down origin-bottom">
           
           <div className="flex gap-2 mb-4">
             {(['AM', 'PM'] as const).map((p) => (
               <button
                 key={p} type="button" onClick={() => changePeriod(p)}
                 className={`flex-1 py-1.5 rounded-lg border text-xs font-bold text-center transition-all ${
-                  period === p ? 'bg-btn-brown border-slate-800 text-white shadow-sm' : 'bg-white border-gray-200 text-gray-500 hover:bg-cream-hover cursor-pointer'
+                  period === p ? 'bg-btn-brown border-slate-800 text-white shadow-sm' : 'bg-white border-gray-200 text-gray-500 hover:bg-white-hover cursor-pointer'
                 }`}
               >
                 {p}
@@ -176,8 +176,8 @@ export default function TimePicker({ value, onChange, placeholder = "Select time
             
             {/* Hour Column */}
             <div className="flex flex-col items-center gap-1.5">
-              <span className="text-[10px] font-bold text-text-brown uppercase">Hour</span>
-              <button type="button" onClick={() => changeHour('up')} className="w-8 h-6 rounded border border-gray-200 flex items-center justify-center text-text-brown hover:bg-cream-hover transition cursor-pointer">
+              <span className="text-[10px] font-bold text-text-primary uppercase">Hour</span>
+              <button type="button" onClick={() => changeHour('up')} className="w-8 h-6 rounded border border-gray-200 flex items-center justify-center text-text-primary hover:bg-white-hover transition cursor-pointer">
                 <FaChevronUp className="text-[10px]" />
               </button>
               
@@ -186,10 +186,10 @@ export default function TimePicker({ value, onChange, placeholder = "Select time
                 value={hourInput} 
                 onChange={(e) => setHourInput(e.target.value.replace(/\D/g, '').slice(-2))}
                 onBlur={handleHourBlur}
-                className="w-12 h-10 rounded-lg bg-white text-center text-sm font-bold text-text-brown border border-2 border-cream-border focus:outline-none focus:ring-2 focus:ring-up-maroon/30" 
+                className="w-12 h-10 rounded-lg bg-white text-center text-sm font-bold text-text-primary border border-2 border-white-border focus:outline-none focus:ring-2 focus:ring-up-maroon/30" 
               />
               
-              <button type="button" onClick={() => changeHour('down')} className="w-8 h-6 rounded border border-gray-200 flex items-center justify-center text-text-brown hover:bg-cream-hover transition cursor-pointer">
+              <button type="button" onClick={() => changeHour('down')} className="w-8 h-6 rounded border border-gray-200 flex items-center justify-center text-text-primary hover:bg-white-hover transition cursor-pointer">
                 <FaChevronDown className="text-[10px]" />
               </button>
             </div>
@@ -198,8 +198,8 @@ export default function TimePicker({ value, onChange, placeholder = "Select time
 
             {/* Minute Column */}
             <div className="flex flex-col items-center gap-1.5">
-              <span className="text-[10px] font-bold text-text-brown uppercase">Min</span>
-              <button type="button" onClick={() => changeMinute('up')} className="w-8 h-6 rounded border border-gray-200 flex items-center justify-center text-text-brown hover:bg-cream-hover transition cursor-pointer">
+              <span className="text-[10px] font-bold text-text-primary uppercase">Min</span>
+              <button type="button" onClick={() => changeMinute('up')} className="w-8 h-6 rounded border border-gray-200 flex items-center justify-center text-text-primary hover:bg-white-hover transition cursor-pointer">
                 <FaChevronUp className="text-[10px]" />
               </button>
               
@@ -208,10 +208,10 @@ export default function TimePicker({ value, onChange, placeholder = "Select time
                 value={minInput} 
                 onChange={(e) => setMinInput(e.target.value.replace(/\D/g, '').slice(-2))}
                 onBlur={handleMinBlur}
-                className="w-12 h-10 rounded-lg bg-white text-center text-sm font-bold text-text-brown border border-2 border-cream-border focus:outline-none focus:ring-2 focus:ring-up-maroon/30" 
+                className="w-12 h-10 rounded-lg bg-white text-center text-sm font-bold text-text-primary border border-2 border-white-border focus:outline-none focus:ring-2 focus:ring-up-maroon/30" 
               />
               
-              <button type="button" onClick={() => changeMinute('down')} className="w-8 h-6 rounded border border-gray-200 flex items-center justify-center text-text-brown hover:bg-cream-hover transition cursor-pointer">
+              <button type="button" onClick={() => changeMinute('down')} className="w-8 h-6 rounded border border-gray-200 flex items-center justify-center text-text-primary hover:bg-white-hover transition cursor-pointer">
                 <FaChevronDown className="text-[10px]" />
               </button>
             </div>

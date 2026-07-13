@@ -26,7 +26,7 @@ export default function MentorHistoryStatsModal({
       <div className="p-6">
         <div className="border-b border-white-border pb-4">
           <h2 className="text-2xl font-extrabold text-up-maroon">{title}</h2>
-          <p className="text-sm text-text-brown-light mt-1">{subtitle}</p>
+          <p className="text-sm text-text-white-light mt-1">{subtitle}</p>
         </div>
 
         <div className="mt-4 max-h-[420px] overflow-y-auto">
@@ -41,14 +41,14 @@ export default function MentorHistoryStatsModal({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="font-bold text-sm text-text-brown truncate">
+                      <p className="font-bold text-sm text-text-primary truncate">
                         {booking.subject} - {booking.topic}
                       </p>
-                      <p className="text-xs text-text-brown-light mt-1">
+                      <p className="text-xs text-text-white-light mt-1">
                         {booking.date} •{" "}
                         {showHours ? booking.durationText : booking.time}
                       </p>
-                      <p className="text-xs text-text-brown-light mt-1 truncate">
+                      <p className="text-xs text-text-white-light mt-1 truncate">
                         Mentor: {booking.mentor}
                       </p>
                     </div>
@@ -79,7 +79,7 @@ export default function MentorHistoryStatsModal({
           <button
             type="button"
             onClick={onClose}
-            className="w-full px-5 py-2 rounded-lg border border-white-border bg-white text-sm font-bold text-text-brown hover:bg-white-hover transition cursor-pointer"
+            className="w-full px-5 py-2 rounded-lg border border-white-border bg-white text-sm font-bold text-text-primary hover:bg-white-hover transition cursor-pointer"
           >
             Close
           </button>

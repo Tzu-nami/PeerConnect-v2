@@ -16,10 +16,10 @@ function DetailItem({
 }) {
   return (
     <div>
-      <p className="text-xs font-bold uppercase tracking-wide text-text-brown-light">
+      <p className="text-xs font-bold uppercase tracking-wide text-text-white-light">
         {label}
       </p>
-      <div className="mt-1 text-sm font-semibold text-text-brown">{value}</div>
+      <div className="mt-1 text-sm font-semibold text-text-primary">{value}</div>
     </div>
   );
 }
@@ -30,12 +30,12 @@ export default function MentorHistoryDetailModal({ booking, onClose }: Props) {
   return (
     <ModalBase isOpen={!!booking} onClose={onClose} maxWidth="max-w-xl">
       <div className="p-6">
-        <div className="flex items-start justify-between gap-4 border-b border-cream-border pb-4">
+        <div className="flex items-start justify-between gap-4 border-b border-white-border pb-4">
           <div>
             <h2 className="text-2xl font-extrabold text-up-maroon">
               Booking Details
             </h2>
-            <p className="text-sm text-text-brown-light mt-1">
+            <p className="text-sm text-text-white-light mt-1">
               {booking.subject} - {booking.topic}
             </p>
           </div>
@@ -52,11 +52,11 @@ export default function MentorHistoryDetailModal({ booking, onClose }: Props) {
           <DetailItem label="Subject Code" value={booking.subject} />
         </div>
 
-        <div className="mt-5 pt-5 border-t border-cream-border">
+        <div className="mt-5 pt-5 border-t border-white-border">
           <DetailItem label="Subject Name" value={booking.subjectName} />
         </div>
 
-        <div className="mt-5 pt-5 border-t border-cream-border">
+        <div className="mt-5 pt-5 border-t border-white-border">
           <DetailItem label="Topic" value={booking.topic} />
         </div>
 

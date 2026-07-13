@@ -18,7 +18,7 @@ function StepHeader({ n, label }: { n: number; label: React.ReactNode }) {
             <span className="w-4 h-4 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">
                 {n}
             </span>
-            <p className="text-xs font-bold pl-2.5 text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+            <p className="text-xs font-bold pl-2.5 text-text-white-light uppercase tracking-wider flex items-center gap-2">
                 {label}
             </p>
             <span className="text-red-500">*</span>
@@ -41,7 +41,7 @@ export default function DateTimeSelection({
                     onChange={(e) => {
                         updateField('date', e.target.value);
                     }}
-                    className={`w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-text-brown focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50`}
+                    className={`w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50`}
                 />
                 {(errors.date || dateError) && <p className="mt-1 text-xs text-red-600">{errors.date || dateError}</p>}
             </div>

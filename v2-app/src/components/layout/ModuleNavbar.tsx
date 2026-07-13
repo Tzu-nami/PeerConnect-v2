@@ -55,12 +55,12 @@ export default function ModuleNavbar({ userName, userFullName, userEmail, userAv
                     <Link href="/" className="text-white font-semibold">LRC <span className="text-up-yellow">PeerConnect</span></Link>
 
                     {menuOpen && (
-                        <div className="fixed top-[60px] md:top-[83px] left-0 right-0 z-40 bg-up-maroon border-t border-cream/10">
+                        <div className="fixed top-[60px] md:top-[83px] left-0 right-0 z-40 bg-up-maroon border-t border-white/10">
                             <ul className="flex flex-col px-6 py-2 list-none">
                                 {links.map((link) => (
                                     <li key={link.href}>
                                         <Link href={link.href} onClick={() => setMenuOpen(false)}
-                                              className="flex items-center gap-3 py-3 text-cream/75 hover:text-up-yellow-light border-b border-cream/10 text-xs tracking-widest uppercase">
+                                              className="flex items-center gap-3 py-3 text-white/75 hover:text-up-yellow-light border-b border-white/10 text-xs tracking-widest uppercase">
                                             {link.icon}
                                             {link.label}
                                         </Link>

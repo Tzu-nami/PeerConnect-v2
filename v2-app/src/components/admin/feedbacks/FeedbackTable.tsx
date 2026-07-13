@@ -38,13 +38,13 @@ function SortIcon({
   sortDir: SortDirection;
 }) {
   if (sortCol !== col) {
-    return <MdUnfoldMore className="text-text-brown-light" />;
+    return <MdUnfoldMore className="text-text-white-light" />;
   }
 
   return sortDir === "asc" ? (
-    <MdArrowUpward className="text-text-brown" />
+    <MdArrowUpward className="text-text-primary" />
   ) : (
-    <MdArrowDownward className="text-text-brown" />
+    <MdArrowDownward className="text-text-primary" />
   );
 }
 
@@ -68,7 +68,7 @@ export default function FeedbackTable({
   onSemesterChange
 }: FeedbackTableProps) {
   const headerClass =
-    "flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer";
+    "flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer";
 
   function sortableHeader(label: string, col: SortKey) {
     return (
@@ -76,8 +76,8 @@ export default function FeedbackTable({
         onClick={() => onSort(col)}
         className={`${headerClass} ${
           sortCol === col
-            ? "font-extrabold text-text-brown"
-            : "font-bold text-text-brown-light"
+            ? "font-extrabold text-text-primary"
+            : "font-bold text-text-white-light"
         }`}
       >
         {label}
@@ -87,11 +87,11 @@ export default function FeedbackTable({
   }
 
   return (
-    <div className="rounded-xl shadow-md border border-cream-border mt-5">
+    <div className="rounded-xl shadow-md border border-white-border mt-5">
       <div className="flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4 p-5">
         <div>
           <h2 className="font-bold text-lg">Anonymous Student Feedbacks</h2>
-          <p className="text-sm text-text-brown-light font-medium">
+          <p className="text-sm text-text-white-light font-medium">
             {totalCount} Feedback{totalCount !== 1 ? "s" : ""} found
           </p>
         </div>
@@ -113,7 +113,7 @@ export default function FeedbackTable({
           <select
             value={mentorFilter}
             onChange={(event) => onMentorFilter(event.target.value)}
-            className="h-[36px] rounded-lg border-cream-border text-xs text-text-brown focus:border-text-brown-light focus:ring-text-brown-light/30"
+            className="h-[36px] rounded-lg border-white-border text-xs text-text-primary focus:border-text-brown-light focus:ring-text-brown-light/30"
           >
             <option value="all">All Mentors</option>
             {mentorOptions.map((mentor) => (
@@ -126,7 +126,7 @@ export default function FeedbackTable({
           <select
             value={ratingFilter}
             onChange={(event) => onRatingFilter(event.target.value)}
-            className="h-[36px] rounded-lg border-cream-border text-xs text-text-brown focus:border-text-brown-light focus:ring-text-brown-light/30"
+            className="h-[36px] rounded-lg border-white-border text-xs text-text-primary focus:border-text-brown-light focus:ring-text-brown-light/30"
           >
             <option value="all">All Ratings</option>
             {ratingOptions.map((rating) => (
@@ -138,16 +138,16 @@ export default function FeedbackTable({
 
           <button
             onClick={onResetFilters}
-            className="h-[36px] px-3 rounded-lg border border-cream-border text-xs font-bold text-text-brown-light hover:bg-cream-dark transition-colors cursor-pointer"
+            className="h-[36px] px-3 rounded-lg border border-white-border text-xs font-bold text-text-white-light hover:bg-white-dark transition-colors cursor-pointer"
           >
             Reset
           </button>
         </div>
       </div>
 
-      <div className="border-t border-cream-border overflow-auto">
+      <div className="border-t border-white-border overflow-auto">
         <table className="w-full min-w-[980px] text-left text-sm table-fixed">
-          <thead className="border-b border-cream-border bg-cream-dark">
+          <thead className="border-b border-white-border bg-white-dark">
             <tr>
               <th className="px-5 py-3 w-[15%]">
                 {sortableHeader("Date", "date")}
@@ -183,7 +183,7 @@ export default function FeedbackTable({
                 ))
             ) : (
                 <tr>
-                    <td colSpan={6} className="text-center py-12 text-sm text-text-brown-light italic">
+                    <td colSpan={6} className="text-center py-12 text-sm text-text-white-light italic">
                         <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
                     </td>
                 </tr>

@@ -24,7 +24,7 @@ export default function SessionStatsModal({
       maxWidth="max-w-xl"
       footer={
         <button onClick={onClose}
-                className="w-full px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-cream-border rounded-lg hover:bg-cream-dark cursor-pointer transition">
+                className="w-full px-4 py-2 text-sm font-semibold text-slate-600 bg-white border border-white-border rounded-lg hover:bg-white-dark cursor-pointer transition">
             Close
         </button>
       }>

@@ -14,22 +14,22 @@ export default function SubjectChecklist({ subjects, selected, onChange, error }
 
     return (
         <div>
-            <div className="border border-cream-border bg-cream-dark rounded-xl overflow-hidden">
-                <div className="max-h-44 overflow-y-auto custom-scrollbar divide-y divide-cream-dark bg-white">
+            <div className="border border-white-border bg-white-dark rounded-xl overflow-hidden">
+                <div className="max-h-44 overflow-y-auto custom-scrollbar divide-y divide-white-dark bg-white">
                     {subjects.length === 0 ? (
-                        <p className="text-xs text-text-brown text-center py-4">No subjects yet. Please add a subject first.</p>
+                        <p className="text-xs text-text-primary text-center py-4">No subjects yet. Please add a subject first.</p>
                     ) : subjects.map((s) => (
-                        <div key={s.id} className="flex items-center px-4 hover:bg-cream-hover">
+                        <div key={s.id} className="flex items-center px-4 hover:bg-white-hover">
                             <input 
                                 type="checkbox"
                                 id={`subject-${s.id}`}
                                 checked={selected.includes(s.id)}
                                 onChange={() => toggle(s.id)}
-                                className="rounded border-cream-border text-btn-brown focus:ring-btn-brown w-4 h-4 cursor-pointer flex-shrink-0" 
+                                className="rounded border-white-border text-btn-brown focus:ring-btn-brown w-4 h-4 cursor-pointer flex-shrink-0" 
                             />
                             <label htmlFor={`subject-${s.id}`} className="flex items-center gap-3 ml-3 py-2.5 cursor-pointer flex-1">
-                                <span className="text-xs font-bold text-text-brown w-20">{s.code}</span>
-                                <span className="text-xs text-text-brown-light">{s.name}</span>
+                                <span className="text-xs font-bold text-text-primary w-20">{s.code}</span>
+                                <span className="text-xs text-text-white-light">{s.name}</span>
                             </label>
                         </div>
                     ))}

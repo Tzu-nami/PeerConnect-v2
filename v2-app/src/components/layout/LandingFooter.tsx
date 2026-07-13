@@ -25,12 +25,12 @@ export default function LandingFooter({ userRole }: { userRole: string | null })
     ];
 
     return (
-        <div className="text-cream/60 bg-up-maroon-dark px-4 sm:px-12 lg:px-20 py-8 mt-auto">
+        <div className="text-white/60 bg-up-maroon-dark px-4 sm:px-12 lg:px-20 py-8 mt-auto">
             <div className="flex flex-col lg:flex-row justify-between mb-7 gap-8">
                 {/* Left side */}
                 <div className="flex flex-col gap-3 max-w-sm">
                     <Link href={logoHref}
-                          className="flex items-center font-heading font-bold text-lg sm:text-xl text-cream tracking-widest">
+                          className="flex items-center font-heading font-bold text-lg sm:text-xl text-white tracking-widest">
                         <FaGraduationCap className="mr-3 w-5 h-5 sm:w-7 sm:h-7"/>
                         Peer<span className="text-up-yellow">Connect</span>
                     </Link>
@@ -39,11 +39,11 @@ export default function LandingFooter({ userRole }: { userRole: string | null })
                     </div>
                     <div className="flex items-center gap-3">
                         <Link href="https://www.facebook.com/lrc.upbaguio" target="_blank" rel="noopener noreferrer"
-                              className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-cream/20 hover:bg-cream/10 hover:text-cream transition-colors">
+                              className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-white/20 hover:bg-white/10 hover:text-white transition-colors">
                             <FaFacebook size={16}/>
                         </Link>
                         <Link href="https://x.com/lrc_upbaguio" target="_blank" rel="noopener noreferrer"
-                              className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-cream/20 hover:bg-cream/10 hover:text-cream transition-colors">
+                              className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-white/20 hover:bg-white/10 hover:text-white transition-colors">
                             <FaXTwitter size={16}/>
                         </Link>
                     </div>
@@ -60,7 +60,7 @@ export default function LandingFooter({ userRole }: { userRole: string | null })
                                 return (
                                     <li key={link.name}>
                                         <Link href={link.href}
-                                              className={`hover:text-cream transition-colors ${isActive ? 'text-up-yellow-light' : ''}`}>
+                                              className={`hover:text-white transition-colors ${isActive ? 'text-up-yellow-light' : ''}`}>
                                             {link.name}
                                         </Link>
                                     </li>
@@ -76,20 +76,20 @@ export default function LandingFooter({ userRole }: { userRole: string | null })
                             <>
                                 {shouldShowBookNow && (
                                     <>
-                                        <Link href={`/${userRole}/bookings`} className="hover:text-cream transition-colors">
+                                        <Link href={`/${userRole}/bookings`} className="hover:text-white transition-colors">
                                             Book a Session
                                         </Link>
-                                        <Link href={`/${userRole}/history`} className="hover:text-cream transition-colors">
+                                        <Link href={`/${userRole}/history`} className="hover:text-white transition-colors">
                                             View bookings
                                         </Link>
                                     </>
                                 )}
-                                <Link href={`/${userRole}/dashboard`} className="hover:text-cream transition-colors">
+                                <Link href={`/${userRole}/dashboard`} className="hover:text-white transition-colors">
                                     Dashboard
                                 </Link>
                             </>
                         ) : (
-                            <Link href="/login" className="hover:text-cream transition-colors">
+                            <Link href="/login" className="hover:text-white transition-colors">
                                 Log In
                             </Link>
                         )}
@@ -109,7 +109,7 @@ export default function LandingFooter({ userRole }: { userRole: string | null })
                         <div>
                             <Link href="https://mail.google.com/mail/?view=cm&fs=1&to=lrc.upbaguio@up.edu.ph"
                                   target="_blank" rel="noopener noreferrer"
-                                  className="flex items-center gap-2 hover:text-cream transition-colors">
+                                  className="flex items-center gap-2 hover:text-white transition-colors">
                                 <IoMailOutline />
                                 lrc.upbaguio@up.edu.ph
                             </Link>
@@ -123,7 +123,7 @@ export default function LandingFooter({ userRole }: { userRole: string | null })
             </div>
 
             {/* Bottom row */}
-            <div className="flex flex-col sm:flex-row justify-between border-t border-cream/20 text-xs pt-5 gap-2">
+            <div className="flex flex-col sm:flex-row justify-between border-t border-white/20 text-xs pt-5 gap-2">
                 <div>&copy; {new Date().getFullYear()} LRC PeerConnect · University of the Philippines Baguio. All rights reserved.
                 </div>
             </div>

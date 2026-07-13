@@ -21,23 +21,23 @@ export default function MentorSessionsTableRow({ session, onView, onEdit, onCanc
       className="border-t border-white-border hover:bg-white-hover transition cursor-pointer group"
     >
       <td className="px-5 py-4 align-middle">
-        <p className="font-bold text-sm text-text-brown truncate">
+        <p className="font-bold text-sm text-text-primary truncate">
           {session.date}
         </p>
-        <p className="text-text-brown-light text-xs truncate mt-0.5">
+        <p className="text-text-white-light text-xs truncate mt-0.5">
           {session.status === "completed" ? session.durationText : session.time}
         </p>
       </td>
 
       <td className="px-5 py-4 align-middle">
         <p
-          className="font-bold text-sm text-text-brown truncate"
+          className="font-bold text-sm text-text-primary truncate"
           title={session.studentNames}
         >
           {session.student}
         </p>
         <p
-          className="text-text-brown-light text-xs truncate mt-0.5"
+          className="text-text-white-light text-xs truncate mt-0.5"
           title={session.emails}
         >
           {session.email}
@@ -46,20 +46,20 @@ export default function MentorSessionsTableRow({ session, onView, onEdit, onCanc
 
       <td className="px-5 py-4 align-middle">
         <p
-          className="font-bold text-sm text-text-brown truncate"
+          className="font-bold text-sm text-text-primary truncate"
           title={session.subject}
         >
           {session.subject}
         </p>
         <p
-          className="text-text-brown-light text-xs truncate mt-0.5"
+          className="text-text-white-light text-xs truncate mt-0.5"
           title={session.topic}
         >
           {session.topic}
         </p>
       </td>
 
-      <td className="px-5 py-4 align-middle text-sm text-text-brown-light truncate">
+      <td className="px-5 py-4 align-middle text-sm text-text-white-light truncate">
         {session.mode}
       </td>
 

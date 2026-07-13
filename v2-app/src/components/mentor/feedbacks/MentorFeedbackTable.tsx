@@ -34,12 +34,12 @@ function SortIcon({
   sortCol: MentorFeedbackSortKey;
   sortDir: SortDirection;
 }) {
-  if (sortCol !== col) return <MdUnfoldMore className="text-text-brown-light" />;
+  if (sortCol !== col) return <MdUnfoldMore className="text-text-white-light" />;
 
   return sortDir === "asc" ? (
-    <MdArrowUpward className="text-text-brown" />
+    <MdArrowUpward className="text-text-primary" />
   ) : (
-    <MdArrowDownward className="text-text-brown" />
+    <MdArrowDownward className="text-text-primary" />
   );
 }
 
@@ -64,8 +64,8 @@ export default function MentorFeedbackTable({
     <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
       <div className="flex flex-wrap gap-4 justify-between items-center p-5">
         <div>
-          <h2 className="font-bold text-lg text-text-brown">All Feedbacks</h2>
-          <p className="text-sm text-text-brown-light font-medium">
+          <h2 className="font-bold text-lg text-text-primary">All Feedbacks</h2>
+          <p className="text-sm text-text-white-light font-medium">
             {totalCount} Feedback{totalCount !== 1 ? "s" : ""} found
           </p>
         </div>
@@ -88,7 +88,7 @@ export default function MentorFeedbackTable({
             <select
               value={subjectFilter}
               onChange={(event) => onSubjectFilter(event.target.value)}
-              className="appearance-none px-4 py-2 pr-10 text-xs font-medium text-text-brown border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] shadow-sm cursor-pointer"
+              className="appearance-none px-4 py-2 pr-10 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[150px] shadow-sm cursor-pointer"
             >
               <option value="all">All Subjects</option>
               {subjectOptions.map((subject) => (
@@ -102,7 +102,7 @@ export default function MentorFeedbackTable({
           <button
             type="button"
             onClick={onResetFilters}
-            className="px-4 py-2 text-xs font-bold text-text-brown-light border border-white-border rounded-lg bg-white hover:bg-white-hover transition h-[36px] shadow-sm cursor-pointer"
+            className="px-4 py-2 text-xs font-bold text-text-white-light border border-white-border rounded-lg bg-white hover:bg-white-hover transition h-[36px] shadow-sm cursor-pointer"
           >
             Reset
           </button>
@@ -116,10 +116,10 @@ export default function MentorFeedbackTable({
               <th className="px-5 py-3 w-[14%]">
                 <button
                   onClick={() => onSort("date")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "date"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-white-light"
                   }`}
                 >
                   Date
@@ -130,10 +130,10 @@ export default function MentorFeedbackTable({
               <th className="px-5 py-3 w-[14%]">
                 <button
                   onClick={() => onSort("subject")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "subject"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-white-light"
                   }`}
                 >
                   Subject
@@ -148,10 +148,10 @@ export default function MentorFeedbackTable({
               <th className="px-5 py-3 w-[22%]">
                 <button
                   onClick={() => onSort("topic")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${
+                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
                     sortCol === "topic"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-white-light"
                   }`}
                 >
                   Topic
@@ -159,17 +159,17 @@ export default function MentorFeedbackTable({
                 </button>
               </th>
 
-              <th className="px-5 py-3 w-[30%] text-xs font-bold text-text-brown-light uppercase tracking-wider">
+              <th className="px-5 py-3 w-[30%] text-xs font-bold text-text-white-light uppercase tracking-wider">
                 Feedback
               </th>
 
               <th className="px-5 py-3 w-[20%] text-center">
                 <button
                   onClick={() => onSort("rating")}
-                  className={`flex items-center justify-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer mx-auto ${
+                  className={`flex items-center justify-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer mx-auto ${
                     sortCol === "rating"
-                      ? "font-extrabold text-text-brown"
-                      : "font-bold text-text-brown-light"
+                      ? "font-extrabold text-text-primary"
+                      : "font-bold text-text-white-light"
                   }`}
                 >
                   Rating
@@ -194,7 +194,7 @@ export default function MentorFeedbackTable({
               ))
           ) : (
               <tr>
-                  <td colSpan={5} className="text-center py-12 text-sm text-text-brown-light italic">
+                  <td colSpan={5} className="text-center py-12 text-sm text-text-white-light italic">
                       <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
                   </td>
               </tr>

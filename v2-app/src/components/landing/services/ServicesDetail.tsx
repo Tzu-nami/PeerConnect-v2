@@ -55,7 +55,7 @@ interface Service {
 
 function ServiceRow({ service }: { service: Service }) {
     const image = (
-        <div className="relative w-full aspect-[16/9] bg-cream-dark border border-cream-border max-h-64 lg:max-h-none">
+        <div className="relative w-full aspect-[16/9] bg-white-dark border border-white-border max-h-64 lg:max-h-none">
             <Image
                 src={service.image ?? ''} alt={service.imageAlt}
                 fill className="object-cover" sizes="(min-width: 1024px) 45vw, 100vw"/>
@@ -74,9 +74,9 @@ function ServiceRow({ service }: { service: Service }) {
                 {service.bullets.map((bullet, index) => (
                     <li
                         key={bullet}
-                        className={`${index === 0 ? "border-t border-cream-border pt-3" : ""} ${
+                        className={`${index === 0 ? "border-t border-white-border pt-3" : ""} ${
                             index === service.bullets.length - 1
-                                ? "border-b border-cream-border pb-3"
+                                ? "border-b border-white-border pb-3"
                                 : ""
                         }`}>
                         {bullet}
@@ -185,7 +185,7 @@ export default function ServicesDetail({ images }: ServicesDetailProps) {
                     </h1>
                 </div>
 
-                <div className="text-text-brown leading-7 border-l-0 md:border-l border-up-green pl-0 md:pl-5 self-center animate-fade-up">
+                <div className="text-text-primary leading-7 border-l-0 md:border-l border-up-green pl-0 md:pl-5 self-center animate-fade-up">
                     The LRC offers three types of peer mentoring sessions led by trained
                     student-mentors ready to help you succeed.
 
@@ -194,7 +194,7 @@ export default function ServicesDetail({ images }: ServicesDetailProps) {
                             <a
                                 key={service.id}
                                 href={`#${service.id}`}
-                                className="border border-text-brown rounded-[40px] px-4 py-1 hover:bg-cream-dark transition-colors">
+                                className="border border-text-brown rounded-[40px] px-4 py-1 hover:bg-white-dark transition-colors">
                                 {service.title}
                             </a>
                         ))}
@@ -202,14 +202,14 @@ export default function ServicesDetail({ images }: ServicesDetailProps) {
                 </div>
             </section>
 
-            <section className="px-6 md:px-20 xl:px-48 border-t border-cream-border pt-12 animate-fade-up [animation-delay:250ms]">
+            <section className="px-6 md:px-20 xl:px-48 border-t border-white-border pt-12 animate-fade-up [animation-delay:250ms]">
                 <div className="flex flex-col gap-12">
                     {services.map((service, index) => (
                         <div key={service.id} className="flex flex-col gap-12">
                             <ServiceRow service={service} />
 
                             {index < services.length - 1 && (
-                                <hr className="border-cream-border" />
+                                <hr className="border-white-border" />
                             )}
                         </div>
                     ))}

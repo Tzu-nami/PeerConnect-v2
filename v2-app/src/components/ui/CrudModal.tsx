@@ -28,7 +28,7 @@ export default function CrudModal({
             maxWidth={maxWidth}
         >
             {/* Header */}
-            <div className="flex-shrink-0 bg-white flex items-center justify-between px-6 py-4 border-b border-cream-border">
+            <div className="flex-shrink-0 bg-white flex items-center justify-between px-6 py-4 border-b border-white-border">
                 <div>
                     <h2 className="text-lg font-extrabold text-up-maroon">{title}</h2>
                     {subtitle && <p className="text-sm text-slate-500 mt-0.5">{subtitle}</p>}
@@ -45,7 +45,7 @@ export default function CrudModal({
 
             {/* Footer */}
             {footer && (
-                <div className="px-6 py-4 bg-white border-cream-border border-t flex-shrink-0 gap-3">
+                <div className="px-6 py-4 bg-white border-white-border border-t flex-shrink-0 gap-3">
                     {footer}
                 </div>
             )}

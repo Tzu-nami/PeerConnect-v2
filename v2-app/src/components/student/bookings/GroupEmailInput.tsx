@@ -43,7 +43,7 @@ export default function GroupEmailInput({ emails, onChange, modeName, error }: G
     const meetsMin = filled >= min;
 
     return (
-        <div className="mt-3 p-4 bg-cream-complement border border-cream-border rounded-lg animate-[slide-down_0.6s_ease-out]">
+        <div className="mt-3 p-4 bg-white-complement border border-white-border rounded-lg animate-[slide-down_0.6s_ease-out]">
             <div className="flex items-center justify-between mb-1">
                 <label className="text-sm font-bold text-blue-900">Group Members (UP Mails)</label>
                 <span className={`text-[10px] font-medium px-2 py-1 rounded ${meetsMin && filled <= max ? 'bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'}`}>
@@ -61,7 +61,7 @@ export default function GroupEmailInput({ emails, onChange, modeName, error }: G
                         type="email"
                         value={email}
                         onChange={(e) => updateEmail(index, e.target.value)}
-                        className="w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50"
                         placeholder="student@up.edu.ph"
                     />
                     {emails.length > min && (

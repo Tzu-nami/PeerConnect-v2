@@ -16,7 +16,7 @@ function StepHeader({ n, label }: { n: number; label: React.ReactNode }) {
             <span className="w-4 h-4 rounded-full bg-up-maroon text-white text-xs flex items-center justify-center">
                 {n}
             </span>
-            <p className="text-xs font-bold pl-2.5 text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+            <p className="text-xs font-bold pl-2.5 text-text-white-light uppercase tracking-wider flex items-center gap-2">
                 {label}
             </p>
             <span className="text-red-500">*</span>
@@ -75,17 +75,17 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
             setLoading(false);
         }
     };
-    const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50";
+    const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50";
     return (
-        <div className="bg-cream rounded-xl border border-cream-border overflow-hidden mb-7">
+        <div className="bg-white rounded-xl border border-white-border overflow-hidden mb-7">
             <button
                 onClick={() => setOpen((v) => !v)}
                 type="button"
-                className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-cream-hover transition-colors cursor-pointer"
+                className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-white-hover transition-colors cursor-pointer"
             >
-                <span className="font-bold text-lg text-text-brown">Student Profile</span>
+                <span className="font-bold text-lg text-text-primary">Student Profile</span>
                     <MdKeyboardArrowDown
-                    className={`w-6 h-6 text-text-brown-light transition-transform duration-200 ${open ? 'rotate-180' : ''}`} 
+                    className={`w-6 h-6 text-text-white-light transition-transform duration-200 ${open ? 'rotate-180' : ''}`} 
                 />
             </button>
 
@@ -114,7 +114,7 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                     }
                                 }}
                                 placeholder="e.g. 2023-00000"
-                                className={`${inputClass} text-text-brown`}
+                                className={`${inputClass} text-text-primary`}
                             />
                             {errors.student_num && <p className="mt-1 text-xs text-red-600">{errors.student_num}</p>}
                         </div>
@@ -130,8 +130,8 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                         onClick={() => handleCollegeChange(c.id)}
                                         className={`py-2 px-2 text-xs font-bold rounded-lg border transition-colors ${
                                             form.college_id === c.id
-                                                ? 'bg-cream-complement text-text-brown border-cream-dot shadow-sm'
-                                                : 'bg-white text-text-brown border-cream-border hover:bg-cream-hover disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-cream'
+                                                ? 'bg-white-complement text-text-primary border-white-dot shadow-sm'
+                                                : 'bg-white text-text-primary border-white-border hover:bg-white-hover disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-white'
                                         }`}
                                     >
                                         {c.code}
@@ -147,7 +147,7 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                 value={form.degreeProgram_id}
                                 disabled={!form.college_id || locked}
                                 onChange={(e) => { setForm((f) => ({ ...f, degreeProgram_id: e.target.value })); setErrors((err) => ({ ...err, degreeProgram_id: '' })); }}
-                                className={`${inputClass} ${!form.degreeProgram_id ? 'text-slate-400' : 'text-text-brown'}`}
+                                className={`${inputClass} ${!form.degreeProgram_id ? 'text-slate-400' : 'text-text-primary'}`}
                             >
                                 <option value="" disabled>--- Degree Program ---</option>
                                 {filteredDegrees.map((d) => (
@@ -176,8 +176,8 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                             }}
                                             className={`py-2 px-1 text-xs font-bold rounded-lg border transition-colors ${
                                                 String(form.yearLevel_id) === String(y.id)
-                                                    ? 'bg-cream-complement text-text-brown border-cream-dot shadow-sm'
-                                                    : 'bg-white text-text-brown border-cream-border hover:bg-cream-hover disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-cream'
+                                                    ? 'bg-white-complement text-text-primary border-white-dot shadow-sm'
+                                                    : 'bg-white text-text-primary border-white-border hover:bg-white-hover disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-white'
                                             }`}
                                         >
                                             {displayName}
@@ -193,7 +193,7 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                 <button
                                 type="button"
                                 onClick={() => setLocked(false)}
-                                className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md"
+                                className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md"
                                 >
                                     Edit Profile
                                 </button>
@@ -202,7 +202,7 @@ export default function StudentProfilePanel({ profile, colleges, degreePrograms,
                                 type="button"
                                 onClick={handleSave}
                                 disabled={!hasChanges || !isComplete || loading}
-                                className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-cream bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md"
+                                className="w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer py-2.5 px-4 rounded-lg text-sm transition-colors font-semibold text-white bg-btn-brown hover:bg-btn-brown-hover rounded-lg shadow-md"
                                 >
                                     {loading ? (
                                         <>

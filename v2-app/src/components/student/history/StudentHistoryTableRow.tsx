@@ -11,26 +11,26 @@ export default function StudentHistoryTableRow({ booking, onView }: Props) {
   return (
     <tr
       onClick={() => onView(booking)}
-      className="border-t border-cream-border hover:bg-cream-hover transition cursor-pointer group"
+      className="border-t border-white-border hover:bg-white-hover transition cursor-pointer group"
     >
       <td className="px-5 py-4 align-middle">
-        <p className="font-bold text-sm text-text-brown truncate">
+        <p className="font-bold text-sm text-text-primary truncate">
           {booking.date}
         </p>
-        <p className="text-text-brown-light text-xs truncate mt-0.5">
+        <p className="text-text-white-light text-xs truncate mt-0.5">
           {booking.status === "completed" ? booking.durationText : booking.time}
         </p>
       </td>
 
       <td className="px-5 py-4 align-middle">
         <p
-          className="font-bold text-sm text-text-brown truncate"
+          className="font-bold text-sm text-text-primary truncate"
           title={booking.subject}
         >
           {booking.subject}
         </p>
         <p
-          className="text-text-brown-light text-xs truncate mt-0.5"
+          className="text-text-white-light text-xs truncate mt-0.5"
           title={booking.topic}
         >
           {booking.topic}
@@ -39,20 +39,20 @@ export default function StudentHistoryTableRow({ booking, onView }: Props) {
 
       <td className="px-5 py-4 align-middle">
         <p
-          className="font-bold text-sm text-text-brown truncate"
+          className="font-bold text-sm text-text-primary truncate"
           title={booking.mentor}
         >
           {booking.mentor}
         </p>
         <p
-          className="text-text-brown-light text-xs truncate mt-0.5"
+          className="text-text-white-light text-xs truncate mt-0.5"
           title={booking.subjectName}
         >
           {booking.subjectName}
         </p>
       </td>
 
-      <td className="px-5 py-4 align-middle text-sm text-text-brown-light truncate">
+      <td className="px-5 py-4 align-middle text-sm text-text-white-light truncate">
         {booking.mode}
       </td>
 

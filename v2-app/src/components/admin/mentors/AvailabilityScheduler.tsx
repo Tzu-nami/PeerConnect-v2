@@ -17,7 +17,7 @@ const generateId = () => {
     return Date.now().toString(36) + Math.random().toString(36).substring(2);
 };
 
-const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"
+const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"
 
 export default function AvailabilityScheduler({ rows, onChange, errors = [] }: Props) {
     const update = (index: number, field: keyof AvailabilityRow, value: string) => {
@@ -43,7 +43,7 @@ export default function AvailabilityScheduler({ rows, onChange, errors = [] }: P
         <div>
             <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 px-1 mb-1">
                 {['Day', 'Start Time', 'End Time', ''].map((label, i) => (
-                    <label key={i} className="text-[10px] font-bold text-text-brown-light uppercase">{label}</label>
+                    <label key={i} className="text-[10px] font-bold text-text-white-light uppercase">{label}</label>
                 ))}
             </div>
 
@@ -92,7 +92,7 @@ export default function AvailabilityScheduler({ rows, onChange, errors = [] }: P
             
             {/* Actions */}
             <div className="flex items-center justify-between px-1 mt-3">
-                <button type="button" onClick={addRow} className="flex items-center gap-1.5 text-xs font-bold text-text-brown hover:text-text-brown-light transition cursor-pointer">
+                <button type="button" onClick={addRow} className="flex items-center gap-1.5 text-xs font-bold text-text-primary hover:text-text-white-light transition cursor-pointer">
                     <FaPlus className="text-[10px]"/> Add more days or time slots
                 </button>
                 <button type="button" onClick={clearAll} className="flex items-center gap-1.5 text-xs font-bold text-red-600 hover:text-red-800 transition cursor-pointer" title="Clear All Availabilities">

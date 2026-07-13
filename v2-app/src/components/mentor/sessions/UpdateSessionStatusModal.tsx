@@ -95,22 +95,22 @@ export default function UpdateSessionStatusModal({ isOpen, session, action, onCl
         isOpen={isOpen}
         title={cfg.title}
         message={
-            <div className="text-left bg-cream p-4 rounded-xl border border-cream-border text-xs text-text-brown space-y-2 mt-4">
+            <div className="text-left bg-white p-4 rounded-xl border border-white-border text-xs text-text-primary space-y-2 mt-4">
             <p className="text-sm text-center font-medium text-slate-600 mb-2 normal-case">
                 {cfg.msg}
             </p>
             <div className="flex justify-between">
-                <span className="font-bold text-text-brown-light uppercase tracking-wider">Student:</span>
+                <span className="font-bold text-text-white-light uppercase tracking-wider">Student:</span>
                 <span className="font-semibold text-slate-700 truncate max-w-[70%]" title={session.studentNames || session.student}>
                 {session.student}
                 </span>
             </div>
             <div className="flex justify-between">
-                <span className="font-bold text-text-brown-light uppercase tracking-wider">Subject:</span>
+                <span className="font-bold text-text-white-light uppercase tracking-wider">Subject:</span>
                 <span className="font-semibold text-slate-700">{session.subject}</span>
             </div>
             <div className="flex justify-between">
-                <span className="font-bold text-text-brown-light uppercase tracking-wider">Schedule:</span>
+                <span className="font-bold text-text-white-light uppercase tracking-wider">Schedule:</span>
                 <span className="font-semibold text-slate-700 text-right">{session.date}<br/>{session.time}</span>
             </div>
             </div>

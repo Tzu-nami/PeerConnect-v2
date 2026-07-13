@@ -8,7 +8,7 @@ interface ViewCourseModalProps {
     subject: AdminCourse | null;
 }
 
-const valueClass = "w-full px-3 py-2 text-sm rounded-lg border border-cream-border bg-cream-dark text-slate-700"
+const valueClass = "w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white-complement text-slate-700"
 
 export default function ViewCourseModal({ isOpen, onClose, subject }: ViewCourseModalProps) {
     if (!subject) return null;
@@ -21,7 +21,7 @@ export default function ViewCourseModal({ isOpen, onClose, subject }: ViewCourse
                 subtitle={subject.name}
             >
                 <div className="space-y-3">
-                    <p className="text-xs font-bold text-text-brown-light uppercase tracking-wider flex items-center gap-2">
+                    <p className="text-xs font-bold text-text-white-light uppercase tracking-wider flex items-center gap-2">
                         Registered Peer Mentors
                     </p>
 
@@ -35,17 +35,17 @@ export default function ViewCourseModal({ isOpen, onClose, subject }: ViewCourse
                                     <div className="w-12 h-12 rounded-full bg-up-maroon text-white flex items-center justify-center text-xs font-bold shadow-sm">{mentor.name.charAt(0)}</div>
                                 )}
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-bold text-text-brown tracking-wider truncate">{mentor.name}</p>
-                                    <p className="text-xs text-text-brown-light tracking-wider truncate">{mentor.email} — {mentor.yearLevel} {mentor.degreeProgram}</p>
+                                    <p className="text-sm font-bold text-text-primary tracking-wider truncate">{mentor.name}</p>
+                                    <p className="text-xs text-text-white-light tracking-wider truncate">{mentor.email} — {mentor.yearLevel} {mentor.degreeProgram}</p>
                                 </div>
                             </div>
                         ))
                     ) : (
                         <div className="text-center py-8">
-                            <div className="w-12 h-12 text-text-brown-light flex items-center justify-center mx-auto mb-3">
+                            <div className="w-12 h-12 text-text-white-light flex items-center justify-center mx-auto mb-3">
                                 <FaUserSlash className="text-4xl" />
                             </div>
-                            <p className="text-sm font-medium text-text-brown-light">No mentors registered.</p>
+                            <p className="text-sm font-medium text-text-white-light">No mentors registered.</p>
                         </div>
                     )}
                 </div>

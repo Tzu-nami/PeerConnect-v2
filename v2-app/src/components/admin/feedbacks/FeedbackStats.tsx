@@ -24,20 +24,20 @@ function StatCard({
 }) {
   return (
     <div
-      className={`bg-white p-5 rounded-xl shadow-md border border-cream-border border-l-4 ${color} flex items-center gap-4`}
+      className={`bg-white p-5 rounded-xl shadow-md border border-white-border border-l-4 ${color} flex items-center gap-4`}
     >
       <div className="text-2xl flex-shrink-0">{icon}</div>
 
       <div className="min-w-0 flex-1">
-        <h3 className="text-xs font-bold text-text-brown-light uppercase leading-none truncate">
+        <h3 className="text-xs font-bold text-text-white-light uppercase leading-none truncate">
           {title}
         </h3>
 
-        <p className="text-xl font-black text-text-brown truncate">
+        <p className="text-xl font-black text-text-primary truncate">
           {value}
         </p>
 
-        <p className="text-xs text-text-brown-light mt-1">
+        <p className="text-xs text-text-white-light mt-1">
           {detail}
         </p>
       </div>

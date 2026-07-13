@@ -22,20 +22,20 @@ interface MentorTableProps {
 }
 
 function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sortDir: 'asc' | 'desc' }) {
-    if (sortCol !== col) return <MdUnfoldMore className="text-text-brown-light" />;
-    return sortDir === 'asc' ? <MdArrowUpward className="text-text-brown" /> : <MdArrowDownward className="text-text-brown" />;
+    if (sortCol !== col) return <MdUnfoldMore className="text-text-white-light" />;
+    return sortDir === 'asc' ? <MdArrowUpward className="text-text-primary" /> : <MdArrowDownward className="text-text-primary" />;
 }
 
 export default function MentorTable({
     mentors, totalCount, searchQuery, onSearch, onAddMentor, onAddSubject, onView, onEdit, onDelete, sortCol, sortDir, onSort
 }: MentorTableProps) {
     return (
-        <div className="rounded-xl shadow-md border border-cream-border mt-5 bg-cream">
+        <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
             {/* Header and search */}
             <div className="flex flex-wrap gap-4 justify-between items-center p-5">
                 <div>
-                    <h2 className="font-bold text-lg text-text-brown">Mentor List</h2>
-                    <p className="text-sm text-text-brown-light font-medium">
+                    <h2 className="font-bold text-lg text-text-primary">Mentor List</h2>
+                    <p className="text-sm text-text-white-light font-medium">
                         {totalCount} Mentor{totalCount !== 1 ? 's' : ''} found
                     </p>
                 </div>
@@ -48,12 +48,12 @@ export default function MentorTable({
                         className="w-56"
                     />
                     <button onClick={onAddSubject} 
-                        className="flex gap-2 items-center text-cream text-sm font-semibold px-4 py-2 rounded-lg bg-btn-brown hover:bg-btn-brown-hover shadow-md cursor-pointer transition">
+                        className="flex gap-2 items-center text-white text-sm font-semibold px-4 py-2 rounded-lg bg-btn-brown hover:bg-btn-brown-hover shadow-md cursor-pointer transition">
                         <MdLibraryAdd />
                         Add Subject
                     </button>
                     <button onClick={onAddMentor} 
-                        className="flex gap-2 items-center text-cream text-sm font-semibold px-4 py-2 rounded-lg bg-btn-brown hover:bg-btn-brown-hover shadow-md cursor-pointer transition">
+                        className="flex gap-2 items-center text-white text-sm font-semibold px-4 py-2 rounded-lg bg-btn-brown hover:bg-btn-brown-hover shadow-md cursor-pointer transition">
                         <MdPersonAddAlt1 />
                         Add Mentor
                     </button>
@@ -61,29 +61,29 @@ export default function MentorTable({
             </div>
 
             {/* Table */}
-            <div className="border-t border-cream-border overflow-x-auto">
+            <div className="border-t border-white-border overflow-x-auto">
                 <table className="w-full text-left text-sm table-fixed min-w-[800px]">
-                    <thead className="border-b border-cream-border bg-cream-dark">
+                    <thead className="border-b border-white-border bg-white-dark">
                         <tr>
                             <th className="px-5 py-3 w-[25%]">
-                                <button onClick={() => onSort('name')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'name' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                                <button onClick={() => onSort('name')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'name' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                                     Mentor Name <SortIcon col="name" sortCol={sortCol} sortDir={sortDir} />
                                 </button>
                             </th>
                             <th className="px-5 py-3 w-[15%]">
-                                <button onClick={() => onSort('student_num')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'student_num' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                                <button onClick={() => onSort('student_num')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'student_num' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                                     Student No. <SortIcon col="student_num" sortCol={sortCol} sortDir={sortDir} />
                                 </button>
                             </th>
                             <th className="px-5 py-3 w-[25%]">
-                                <button onClick={() => onSort('email')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-brown transition cursor-pointer ${sortCol === 'email' ? 'font-extrabold text-text-brown' : 'font-bold text-text-brown-light'}`}>
+                                <button onClick={() => onSort('email')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'email' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
                                     UP Mail <SortIcon col="email" sortCol={sortCol} sortDir={sortDir} />
                                 </button>
                             </th>
-                            <th className="px-5 py-3 w-[25%] text-xs font-bold text-text-brown-light uppercase tracking-wider">
+                            <th className="px-5 py-3 w-[25%] text-xs font-bold text-text-white-light uppercase tracking-wider">
                                 Subjects
                             </th>
-                            <th className="px-5 py-3 w-[10%] text-xs font-bold text-text-brown-light uppercase tracking-wider text-center">
+                            <th className="px-5 py-3 w-[10%] text-xs font-bold text-text-white-light uppercase tracking-wider text-center">
                                 Actions
                             </th>
                         </tr>
@@ -91,7 +91,7 @@ export default function MentorTable({
                     <tbody>
                         {mentors.length === 0 ? (
                             <tr>
-                                <td colSpan={5} className="text-center py-12 text-sm text-text-brown-light italic">
+                                <td colSpan={5} className="text-center py-12 text-sm text-text-white-light italic">
                                     No mentors match your search.
                                 </td>
                             </tr>

@@ -35,13 +35,13 @@ export default function HeroSection({ shouldShowBookNow, bookURL, imageURL }: He
                     University of the Philippines Baguio
                 </h2>
 
-                <h1 className="font-heading font-bold text-cream tracking-wide
+                <h1 className="font-heading font-bold text-white tracking-wide
                                text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-8xl
                                leading-[1.05] mb-3 sm:mb-4 md:mb-6">
                     Learning <span className="hidden sm:inline"><br/></span> Resource <br/> Center
                 </h1>
 
-                <p className="font-light leading-relaxed sm:leading-loose text-cream/70
+                <p className="font-light leading-relaxed sm:leading-loose text-white/70
                               text-[11px] sm:text-sm md:text-sm lg:text-base xl:text-lg
                               max-w-[95%] sm:max-w-[380px] md:max-w-[440px] lg:max-w-[500px]
                               mb-4 sm:mb-6 md:mb-8">

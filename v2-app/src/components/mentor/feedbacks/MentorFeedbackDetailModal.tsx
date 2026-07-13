@@ -29,10 +29,10 @@ function DetailItem({
 }) {
   return (
     <div>
-      <p className="text-xs font-bold uppercase tracking-wide text-text-brown-light">
+      <p className="text-xs font-bold uppercase tracking-wide text-text-white-light">
         {label}
       </p>
-      <div className="mt-1 text-sm font-semibold text-text-brown">{value}</div>
+      <div className="mt-1 text-sm font-semibold text-text-primary">{value}</div>
     </div>
   );
 }
@@ -91,7 +91,7 @@ export default function MentorFeedbackDetailModal({
             <h2 className="text-2xl font-extrabold text-up-maroon">
               Feedback Details
             </h2>
-            <p className="text-sm text-text-brown-light mt-1">
+            <p className="text-sm text-text-white-light mt-1">
               {feedback.subject} - {feedback.topic}
             </p>
           </div>
@@ -110,7 +110,7 @@ export default function MentorFeedbackDetailModal({
         </div>
 
         <div className="mt-5 pt-5 border-t border-white-border">
-          <p className="text-xs font-bold uppercase tracking-wide text-text-brown-light mb-3">
+          <p className="text-xs font-bold uppercase tracking-wide text-text-white-light mb-3">
             Rating Breakdown
           </p>
 
@@ -120,7 +120,7 @@ export default function MentorFeedbackDetailModal({
                 key={question}
                 className="flex flex-col gap-1 rounded-lg border border-white-border bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
               >
-                <p className="text-sm font-medium text-text-brown">
+                <p className="text-sm font-medium text-text-primary">
                   {index + 1}. {question}
                 </p>
                 <span className="text-sm font-extrabold text-up-maroon">
