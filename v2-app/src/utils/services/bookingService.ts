@@ -33,7 +33,8 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
             .select('mentor_id, subject_id'),
         supabase
             .from('subjects')
-            .select('id, code, name').order('code'),
+            .select('id, code, name').order('code')
+            .eq('is_active', true),
         supabase
             .from('tutorial_modes')
             .select('id, mode').order('id'),

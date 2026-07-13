@@ -125,11 +125,11 @@ export default function StudentHistoryTable({
                   onClick={() => setIsDropdownOpen(false)}
                 />
 
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-48 bg-white-complement border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
                   {availableStatuses.map((status) => (
                     <label
                       key={status}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white cursor-pointer transition"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white-complement-hover hover:rounded-lg cursor-pointer transition"
                     >
                       <input
                         type="checkbox"
@@ -151,7 +151,7 @@ export default function StudentHistoryTable({
 
       <div className="border-t border-white-border overflow-x-auto">
         <table className="w-full text-left text-sm table-fixed min-w-[850px]">
-          <thead className="border-b border-white-border bg-white">
+          <thead className="border-b border-white-border bg-white-dark">
             <tr>
               <th className="px-5 py-3 w-[17%]">
                 <button

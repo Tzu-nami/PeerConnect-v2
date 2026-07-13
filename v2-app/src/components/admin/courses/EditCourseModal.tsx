@@ -40,8 +40,8 @@ export default function EditCourseModal({ isOpen, onClose, onSuccess, subject }:
 
     const handleValidate = async () => {
         const errs: Record<string, string> = {};
-        if (!form.code.trim()) errs.code = 'Subject code is required.';
-        if (!form.name.trim()) errs.name = 'Subject name is required.';
+        if (!form.code.trim()) errs.code = 'Course code is required.';
+        if (!form.name.trim()) errs.name = 'Course name is required.';
         if (Object.keys(errs).length > 0) {
             setErrors(errs);
             return;
@@ -98,12 +98,12 @@ export default function EditCourseModal({ isOpen, onClose, onSuccess, subject }:
             >
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Subject Code <span className="text-red-500">*</span></label>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Course Code <span className="text-red-500">*</span></label>
                         <input type="text" value={form.code} onChange={(e) => setForm(f => ({ ...f, code: e.target.value }))} className="w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition" maxLength={20} />
                         {errors.code && <p className="mt-1 text-xs text-red-600">{errors.code}</p>}
                     </div>
                     <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Subject Name <span className="text-red-500">*</span></label>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Course Name <span className="text-red-500">*</span></label>
                         <input type="text" value={form.name} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} className="w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition" maxLength={255}/>
                         {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
                     </div>

@@ -22,6 +22,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(403).json({ error: 'Forbidden' });
     }
 
+    function formatHours(decimalHours: number | string) {
+        const totalMinutes = Math.round(Number(decimalHours) * 60);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        return `${hours}h ${minutes}m`;
+    }
+
     const supabase = createClient({ req, res })
 
     // Fetch semesters
@@ -82,7 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 program:  mentor.program,
                 year_level: mentor.year_level,
                 sessions_completed: sessionsCompleted,
-                hours_rendered: hours ?? 0,
+                raw_hours: hours ?? 0,
                 average_rating: averageRatings
             }
         })
@@ -112,7 +119,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         cancelled: sessionRows.filter((session) => session.booking_status === 'cancelled').length,
         rejected: sessionRows.filter((session) => session.booking_status === 'rejected').length,
         noShow: sessionRows.filter((session) => session.booking_status === 'no_show').length,
-        totalHours: mentorPerformance.reduce((sum, hours) => sum + Number(hours.hours_rendered), 0),
+        totalHours: formatHours(mentorPerformance.reduce((sum, mentor) => sum + Number(mentor.raw_hours), 0)),
         feedbackCount: feedbackRows.length,
         averageRating: overallAverageRating
     }

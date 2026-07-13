@@ -68,7 +68,7 @@ export default function GroupEmailInput({ emails, onChange, modeName, error }: G
                         <button
                             type="button"
                             onClick={() => removeEmail(index)}
-                            className="text-red-400 hover:text-red-600 transition flex-shrink-0 w-6 flex justify-center"
+                            className="text-red-400 hover:text-red-600 transition flex-shrink-0 w-6 flex justify-center cursor-pointer"
                             title="Remove student"
                         >
                             <MdClose className="text-lg" />
@@ -82,7 +82,7 @@ export default function GroupEmailInput({ emails, onChange, modeName, error }: G
                 <button
                 type="button"
                 onClick={addEmail}
-                className="text-xs font-medium text-blue-700 hover:text-blue-800 transition flex items-center"
+                className="text-xs font-medium text-blue-700 hover:text-blue-800 transition flex items-center cursor-pointer"
                 >
                     <MdAdd className="mr-1" /> Add Student
                 </button>

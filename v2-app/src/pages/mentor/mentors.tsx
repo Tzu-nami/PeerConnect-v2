@@ -101,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
             )
         `).eq('is_active', true)
         .returns<RawMentor[]>(),
-        supabase.from('subjects').select('id, code, name').order('code'),
+        supabase.from('subjects').select('id, code, name').order('code').eq('is_active', true),
     ]);
 
     const isAuthenticated = !!session;

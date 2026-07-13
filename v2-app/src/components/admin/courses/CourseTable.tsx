@@ -76,12 +76,12 @@ export default function CourseTable({
                         <tr>
                             <th className="px-5 py-3">
                                 <button onClick={() => onSort('code')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'code' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
-                                    Subject Code <SortIcon col="code" sortCol={sortCol} sortDir={sortDir} />
+                                    Course Code <SortIcon col="code" sortCol={sortCol} sortDir={sortDir} />
                                 </button>
                             </th>
                             <th className="px-5 py-3 w-[35%]">
                                 <button onClick={() => onSort('name')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'name' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
-                                    Subject Name <SortIcon col="name" sortCol={sortCol} sortDir={sortDir} />
+                                    Course Name <SortIcon col="name" sortCol={sortCol} sortDir={sortDir} />
                                 </button>
                             </th>
                             <th className="px-5 py-3 w-[30%]">

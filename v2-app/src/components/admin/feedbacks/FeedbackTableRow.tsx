@@ -65,20 +65,24 @@ export default function FeedbackTableRow({
           ) : (
             <span className="text-xs text-gray-300 italic">No score</span>
           )}
-
-          {feedback.q10 !== null && (
-            <span
-              className={`inline-flex items-center gap-1 border px-2 py-1 rounded-full text-[10px] font-bold whitespace-nowrap ${
-                isOnTime(feedback.q10)
-                  ? "text-green-700 bg-green-50 border-green-200"
-                  : "text-red-700 bg-red-50 border-red-200"
-              }`}
-            >
-              {isOnTime(feedback.q10) ? <FaCheck /> : <FaXmark />}
-              {isOnTime(feedback.q10) ? "On time" : "Late"}
-            </span>
-          )}
         </div>
+      </td>
+
+      <td className="px-5 py-6">
+        {feedback.q10 !== null ? (
+          <span
+            className={`inline-flex items-center gap-1 border px-2 py-1 rounded-full text-[10px] font-bold whitespace-nowrap ${
+              isOnTime(feedback.q10)
+                ? "text-green-700 bg-green-50 border-green-200"
+                : "text-red-700 bg-red-50 border-red-200"
+            }`}
+          >
+            {isOnTime(feedback.q10) ? <FaCheck /> : <FaXmark />}
+            {isOnTime(feedback.q10) ? "On time" : "Late"}
+          </span>
+        ) : (
+          <span className="text-xs text-gray-300 italic">-</span>
+        )}
       </td>
     </tr>
   );

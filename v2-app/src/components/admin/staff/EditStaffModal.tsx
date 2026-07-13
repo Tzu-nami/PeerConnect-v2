@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 // Components
 import CrudModal from "@/components/ui/CrudModal"
@@ -28,6 +28,7 @@ const INITIAL_FORM = { firstName: '', lastName: '', middleInitial: '', email: ''
 const inputClass = "w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition"
 
 export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: EditStaffModalProps) {
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [form, setForm] = useState(INITIAL_FORM)
     const [avatarFile, setAvatarFile] = useState<File | null>(null)
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
@@ -204,14 +205,30 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
                             Profile Picture
                         </p>
 
-                        <div className="w-full aspect-square rounded-xl border-2 border-dashed border-white-border bg-white-dark flex items-center justify-center overflow-hidden">
-                            {avatarPreview ? <img src={avatarPreview} alt="preview" className="w-full h-full object-cover" /> : <MdImage className="text-4xl text-slate-300" />}
+                        <div 
+                            onClick={() => fileInputRef.current?.click()}
+                            className="w-full aspect-square max-w-[375px] rounded-xl border-2 border-dashed border-white-border bg-white flex flex-col items-center justify-center cursor-pointer hover:bg-white-hover hover:border-white-complement transition overflow-hidden relative group bg-white shadow-sm">
+                            {avatarPreview
+                                ? (
+                                <>
+                                    <img src={avatarPreview} alt="preview" className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <MdImage className="text-2xl text-white mb-2" />
+                                        <span className="text-white text-xs font-bold">Change Image</span>
+                                    </div>
+                                </>
+                                ) : (
+                                    <div className="text-center p-6">
+                                        <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                            <MdImage className="text-2xl" />
+                                        </div>
+                                        <p className="text-sm font-bold text-slate-700">Upload Image</p>
+                                        <p className="text-[10px] text-gray-400 mt-1">PNG, JPG up to 5MB</p>
+                                    </div>
+                                )}
                         </div>
-
-                        <label className="flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md cursor-pointer">
-                            Choose File
-                            <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
-                        </label>
+                        <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" ref={fileInputRef} />
+                        {errors.avatar && <p className="mt-2 text-xs text-red-600">{errors.avatar}</p>}
                     </div>
                 </div>
             </CrudModal>

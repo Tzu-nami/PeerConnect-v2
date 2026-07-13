@@ -50,7 +50,8 @@
 
     /* Others */
     --color-white-complement:     #E6FEFF;
-    --color-white-triadic:        #F8F2FA;
+    --color-white-complement-hover: #CFE4E5;
+    --color-white-triadic:        #FFE7E6;
     --color-text-white-complement:#BCA613;
     --color-text-white-light:     #8D93A0;
     --color-day-available:        #D1FAE5;
@@ -100,7 +101,7 @@ body {
 
 .loader {
     width: fit-content;
-    font-size: 60px;
+    font-size: clamp(24px, 6vw, 60px);
     font-family: 'Palatino Linotype', sans-serif;
     text-transform: uppercase;
     color: #0000;
@@ -112,6 +113,67 @@ body {
 
 .loader:before {
   content: "LRC PeerConnect";
+}
+
+select {
+    appearance: base-select;
+    display: inline-flex;
+    align-items: center;
+}
+
+::picker(select) {
+    appearance: base-select;
+    border: 2px solid var(--color-white-border);
+    box-shadow: 0 12px 30px #0003;
+    border-radius: 12px;
+    background-color: var(--color-white-complement);
+    padding: 0.6rem;
+}
+
+select::picker-icon {
+    display: none;
+}
+
+selectedcontent {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+select option {
+    padding: 8px 12px;
+    border-radius: 0.5rem;
+    font-size: 14px;
+    color: #000000;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+select option:disabled {
+    background-color: white;
+    cursor: disabled;
+}
+
+select option:checked {
+    padding: 8px 12px;
+    border-radius: 0.5rem;
+    font-size: 14px;
+    background-color: #7B1113;
+    cursor: pointer;
+    color: white;
+    transition: all 0.15s ease;
+}
+
+select option::checkmark {
+    color: white;
+    text-align: right;
+}
+
+@supports not(appearance: base-select) {
+    select {
+        appearance: none;
+    }
 }
 
 .activities-pagination .swiper-pagination-bullet {

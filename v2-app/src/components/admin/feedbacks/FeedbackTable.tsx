@@ -87,10 +87,10 @@ export default function FeedbackTable({
   }
 
   return (
-    <div className="rounded-xl shadow-md border border-white-border mt-5">
+    <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
       <div className="flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4 p-5">
         <div>
-          <h2 className="font-bold text-lg">Anonymous Student Feedbacks</h2>
+          <h2 className="font-bold text-lg">Student Feedbacks</h2>
           <p className="text-sm text-text-white-light font-medium">
             {totalCount} Feedback{totalCount !== 1 ? "s" : ""} found
           </p>
@@ -113,7 +113,7 @@ export default function FeedbackTable({
           <select
             value={mentorFilter}
             onChange={(event) => onMentorFilter(event.target.value)}
-            className="h-[36px] rounded-lg border-white-border text-xs text-text-primary focus:border-text-brown-light focus:ring-text-brown-light/30"
+            className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] w-[160px] shadow-sm cursor-pointer truncate"
           >
             <option value="all">All Mentors</option>
             {mentorOptions.map((mentor) => (
@@ -126,7 +126,7 @@ export default function FeedbackTable({
           <select
             value={ratingFilter}
             onChange={(event) => onRatingFilter(event.target.value)}
-            className="h-[36px] rounded-lg border-white-border text-xs text-text-primary focus:border-text-brown-light focus:ring-text-brown-light/30"
+            className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] w-[110px] shadow-sm cursor-pointer"
           >
             <option value="all">All Ratings</option>
             {ratingOptions.map((rating) => (
@@ -149,23 +149,26 @@ export default function FeedbackTable({
         <table className="w-full min-w-[980px] text-left text-sm table-fixed">
           <thead className="border-b border-white-border bg-white-dark">
             <tr>
-              <th className="px-5 py-3 w-[15%]">
+              <th className="px-5 py-3 w-[13%]">
                 {sortableHeader("Date", "date")}
               </th>
-              <th className="px-5 py-3 w-[16%]">
+              <th className="px-5 py-3 w-[14%]">
                 {sortableHeader("Mentor", "mentor_name")}
               </th>
-              <th className="px-5 py-3 w-[12%]">
+              <th className="px-5 py-3 w-[10%]">
                 {sortableHeader("Subject", "subject")}
               </th>
               <th className="px-5 py-3 w-[17%]">
                 {sortableHeader("Topic", "topic")}
               </th>
-              <th className="px-5 py-3 w-[22%]">
+              <th className="px-5 py-3 w-[20%]">
                 {sortableHeader("Feedback", "feedback")}
               </th>
               <th className="px-5 py-3 w-[18%]">
                 {sortableHeader("Rating", "rating")}
+              </th>
+              <th className="px-5 py-3 w-[8%]">
+                {sortableHeader("Time", "time")}
               </th>
             </tr>
           </thead>
@@ -173,7 +176,7 @@ export default function FeedbackTable({
             <tbody>
             {!selectedSemesterId ? (
                 <tr>
-                    <td colSpan={6}>
+                    <td colSpan={7}>
                         <EmptyState />
                     </td>
                 </tr>
@@ -183,7 +186,7 @@ export default function FeedbackTable({
                 ))
             ) : (
                 <tr>
-                    <td colSpan={6} className="text-center py-12 text-sm text-text-white-light italic">
+                    <td colSpan={7} className="text-center py-12 text-sm text-text-white-light italic">
                         <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
                     </td>
                 </tr>

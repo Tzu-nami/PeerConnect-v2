@@ -90,12 +90,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         supabase
             .from('mentor_details')
             .select('*')
-            .eq('student_id', studentId),
+            .eq('student_id', studentId)
+            .eq('is_active', true),
 
         // Subject list
         supabase
             .from('subjects')
-            .select('id, code, name'),
+            .select('id, code, name')
+            .eq('is_active', true),
     ])
 
     const sessionsToday = result1.count

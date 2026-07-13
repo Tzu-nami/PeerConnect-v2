@@ -4,6 +4,7 @@ import { format12hrTime, formatHours } from '../formatHours';
 
 interface RawBooking {
     id: string;
+    group_id: string | null;
     topic: string;
     booking_status: SessionStatus;
     date: string;
@@ -66,6 +67,7 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
         .from('bookings')
         .select(`
       id,
+      group_id,
       topic,
       booking_status,
       date,
@@ -101,16 +103,11 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       cancelledSessions.push(b);
       continue;
     }
-    const modeRaw = b.tutorial_modes?.mode ?? '';
-    const isGroup = modeRaw.toLowerCase().includes('group');
+    const key = b.group_id || b.id;
 
-        const key = isGroup
-            ? `${b.date} | ${b.schedule_start} | ${b.schedule_end} | ${b.subjects?.code ?? ''} | ${(b.topic ?? '').trim()}`
-            : b.id;
-
-        if (!groups.has(key)) groups.set(key, []);
-        groups.get(key)!.push(b);
-    }
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(b);
+  }
 
   // Sessions data formatting display
   const sessions: AdminSession[] = [];
@@ -134,7 +131,7 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       studentNames: studentUsers.map(u => `${u.firstName} ${u.lastName}`).join(', '),
       email: group.length > 1 ? 'Multiple Emails' : (studentUsers[0]?.email ?? ''),
       emails: studentUsers.map(u => u.email ?? '').join(', '),
-      mentor: mentorUser ? `${mentorUser.firstName} ${mentorUser.lastName}` : '—',
+      mentor: mentorUser ? `${mentorUser.firstName} ${mentorUser.lastName}` : 'ANY/TBD',
       subject: b.subjects?.code ?? 'N/A',
       subjectName: b.subjects?.name ?? '',
       topic: b.topic ?? '—',
@@ -145,8 +142,8 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       durationText: `${format12hrTime(`${String(start.getHours()).padStart(2,'0')}:${String(start.getMinutes()).padStart(2,'0')}`)} - ${format12hrTime(`${String(end.getHours()).padStart(2,'0')}:${String(end.getMinutes()).padStart(2,'0')}`)} (${formatHours(diffMinutes)})`,
       durationHours,
       mode: b.tutorial_modes?.mode ? cleanMode(b.tutorial_modes.mode) : '—',
-      yearLevel: sp?.year_levels?.name ?? 'N/A',
-      degreeProgram: sp?.degree_programs?.name ?? 'N/A',
+      yearLevel: group.map(bk => bk.student_profiles?.year_levels?.name ?? 'N/A').join(', '),
+      degreeProgram: group.map(bk => bk.student_profiles?.degree_programs?.name ?? 'N/A').join(', '),
       status: derivedStatus,
       is_open: b.mentor_id === null,
     };
@@ -174,13 +171,16 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
     // Stats
     const completedSessions = sessions.filter(s => s.status === 'completed');
     const totalRawHours = completedSessions.reduce((sum, s) => sum + (s.durationHours || 0), 0);
+    const totalMins = Math.round(totalRawHours * 60);
+    const hrs = Math.floor(totalMins / 60);
+    const mins = totalMins % 60
     const counts = {
         total: sessions.length,
         accepted: sessions.filter(s => s.status === 'accepted').length,
         pending: sessions.filter(s => s.status === 'pending').length,
         completed: completedSessions.length,
         totalRawHours: totalRawHours,
-        totalHours: totalRawHours.toFixed(2)
+        totalHours: `${hrs}h ${mins}m`
     };
 
     return { sessions, counts };

@@ -96,12 +96,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         // Mentor details
         supabase
             .from('mentor_details')
-            .select('*'),
+            .select('*')
+            .eq('is_active', true),
 
         // Subject list
         supabase
             .from('subjects')
-            .select('id, code, name'),
+            .select('id, code, name')
+            .eq('is_active', true),
 
         // Top mentors
         supabase.rpc('get_top_mentors', { p_semester_id: semesterId }),

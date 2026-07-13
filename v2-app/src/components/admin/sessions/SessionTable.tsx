@@ -25,9 +25,13 @@ interface SessionTableProps {
   onView: (s: AdminSession) => void;
   onEdit: (s: AdminSession) => void;
   onCancel: (s: AdminSession) => void
-    semesters: Semester[];
-    selectedSemesterId: string | null;
-    onSemesterChange: (id: string) => void;
+  semesters: Semester[];
+  selectedSemesterId: string | null;
+  onSemesterChange: (id: string) => void;
+  mentorFilter: string;
+  onMentorChange: (mentor: string) => void;
+  availableMentors: string[];
+  onResetFilters: () => void;
 }
 
 function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sortDir: 'asc' | 'desc' }) {
@@ -37,7 +41,7 @@ function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sor
 
 
 export default function SessionTable({ 
-  sessions, totalCount, searchQuery, onSearch, statusFilters, onStatusChange, availableStatuses, sortCol, sortDir, onSort, onView, onEdit, onCancel, semesters, selectedSemesterId, onSemesterChange
+  sessions, totalCount, searchQuery, onSearch, statusFilters, onStatusChange, availableStatuses, sortCol, sortDir, onSort, onView, onEdit, onCancel, semesters, selectedSemesterId, onSemesterChange, mentorFilter, onMentorChange, availableMentors, onResetFilters,
 }: SessionTableProps) {
   
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -78,12 +82,24 @@ export default function SessionTable({
                 selected={selectedSemesterId}
                 onChange={onSemesterChange}
             />
+            <select
+              value={mentorFilter}
+              onChange={(e) => onMentorChange(e.target.value)}
+              className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] w-[160px] shadow-sm cursor-pointer"
+            >
+              <option value="all">All Mentors</option>
+              {availableMentors.map((mentor) => (
+                <option key={mentor} value={mentor}>
+                  {mentor}
+                </option>
+              ))}
+            </select>
 
           <div className="relative">
             {/* Status filters */}
             <button 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] min-w-[160px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
+              className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-brown-light focus:ring-text-brown-light/30 transition-shadow h-[36px] w-[140px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
             >
               <span>
                 {statusFilters.length === 0 
@@ -101,11 +117,11 @@ export default function SessionTable({
                   onClick={() => setIsDropdownOpen(false)} 
                 />
                 
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-48 bg-white-complement border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
                   {availableStatuses.map(status => (
                     <label 
                       key={status} 
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white cursor-pointer transition"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white-complement-hover hover:rounded-lg cursor-pointer transition"
                     >
                       <input 
                         type="checkbox"
@@ -122,6 +138,12 @@ export default function SessionTable({
               </>
             )}
           </div>
+          <button
+              onClick={onResetFilters}
+              className="h-[36px] px-3 rounded-lg border border-white-border text-xs font-bold text-text-white-light hover:bg-white-dark transition-colors cursor-pointer"
+            >
+              Reset
+            </button>
         </div>
       </div>
 

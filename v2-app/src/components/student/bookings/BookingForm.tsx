@@ -279,9 +279,9 @@ export default function BookingForm({
                                         setForm((f) => ({ ...f, tutorialMode_id : m.id })); 
                                         setErrors((err) => ({ ...err, tutorialMode_id: '' })); 
                                     }}
-                                    className={`py-3 px-2 text-xs font-bold rounded-lg border transition-colors ${
+                                    className={`py-3 px-2 text-xs font-semibold rounded-lg border transition-colors ${
                                         form.tutorialMode_id === m.id
-                                            ? 'bg-white-complement text-text-primary border-white-dot shadow-sm'
+                                            ? 'bg-white-complement text-text-primary border-white-dot'
                                             : 'bg-white text-text-primary border-white-border hover:bg-white-hover disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-white'
                                     }`}
                                 >

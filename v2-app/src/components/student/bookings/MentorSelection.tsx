@@ -50,7 +50,7 @@ export default function MentorSelection({
                             : '--- Select a mentor ---'}
                     </option>
                     {filteredMentors.length > 0 && !isMentorLocked && (
-                        <option value="any" className="bg-white-complement">ANY (Alerts all available mentors)</option>
+                        <option value="any" className="bg-white-triadic hover:bg-white-complement-hover">ANY (Alerts all available mentors)</option>
                     )}
                     {filteredMentors.map((m) => (
                         <option key={m.profile_id} value={m.profile_id}>{m.name}</option>
