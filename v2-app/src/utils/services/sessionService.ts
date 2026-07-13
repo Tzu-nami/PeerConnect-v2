@@ -4,6 +4,7 @@ import { format12hrTime, formatHours } from '../formatHours';
 
 interface RawBooking {
     id: string;
+    group_id: string | null;
     topic: string;
     booking_status: SessionStatus;
     date: string;
@@ -66,6 +67,7 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
         .from('bookings')
         .select(`
       id,
+      group_id,
       topic,
       booking_status,
       date,
@@ -101,16 +103,11 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       cancelledSessions.push(b);
       continue;
     }
-    const modeRaw = b.tutorial_modes?.mode ?? '';
-    const isGroup = modeRaw.toLowerCase().includes('group');
+    const key = b.group_id || b.id;
 
-        const key = isGroup
-            ? `${b.date} | ${b.schedule_start} | ${b.schedule_end} | ${b.subjects?.code ?? ''} | ${(b.topic ?? '').trim()}`
-            : b.id;
-
-        if (!groups.has(key)) groups.set(key, []);
-        groups.get(key)!.push(b);
-    }
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(b);
+  }
 
   // Sessions data formatting display
   const sessions: AdminSession[] = [];
