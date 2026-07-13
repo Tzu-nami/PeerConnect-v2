@@ -82,7 +82,7 @@ export default function AdminSessionDetailModal({ session, onClose }: Props) {
 
           {session.is_open && (
             <div className="mt-5 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm font-semibold text-yellow-700">
-              This is an open pending booking that matches your subjects.
+              This is an open booking that can be claimed by any qualified mentors.
             </div>
           )}
         </div>

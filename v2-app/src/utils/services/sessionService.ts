@@ -134,7 +134,7 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       studentNames: studentUsers.map(u => `${u.firstName} ${u.lastName}`).join(', '),
       email: group.length > 1 ? 'Multiple Emails' : (studentUsers[0]?.email ?? ''),
       emails: studentUsers.map(u => u.email ?? '').join(', '),
-      mentor: mentorUser ? `${mentorUser.firstName} ${mentorUser.lastName}` : '—',
+      mentor: mentorUser ? `${mentorUser.firstName} ${mentorUser.lastName}` : 'ANY/TBD',
       subject: b.subjects?.code ?? 'N/A',
       subjectName: b.subjects?.name ?? '',
       topic: b.topic ?? '—',
