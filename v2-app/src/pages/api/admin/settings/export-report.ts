@@ -89,8 +89,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 program:  mentor.program,
                 year_level: mentor.year_level,
                 sessions_completed: sessionsCompleted,
-                raw_hours: hours ?? 0,
-                average_rating: averageRatings
+                hours_rendered: formatHours(hours ?? 0),
+                average_rating: averageRatings,
             }
         })
     )
@@ -119,7 +119,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         cancelled: sessionRows.filter((session) => session.booking_status === 'cancelled').length,
         rejected: sessionRows.filter((session) => session.booking_status === 'rejected').length,
         noShow: sessionRows.filter((session) => session.booking_status === 'no_show').length,
-        totalHours: formatHours(mentorPerformance.reduce((sum, mentor) => sum + Number(mentor.raw_hours), 0)),
+        totalHours: formatHours(mentorPerformance.reduce((sum, mentor) => sum + Number(mentor.hours_rendered), 0)),
         feedbackCount: feedbackRows.length,
         averageRating: overallAverageRating
     }
