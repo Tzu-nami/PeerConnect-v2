@@ -117,7 +117,7 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
 
         const { data: active } = await supabase
             .from('bookings')
-            .select(`id, booking_status, date, schedule_start, schedule_end, topic,
+            .select(`id, booking_status, date, schedule_start, schedule_end, topic, room,
                 subjects(code, name), tutorial_modes(mode),
                 mentor_profiles(user_profiles(firstName, lastName))`)
             .eq('student_id', studentProfile.id)
@@ -140,6 +140,7 @@ export async function getStudentBookingPageData(supabase: SupabaseClient, userId
                 start_time: new Date(active.schedule_start).toTimeString().substring(0,5),
                 end_time:   new Date(active.schedule_end).toTimeString().substring(0,5),
                 status: active.booking_status as 'pending' | 'accepted',
+                room: active.room ?? '',
             };
         }
 
