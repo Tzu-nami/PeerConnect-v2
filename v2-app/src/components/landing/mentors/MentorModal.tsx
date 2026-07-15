@@ -26,16 +26,21 @@ export default function MentorModal({ mentor, onClose, isAuthenticated = false, 
                     <img src={mentor.avatar} alt={mentor.lastName} className="w-full h-full object-cover bg-white" />
                 </div>
                 <div className="flex-1 min-w-0 pt-1">
-                    <p className="text-white font-black text-2xl leading-tight tracking-tight truncate" title={fullName}>
+                    <p className="text-white font-black text-2xl leading-tight tracking-tight break-words" title={fullName}>
                         {fullName}
                     </p>
                     {mentor.yearLevel && mentor.degreeProgram && (
                         <p className="text-white/60 text-xs mt-1">
-                        {mentor.yearLevel} — {mentor.degreeProgram}
+                            {mentor.yearLevel} — 
+                            <span className="sm:hidden"> {mentor.degreeProgramCode}</span>
+                            <span className="hidden sm:inline"> {mentor.degreeProgram}</span>
                         </p>
                     )}
                     {mentor.college && (
-                        <p className="text-white/60 text-xs mt-1">{mentor.college}</p>
+                        <p className="text-white/60 text-xs mt-1">
+                            <span className="sm:hidden">{mentor.collegeCode}</span>
+                            <span className="hidden sm:inline">{mentor.college}</span>
+                        </p>
                     )}
                     <p className="text-white/60 text-xs mt-1">{mentor.email}</p>
                 </div>

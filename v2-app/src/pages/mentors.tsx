@@ -47,12 +47,12 @@ interface RawMentor {
         avatar: string | null;
         student_profiles: {
             year_levels: { name: string } | null;
-            degree_programs: { name: string } | null;
-            colleges: { name: string } | null;
+            degree_programs: { code: string, name: string } | null;
+            colleges: { code: string, name: string } | null;
         } | {
             year_levels: { name: string } | null;
-            degree_programs: { name: string } | null;
-            colleges: { name: string } | null;
+            degree_programs: { code: string, name: string } | null;
+            colleges: { code: string, name: string } | null;
         }[] | null;
     } | null;
     mentor_subjects: {
@@ -83,8 +83,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 avatar,
                 student_profiles (
                     year_levels ( name ),
-                    degree_programs ( name ),
-                    colleges ( name )
+                    degree_programs ( code, name ),
+                    colleges ( code, name )
                 )
             ),
             mentor_subjects (
@@ -164,6 +164,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
                 yearLevel: studentProfile?.year_levels?.name ?? '',
                 degreeProgram: studentProfile?.degree_programs?.name ?? '',
                 college: studentProfile?.colleges?.name ?? '',
+                collegeCode: studentProfile?.colleges?.code ?? '',
+                degreeProgramCode: studentProfile?.degree_programs?.code ?? '',
             } satisfies Mentor;
         })
         .sort((a: Mentor, b: Mentor) => a.lastName.localeCompare(b.lastName));
