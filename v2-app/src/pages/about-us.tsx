@@ -83,7 +83,7 @@ export default function AboutPage({ mentorCount, bookingCount, subjectCount, sta
                 <HowItWorks />
 
                 {/* Who are mentors */}
-                <MentorQualities imageURL={images['mentors_staffs']} />
+                <MentorQualities imageURL={images['mentors_staff']} />
 
                 {/* FAQs */}
                 <section className="py-10 border-b border-white-border animate-fade-up [animation-delay:300ms]">

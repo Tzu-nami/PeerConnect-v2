@@ -12,6 +12,7 @@ import { MdImage, MdPersonAddAlt1 } from "react-icons/md"
 
 // Utilities
 import { createClient } from "@/utils/supabase/client"
+import {FiCheckCircle} from "react-icons/fi";
 
 // Props
 interface AddStaffModalProps {
@@ -257,7 +258,11 @@ export default function AddStaffModal({ isOpen, onClose, onSuccess }: AddStaffMo
                 onCancel={() => setConfirmOpen(false)}
                 title="Add this staff member?"
                 message="This will create a new staff account with the information provided."
-                icon={<MdPersonAddAlt1 className="text-green-600 text-5xl" />}
+                icon={
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                        <MdPersonAddAlt1 className="text-green-600 text-4xl" />
+                    </div>
+                }
                 confirmLabel="Add Staff"
                 confirmClassName="bg-green-600 hover:bg-green-700"
                 loading={loading}

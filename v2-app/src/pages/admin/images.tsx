@@ -1,12 +1,17 @@
-import {GetServerSideProps} from "next";
-import {createClient as serverClient} from "@/utils/supabase/server";
-import {createClient} from "@/utils/supabase/client";
-import { LandingImages } from "@/types/landingImages"
-import {useRouter} from "next/router";
-import {useState} from "react";
+import { GetServerSideProps } from "next"
+import { useRouter } from "next/router"
+import { useState } from "react"
 import { toast } from "sonner"
+
+// Icons
 import { RiImageEditFill } from "react-icons/ri";
 
+// Types
+import { LandingImages } from "@/types/landingImages"
+
+// Utilities
+import {createClient as serverClient} from "@/utils/supabase/server";
+import {createClient} from "@/utils/supabase/client";
 
 interface ImageCardProps {
     image: LandingImages
@@ -61,7 +66,7 @@ function ImageCard({ image }: ImageCardProps) {
 
         toast.success(`${image.label} updated successfully!`)
         setUploading(false)
-        router.replace(router.asPath)
+        router.replace(router.asPath, undefined, { scroll: false })
     }
 
     return(
