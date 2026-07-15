@@ -62,13 +62,13 @@ export default function AdminSessionDetailModal({ session, onClose }: Props) {
         <div className="flex-1 overflow-y-auto min-h-0 py-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <DetailItem label="Date" value={session.date} />
-            <DetailItem label="Time" value={session.time} />
+            <DetailItem label="Room" value={session.room} />
             <DetailItem label="Duration" value={session.durationText} />
             <DetailItem label="Tutorial Mode" value={session.mode} />
             <DetailItem label={isGroup ? "Students" : "Student"} value={<FormatList text={session.studentNames} />} />
             <DetailItem label={isGroup ? "Emails" : "Email"} value={<FormatList text={session.emails} />} />
             <DetailItem label="Course Code" value={session.subject} />
-            <DetailItem label="Subject Name" value={session.subjectName} />
+            <DetailItem label="Course Name" value={session.subjectName} />
             <DetailItem label={isGroup ? "Year Levels" : "Year Level"} value={<FormatList text={session.yearLevel} />} />
             <DetailItem label={isGroup ? "Degree Programs" : "Degree Program"} value={<FormatList text={session.degreeProgram} />} />
           </div>

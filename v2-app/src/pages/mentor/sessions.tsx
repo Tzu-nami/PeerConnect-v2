@@ -27,7 +27,7 @@ export type MentorSessionSortKey =
   | "date"
   | "student"
   | "subject"
-  | "mode"
+  | "room"
   | "status";
 
 export type MentorSessionRow = {
@@ -56,6 +56,7 @@ export type MentorSessionRow = {
   status: string;
   isOpen: boolean;
   isAny: boolean;
+  room?: string;
 };
 
 type Props = {
@@ -442,6 +443,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
       mentor_id,
       subject_id,
       is_any,
+      room,
       student_profiles!student_id (
         student_num,
         year_levels ( name ),
@@ -479,6 +481,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         schedule_end,
         mentor_id,
         subject_id,
+        room,
         student_profiles!student_id (
           student_num,
           year_levels ( name ),
@@ -575,6 +578,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
       status: firstBooking.booking_status ?? "-",
       isOpen: firstBooking.mentor_id === null,
       isAny: firstBooking.is_any ?? false,
+      room: ['cancelled', 'rejected', 'no_show'].includes(firstBooking.booking_status) ? 'N/A' : firstBooking.room,
     };
   });
 

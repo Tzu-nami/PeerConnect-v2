@@ -147,7 +147,7 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       degreeProgram: group.map(bk => bk.student_profiles?.degree_programs?.name ?? 'N/A').join(', '),
       status: derivedStatus,
       is_open: b.mentor_id === null,
-      room: b.room,
+      room: ['cancelled', 'rejected', 'no_show'].includes(derivedStatus) ? 'N/A' : b.room,
     };
   };
 

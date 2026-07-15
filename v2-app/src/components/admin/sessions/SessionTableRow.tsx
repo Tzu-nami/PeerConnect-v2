@@ -32,11 +32,8 @@ export default function SessionTableRow({ session, onView, onEdit, onCancel, onA
         <p className="font-bold text-sm text-text-primary truncate" title={`${session.mentor}`}>
           {session.mentor}
         </p>
-        <p 
-          className="text-text-white-light text-xs truncate mt-0.5" 
-          title={session.room === 'TBA' ? 'N/A' : session.room}
-        >
-          Room: {session.room === 'TBA' ? 'N/A' : session.room}
+        <p className="text-text-white-light text-xs truncate mt-0.5" title={session.room}>
+          Room: {session.room}
         </p>
       </td>
       <td className="px-5 py-4 align-middle">
