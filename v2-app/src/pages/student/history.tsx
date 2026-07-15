@@ -18,7 +18,7 @@ export type StudentHistorySortKey =
   | "date"
   | "subject"
   | "mentor"
-  | "mode"
+  | "room"
   | "status";
 
 export type StudentHistoryRow = {
@@ -38,6 +38,7 @@ export type StudentHistoryRow = {
   group_ids: string[];
   student: string;
   studentNames: string;
+  room?: string;
 };
 
 type Props = {
@@ -106,6 +107,13 @@ function formatDuration(hours: number) {
   if (mins > 0) durationString += `${hrs > 0 ? ' ' : ''}${mins} min${mins !== 1 ? 's' : ''}`;
 
   return durationString || "0 mins";
+}
+
+function cleanMode(mode: string) {
+  return mode
+    .replace(/\s*\([^)]*\)\s*/g, " ")
+    .replace(/\s*(Tutorial|Session|Sessions)\s*/gi, " ")
+    .trim();
 }
 
 function getSortValue(row: StudentHistoryRow, key: StudentHistorySortKey) {
@@ -333,7 +341,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     const { data: bookingRows } = await supabase
         .from("bookings")
         .select(`
-      id, topic, booking_status, date, schedule_start, schedule_end, mentor_id, subject_id, group_id,
+      id, topic, booking_status, date, schedule_start, schedule_end, mentor_id, subject_id, group_id, room,
       subjects ( code, name ),
       mentor_profiles!mentor_id ( user_profiles ( firstName, lastName ) ),
       student_profiles!student_id ( user_profiles ( firstName, lastName ) ), 
@@ -396,11 +404,14 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
           ? new Date(booking.schedule_start).toTimeString().slice(0, 5)
           : "",
         time: `${startTime} - ${endTime}`,
-        mode: booking.tutorial_modes?.mode ?? "-",
+        mode: booking.tutorial_modes?.mode
+        ? cleanMode(booking.tutorial_modes.mode)
+        : "-",
         status: booking.booking_status ?? "-",
         durationHours,
         durationText: `${startTime} - ${endTime} (${formatDuration(durationHours)})`,
         group_ids,
+        room: ['cancelled', 'rejected', 'no_show'].includes(booking.booking_status) ? 'N/A' : booking.room,
       };
     })
   );

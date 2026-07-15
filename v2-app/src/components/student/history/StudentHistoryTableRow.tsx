@@ -52,8 +52,19 @@ export default function StudentHistoryTableRow({ booking, onView }: Props) {
         </p>
       </td>
 
-      <td className="px-5 py-4 align-middle text-sm text-text-white-light truncate">
-        {booking.mode}
+      <td className="px-5 py-4 align-middle">
+        <p
+          className="font-bold text-sm text-text-primary truncate"
+          title={booking.room}
+        >
+          {booking.room}
+        </p>
+        <p
+          className="text-text-white-light text-xs truncate mt-0.5"
+          title={booking.mode}
+        >
+          {booking.mode}
+        </p>
       </td>
 
       <td className="px-5 py-4 align-middle text-center">

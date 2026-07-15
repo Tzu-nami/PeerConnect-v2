@@ -201,15 +201,15 @@ export default function StudentHistoryTable({
 
               <th className="px-5 py-3 w-[15%]">
                 <button
-                  onClick={() => onSort("mode")}
+                  onClick={() => onSort("room")}
                   className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
-                    sortCol === "mode"
+                    sortCol === "room"
                       ? "font-extrabold text-text-primary"
                       : "font-bold text-text-white-light"
                   }`}
                 >
-                  Mode
-                  <SortIcon col="mode" sortCol={sortCol} sortDir={sortDir} />
+                  Room
+                  <SortIcon col="room" sortCol={sortCol} sortDir={sortDir} />
                 </button>
               </th>
 
