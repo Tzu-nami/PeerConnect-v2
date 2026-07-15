@@ -194,7 +194,7 @@ export default function StudentDashboard({ sessionList, upcomingSessions, sessio
                 placeholder="Search mentors, subjects, or sessions..." role="student" />
 
             {/* Stat cards */}
-            <div className={`grid ${gridCols} gap-4 w-full`}>
+            <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 w-full`}>
                 {cards.map((card) => {
                     return (
                         <StatCard key={card.dataKey} label={card.label} value={data[card.dataKey]} href={card.href} borderColor={card.borderColor} icon={card.icon} iconColor={card.iconColor} />
@@ -203,10 +203,10 @@ export default function StudentDashboard({ sessionList, upcomingSessions, sessio
             </div>
 
             {/* Grid content */}
-            <div className="grid grid-cols-3 gap-6 mt-4 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4 items-start">
                 {/* LEFT COLUMN - Today's Schedule and  Weekly Grid stacked */}
-                <div className="col-span-2 flex flex-col gap-6">
-                    <div className="h-[560px]">
+                <div className="lg:col-span-2 flex flex-col gap-6">
+                    <div className="min-h-[400px] md:h-[560px]">
                         <TodaysSchedule  currentSessions={todaySessions} date={dateFormat} role="student" />
                     </div>
 
@@ -214,8 +214,7 @@ export default function StudentDashboard({ sessionList, upcomingSessions, sessio
                 </div>
 
                 {/* RIGHT COLUMN - Calendar and Pending Requests stacked */}
-
-                <div className="col-span-1 flex flex-col gap-4">
+                <div className="lg:col-span-1 flex flex-col gap-4">
                     <ScheduleCalendar sessionsByDate={sessionsByDate}
                                       today={TODAY}
                                       selectedDate={selectedDate}
