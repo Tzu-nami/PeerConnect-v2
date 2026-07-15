@@ -101,7 +101,7 @@ body {
 
 .loader {
     width: fit-content;
-    font-size: clamp(24px, 6vw, 60px);
+    font-size: clamp(36px, 6vw, 60px);
     font-family: 'Palatino Linotype', sans-serif;
     text-transform: uppercase;
     color: #0000;
@@ -127,6 +127,7 @@ select {
     box-shadow: 0 12px 30px #0003;
     border-radius: 12px;
     background-color: white;
+    max-width: 90vw;
     padding: 0.6rem;
 }
 
@@ -209,7 +210,13 @@ select option::checkmark {
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    padding: 24px;
+    padding: 12px;
+}
+
+@media (min-width: 640px) {
+    .modal-overlay {
+        padding: 24px;
+    }
 }
 
 .modal-overlay.open { display: flex; }
@@ -221,6 +228,9 @@ select option::checkmark {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     overflow: hidden;
     max-width: 42rem;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ─────────────────────────────────────────────
@@ -253,9 +263,11 @@ select option::checkmark {
 }
 
 /* Mentor availability grid */
-.avail-grid { display: grid;
+.avail-grid { 
+    display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 4px;
+    min-width: 280px;
 }
 
 .avail-day-header {
@@ -321,6 +333,23 @@ select option::checkmark {
 }
 
 /* Toolbar title, e.g. "July 6 – 12, 2026" */
+@media (max-width: 640px) {
+    .fc .fc-toolbar.fc-header-toolbar {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .fc .fc-toolbar-title {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .fc .fc-button {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+}
+
 .fc .fc-toolbar-title {
     font-size: 1.25rem;
     font-weight: 700;
