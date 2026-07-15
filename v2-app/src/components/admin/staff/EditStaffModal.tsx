@@ -238,7 +238,11 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSuccess }: Ed
                 onCancel={() => setConfirmOpen(false)}
                 title="Update this staff member?"
                 message="This will save the changes made to their information and profile."
-                icon={<FaUserEdit  className="text-blue-600 text-5xl" />}
+                icon={
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                        <FaUserEdit className="text-blue-600 text-4xl" />
+                    </div>
+                }
                 confirmLabel="Update"
                 confirmClassName="bg-blue-600 hover:bg-blue-700"
                 loading={loading}
