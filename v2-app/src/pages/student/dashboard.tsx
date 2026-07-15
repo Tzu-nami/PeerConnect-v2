@@ -90,7 +90,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         supabase
             .from('mentor_details')
             .select('*')
-            .eq('student_id', studentId)
             .eq('is_active', true),
 
         // Subject list
