@@ -34,4 +34,6 @@ export interface Mentor {
     degreeProgram: string;
     college: string;
     bookingUrl?: string;
+    degreeProgramCode?: string;
+    collegeCode?: string;
 }

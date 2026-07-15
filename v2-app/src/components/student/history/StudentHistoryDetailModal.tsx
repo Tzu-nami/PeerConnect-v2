@@ -62,7 +62,7 @@ export default function MentorHistoryDetailModal({ booking, onClose }: Props) {
       <div className="flex-1 overflow-y-auto min-h-0 py-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <DetailItem label="Date" value={booking.date} />
-          <DetailItem label="Time" value={booking.time} />
+          <DetailItem label="Room" value={booking.room} />
           <DetailItem label="Duration" value={booking.durationText} />
           <DetailItem label="Tutorial Mode" value={booking.mode} />
           <DetailItem label={isGroup ? "Students" : "Student"} value={<FormatList text={booking.studentNames} />} />

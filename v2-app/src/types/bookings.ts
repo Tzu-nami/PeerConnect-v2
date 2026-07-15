@@ -108,6 +108,7 @@ export interface ActiveBooking {
     start_time: string;
     end_time: string;
     status: 'pending' | 'accepted';
+    room?: string;
 }
 
 export interface CompletedBookingForFeedback {

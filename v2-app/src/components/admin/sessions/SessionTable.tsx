@@ -24,7 +24,8 @@ interface SessionTableProps {
   onSort: (col: string) => void;
   onView: (s: AdminSession) => void;
   onEdit: (s: AdminSession) => void;
-  onCancel: (s: AdminSession) => void
+  onCancel: (s: AdminSession) => void;
+  onAssignRoom: (s: AdminSession) => void;
   semesters: Semester[];
   selectedSemesterId: string | null;
   onSemesterChange: (id: string) => void;
@@ -41,7 +42,7 @@ function SortIcon({ col, sortCol, sortDir }: { col: string, sortCol: string, sor
 
 
 export default function SessionTable({ 
-  sessions, totalCount, searchQuery, onSearch, statusFilters, onStatusChange, availableStatuses, sortCol, sortDir, onSort, onView, onEdit, onCancel, semesters, selectedSemesterId, onSemesterChange, mentorFilter, onMentorChange, availableMentors, onResetFilters,
+  sessions, totalCount, searchQuery, onSearch, statusFilters, onStatusChange, availableStatuses, sortCol, sortDir, onSort, onView, onEdit, onCancel, semesters, selectedSemesterId, onSemesterChange, mentorFilter, onMentorChange, availableMentors, onResetFilters, onAssignRoom
 }: SessionTableProps) {
   
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -169,7 +170,7 @@ export default function SessionTable({
               </th>
               <th className="px-5 py-3 w-[15%]">
                 <button onClick={() => onSort('subject')} className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${sortCol === 'subject' ? 'font-extrabold text-text-primary' : 'font-bold text-text-white-light'}`}>
-                  Subject <SortIcon col="subject" sortCol={sortCol} sortDir={sortDir} />
+                  Course <SortIcon col="subject" sortCol={sortCol} sortDir={sortDir} />
                 </button>
               </th>
               <th className="px-5 py-3 w-[12%] text-center">
@@ -197,6 +198,7 @@ export default function SessionTable({
                         onView={onView}
                         onEdit={onEdit}
                         onCancel={onCancel}
+                        onAssignRoom={onAssignRoom}
                     />
                 ))
             ) : (

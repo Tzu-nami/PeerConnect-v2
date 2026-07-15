@@ -48,6 +48,7 @@ export default function ActiveBookingCard({ booking, onCancel }: ActiveBookingCa
                         { label: 'Peer Mentor',  value: booking.mentor_name || 'TBA' },
                         { label: 'Date',         value: dateFormatted },
                         { label: 'Time',         value: `${format12hrTime(booking.start_time)} – ${format12hrTime(booking.end_time)}` },
+                        { label: 'Room',         value: booking.room },
                     ].map(({ label, value }) => (
                         <div key={label} className="min-w-0">
                             <label className="block text-[10px] font-bold text-text-white-light uppercase tracking-wider mb-0.5">{label}</label>

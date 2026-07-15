@@ -20,17 +20,17 @@ export default function UpcomingSessions({ upcomingSessions }: UpcomingSessionsP
     return(
         <div className="bg-white rounded-xl shadow-sm border border-white-border flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between bg-text-primary rounded-t-xl">
-                <div className="flex items-center gap-2 text-white px-5 py-3 font-semibold">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-text-primary rounded-t-xl gap-2 px-4 sm:px-5 py-3">
+                <div className="flex items-center gap-2 text-white font-semibold">
                     <IoToday />
                     <span>My Upcoming Sessions</span>
                 </div>
-                <span>{upcomingSessions.length} Session{upcomingSessions.length !== 1 ? 's' : ''}</span>
+                <span className="text-white text-sm sm:text-base opacity-90">{upcomingSessions.length} Session{upcomingSessions.length !== 1 ? 's' : ''}</span>
             </div>
 
             {/* Content */}
             {upcomingSessions.length === 0 ? (
-                <p className="text-sm text-text-muted italic text-center py-[6px]">No upcoming sessions.</p>
+                <p className="text-sm text-text-muted italic text-center py-6">No upcoming sessions.</p>
             ) : (
                 <div className="flex flex-col divide-y divide-white-border max-h-[600px] overflow-y-auto">
                     {upcomingSessions.map((session) => {
@@ -44,16 +44,16 @@ export default function UpcomingSessions({ upcomingSessions }: UpcomingSessionsP
                         })
 
                         return(
-                            <div key={session.id} className="flex items-center justify-between text-[15px] px-5 py-3">
+                            <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[15px] px-4 sm:px-5 py-4">
                                 {/* Session info snippet */}
                                 <div className="flex flex-col min-w-0">
-                                    <p className="font-semibold mb-0.5">{session.mentorName}</p>
-                                    <p className="text-sm text-text-muted">{session.subject} - {session.topic}</p>
-                                    <p className="text-sm text-text-muted">{formattedDate} | {startTime} - {endTime} </p>
+                                    <p className="font-semibold mb-0.5 truncate">{session.mentorName}</p>
+                                    <p className="text-sm text-text-muted truncate">{session.subject} - {session.topic}</p>
+                                    <p className="text-sm text-text-muted truncate">{formattedDate} | {startTime} - {endTime} </p>
                                 </div>
 
                                 {/* Session status */}
-                                <div>
+                                <div className="shrink-0 self-start sm:self-auto">
                                     <StatusBadge status={session.bookingStatus} />
                                 </div>
                             </div>

@@ -75,8 +75,8 @@ export default function StudentHistoryTable({
   }
 
   return (
-    <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
-      <div className="flex flex-wrap gap-4 justify-between items-center p-5">
+    <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white grid grid-cols-1">
+      <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center p-4 sm:p-5">
         <div>
           <h2 className="font-bold text-lg text-text-primary">All Bookings</h2>
           <p className="text-sm text-text-white-light font-medium">
@@ -84,7 +84,7 @@ export default function StudentHistoryTable({
           </p>
         </div>
 
-        <div className="flex gap-3 items-center flex-wrap">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center w-full md:w-auto">
           <SearchBar
             value={searchQuery}
             onChange={onSearch}
@@ -92,13 +92,15 @@ export default function StudentHistoryTable({
             className="w-56"
           />
 
+          <div className="w-full sm:w-auto">
             <SemesterFilter
                 semesters={semesters}
                 selected={selectedSemesterId}
                 onChange={onSemesterChange}
             />
+          </div>
 
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -125,11 +127,11 @@ export default function StudentHistoryTable({
                   onClick={() => setIsDropdownOpen(false)}
                 />
 
-                <div className="absolute right-0 mt-2 w-48 bg-white-complement border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
+                <div className="absolute md:right-0 mt-2 w-48 bg-white border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
                   {availableStatuses.map((status) => (
                     <label
                       key={status}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white-complement-hover hover:rounded-lg cursor-pointer transition"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white-hover hover:rounded-lg cursor-pointer transition"
                     >
                       <input
                         type="checkbox"
@@ -201,15 +203,15 @@ export default function StudentHistoryTable({
 
               <th className="px-5 py-3 w-[15%]">
                 <button
-                  onClick={() => onSort("mode")}
+                  onClick={() => onSort("room")}
                   className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
-                    sortCol === "mode"
+                    sortCol === "room"
                       ? "font-extrabold text-text-primary"
                       : "font-bold text-text-white-light"
                   }`}
                 >
-                  Mode
-                  <SortIcon col="mode" sortCol={sortCol} sortDir={sortDir} />
+                  Room
+                  <SortIcon col="room" sortCol={sortCol} sortDir={sortDir} />
                 </button>
               </th>
 

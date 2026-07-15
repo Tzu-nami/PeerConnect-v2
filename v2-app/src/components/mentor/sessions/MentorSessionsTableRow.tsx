@@ -59,8 +59,19 @@ export default function MentorSessionsTableRow({ session, onView, onEdit, onCanc
         </p>
       </td>
 
-      <td className="px-5 py-4 align-middle text-sm text-text-white-light truncate">
-        {session.mode}
+      <td className="px-5 py-4 align-middle">
+        <p
+          className="font-bold text-sm text-text-primary truncate"
+          title={session.room}
+          >
+          {session.room}
+        </p>
+        <p
+          className="text-text-white-light text-xs truncate mt-0.5"
+          title={session.mode}
+        >
+          {session.mode}
+        </p>
       </td>
 
       <td className="px-5 py-4 align-middle text-center">

@@ -19,21 +19,21 @@ export default function MentorFilters({
     subjects, searchQuery, selectedDay, selectedSubject, resultCount, onSearch, onDayChange, onSubjectChange, 
 }: Props) {
     return (
-        <div className="mb-3 pb-4 border-b border-gray-200 flex flex-wrap items-center justify-between gap-4 animate-[slideDown_0.3s_ease]">
-            <div className="flex flex-wrap items-center gap-3">
+        <div className="mb-3 pb-4 border-b border-gray-200 flex flex-col lg:flex-row lg:items-center justify-between gap-4 animate-[slideDown_0.3s_ease]">
+            <div className="flex flex-col md:flex-row flex-wrap items-stretch md:items-center gap-3 w-full lg:w-auto min-w-0">
 
                 {/* Search bar */}
                 <SearchBar
                     value={searchQuery}
                     onChange={onSearch}
                     placeholder="Search name..."
-                    className="w-56 shadow-sm [&_input]:focus:border-up-maroon [&_input]:focus:ring-up-maroon"
+                    className="w-full md:w-56 shadow-sm [&_input]:focus:border-up-maroon [&_input]:focus:ring-up-maroon"
                 />
 
                 {/* Day filters */}
-                <div className="flex items-center gap-2 bg-white p-1 rounded-lg border border-gray-200 shadow-sm">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 pl-2 pr-1">Day</span>
-                    <div className="flex gap-1">
+                <div className="flex items-center gap-2 bg-white p-1 rounded-lg border border-gray-200 shadow-sm w-full md:w-auto overflow-x-auto custom-scrollbar">
+                    <span className="hidden md:block text-[10px] font-bold uppercase tracking-widest text-gray-400 pl-2 pr-1 shrink-0">Day</span>
+                    <div className="flex gap-1 shrink-0">
                         <button
                             onClick={() => onDayChange('')}
                             className={`px-3 py-1.5 text-xs font-bold rounded transition ${
@@ -57,12 +57,12 @@ export default function MentorFilters({
                 </div>
 
                 {/* Subjects filter */}
-                <div className="relative shadow-sm rounded-lg">
+                <div className="relative shadow-sm rounded-lg w-full md:w-auto">
                     <FaFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
                     <select 
                         value={selectedSubject} 
                         onChange={(e) => onSubjectChange(e.target.value)}
-                        className="appearance-none rounded-lg border-gray-200 pl-8 pr-8 py-1.5 text-xs font-medium text-slate-700 outline-none cursor-pointer focus:ring-1 focus:border-up-maroon focus:ring-up-maroon bg-white h-[34px]">
+                        className="w-full md:w-auto appearance-none rounded-lg border-gray-200 pl-8 pr-8 py-1.5 text-xs font-medium text-slate-700 outline-none cursor-pointer focus:ring-1 focus:border-up-maroon focus:ring-up-maroon bg-white h-[34px]">
                             <option value="">All Subjects</option>
                             {subjects.map((s) => (
                                 <option key={s.id} value={s.id}>{s.code}</option>
@@ -72,7 +72,7 @@ export default function MentorFilters({
             </div>
 
             {/* Filtered results */}
-            <span className="text-sm font-medium text-slate-500">Showing {resultCount} mentor{resultCount !== 1 ? 's' : ''}    
+            <span className="text-sm font-medium text-slate-500 shrink-0">Showing {resultCount} mentor{resultCount !== 1 ? 's' : ''}    
             </span>
         </div>
     );

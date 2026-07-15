@@ -60,7 +60,7 @@ export default function TodaysSchedule({ currentSessions, date, role }: TodaysSc
     return(
         <div className="bg-white rounded-xl shadow-sm border border-white-border h-full flex flex-col">
             {/* Header */}
-            <div className="flex justify-between p-5">
+            <div className="flex flex-col sm:flex-row gap-4 justify-between p-4 sm:p-5">
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2">
                         <FaCalendarCheck className="text-lg" />
@@ -69,11 +69,11 @@ export default function TodaysSchedule({ currentSessions, date, role }: TodaysSc
                     <p className="text-sm text-text-muted">{date}</p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                     <SearchBar value={searchQuery} onChange={(e) => {setSearchQuery(e); setCurrentPage(1)}} placeholder="Search session..." />
                     <div className="relative rounded-lg flex items-center">
                         <select value={selectedStatus} onChange={(e) => {setSelectedStatus(e.target.value); setCurrentPage(1)}}
-                                className="text-xs font-medium text-text-primary border border-white-border rounded-lg px-3 h-[36px] w-28 bg-white outline-none focus:ring-1 focus:border-text-muted cursor-pointer">
+                                className="text-xs font-medium text-text-primary border border-white-border rounded-lg px-3 h-[36px] w-full sm:w-28 bg-white outline-none focus:ring-1 focus:border-text-muted cursor-pointer">
                             <option value="">All</option>
                             {Object.entries(STATUS_LABELS).map(([value, label]) => (
                                 <option key={value} value={value}>{label}</option>
@@ -84,8 +84,8 @@ export default function TodaysSchedule({ currentSessions, date, role }: TodaysSc
             </div>
 
             {/* Table */}
-            <div className="flex-1">
-                <table className="w-full table-fixed text-left text-[13px]">
+            <div className="flex-1 overflow-x-auto">
+                <table className="w-full min-w-[600px] table-fixed text-left text-[13px]">
                     {/* Table header */}
                     <thead className="text-text-muted text-xs bg-white-dark">
                     <tr>
@@ -103,7 +103,7 @@ export default function TodaysSchedule({ currentSessions, date, role }: TodaysSc
                     <tbody>
                     {paginatedSessions.length === 0 ? (
                         <tr>
-                            <td colSpan={colHeader.length} className="text-center py-40 text-text-muted">
+                            <td colSpan={colHeader.length} className="text-center py-20 sm:py-40 text-text-muted">
                                 <div className="flex flex-col items-center gap-2">
                                     <MdEventBusy  className="text-4xl opacity-30" />
                                     <p className="text-sm italic">No sessions found for today</p>
@@ -131,15 +131,15 @@ export default function TodaysSchedule({ currentSessions, date, role }: TodaysSc
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between px-5 pb-4">
+            <div className="flex items-center justify-between px-5 pb-4 mt-auto pt-4 border-t border-white-border sm:border-t-0 sm:pt-0">
                 <p className="text-xs text-text-muted">Showing {paginatedSessions.length} of {filteredSessions.length} session{filteredSessions.length !== 1 ? 's' : ''} </p>
                 <div className="flex items-center gap-2 text-2xl ">
                     <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1 || totalPages <= 1}
-                            className="border border-white-border py-1 rounded-sm hover:bg-white-hover cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+                            className="border border-white-border py-1 px-2 rounded-sm hover:bg-white-hover cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
                         <MdChevronLeft />
                     </button>
                     <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages || totalPages === 0 || totalPages <= 1}
-                            className="border border-white-border py-1 rounded-sm hover:bg-white-hover cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+                            className="border border-white-border py-1 px-2 rounded-sm hover:bg-white-hover cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
                         <MdChevronRight />
                     </button>
                 </div>

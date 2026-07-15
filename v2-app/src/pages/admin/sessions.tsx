@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 import SessionDetailModal from '@/components/admin/sessions/ViewSessionModal';
 import EditSessionModal from '@/components/admin/sessions/EditSessionModal';
 import CancelSessionModal from '@/components/admin/sessions/CancelSessionModal';
+import AssignRoomModal from '@/components/admin/sessions/AssignRoomModal';
 
 // Data fetch
 import { getRecentSemesters, getAdminSessionsData } from '@/utils/services/sessionService';
@@ -61,6 +62,7 @@ export default function AdminSessionsPage({ initialSessions, counts, semesters, 
     const [viewSession, setViewSession] = useState<AdminSession | null>(null);
     const [editSession, setEditSession] = useState<AdminSession | null>(null);
     const [cancelSession, setCancelSession] = useState<AdminSession | null>(null);
+    const [assignRoomSession, setAssignRoomSession] = useState<AdminSession | null>(null);
 
     // Filters
     const availableStatuses = useMemo(() => {
@@ -164,6 +166,7 @@ export default function AdminSessionsPage({ initialSessions, counts, semesters, 
                     onView={(session) => setViewSession(session)}
                     onEdit={(session) => setEditSession(session)}
                     onCancel={(session) => setCancelSession(session)}
+                    onAssignRoom={(session) => setAssignRoomSession(session)}
                     semesters={semesters}
                     selectedSemesterId={selectedSemesterId}
                     onSemesterChange={handleSemesterChange}
@@ -194,6 +197,13 @@ export default function AdminSessionsPage({ initialSessions, counts, semesters, 
                     session={cancelSession}
                     onClose={() => setCancelSession(null)}
                     onSuccess={() => { handleRefresh(); setCancelSession(null); toast.success("Session has been cancelled."); }}
+                />
+
+                <AssignRoomModal
+                    isOpen={!!assignRoomSession}
+                    session={assignRoomSession}
+                    onClose={() => setAssignRoomSession(null)}
+                    onSuccess={() => { handleRefresh(); setAssignRoomSession(null); toast.success("Room assigned successfully."); }}
                 />
             </>
         </div>
