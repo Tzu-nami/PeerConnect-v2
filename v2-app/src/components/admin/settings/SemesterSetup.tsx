@@ -8,7 +8,7 @@ import ConfirmModal from "@/components/ui/ConfirmModal"
 import {TERM_LABELS} from "@/constants/termLabels";
 
 // Icons
-import { FiAlertTriangle, FiCheckCircle } from "react-icons/fi"
+import { FiAlertTriangle, FiCheckCircle, FiEdit3  } from "react-icons/fi"
 
 // Utilities
 import {createClient} from "@/utils/supabase/client";
@@ -25,10 +25,14 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
     const [semester, setSemester] = useState(currentSemester ?? '')
     const [acadYear, setAcadYear] = useState(currentAcadYear ?? 2026)
     const [semStart, setSemStart] = useState(currentSemStart ?? '')
+    const isUnchanged =
+        semester === (currentSemester ?? '') &&
+        acadYear === (currentAcadYear ?? 2026) &&
+        semStart === (currentSemStart ?? '')
 
     // Function states
     const [loading, setLoading] = useState(false)
-    const [confirmAction, setConfirmAction] = useState<'save' | 'end' | null>(null)
+    const [confirmAction, setConfirmAction] = useState<'save' | 'end' | 'update' | null>(null)
 
     const supabase = createClient()
 
@@ -42,7 +46,8 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
     // Handles saving the semester details
     async function handleSave() {
         setLoading(true)
-        const { error } = await supabase.rpc('set_current_semester', {
+        const rpc = isCurrentActive ? 'update_current_semester' : 'set_current_semester'
+        const { error } = await supabase.rpc(rpc, {
             p_term: semester,
             p_ay_start: acadYear,
             p_semester_start: semStart
@@ -54,7 +59,7 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
             toast.error(error.message)
             return
         }
-        toast.success('Semester saved successfully.')
+        toast.success(isCurrentActive ? 'Semester updated successfully.' : 'Semester saved successfully.')
         window.location.href = window.location.pathname
     }
 
@@ -83,9 +88,8 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                     <label className="text-sm text-text-muted">Term</label>
                     <select name="currentTerm"
                             value={semester}
-                            disabled={isCurrentActive}
                             onChange={(e) => setSemester(e.target.value)}
-                            className="px-3 py-2 text-sm rounded-sm border border-white-border bg-white  focus:outline-none focus:ring focus:ring-text-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                            className="px-3 py-2 text-sm rounded-sm border border-white-border bg-white  focus:outline-none focus:ring focus:ring-text-primary">
                         <option value="" disabled hidden>Select semester</option>
                         {Object.entries(TERM_LABELS).map(([value, label]) => (
                             <option key={value} value={value}>{label as string}</option>
@@ -102,10 +106,9 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                             type="number"
                             min={2026}
                             value={acadYear}
-                            disabled={isCurrentActive}
                             placeholder="Enter academic year 2026 onwards..."
                             onChange={(e) => setAcadYear(Number(e.target.value))}
-                            className="px-3 py-2 text-sm rounded-sm border border-white-border bg-white  focus:outline-none focus:ring focus:ring-text-primary disabled:opacity-50 disabled:cursor-not-allowed w-40"
+                            className="px-3 py-2 text-sm rounded-sm border border-white-border bg-white  focus:outline-none focus:ring focus:ring-text-primary w-40"
                         />
                         <p className={`${isCurrentActive ? "opacity-50" : "opacity-100" } text-sm whitespace-nowrap`}>
                             {acadYear ? `– ${acadYear + 1}` : '— ----'}
@@ -119,9 +122,8 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                     <input name="semStart"
                            type="date"
                            value={semStart}
-                           disabled={isCurrentActive}
                            onChange={(e) => setSemStart(e.target.value)}
-                           className="px-3 py-2 text-sm rounded-sm border border-white-border bg-white  focus:outline-none focus:ring focus:ring-text-primary disabled:opacity-50 disabled:cursor-not-allowed" />
+                           className="px-3 py-2 text-sm rounded-sm border border-white-border bg-white  focus:outline-none focus:ring focus:ring-text-primary" />
                 </div>
             </div>
             <button onClick={() => {
@@ -129,11 +131,11 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                             toast.error('Academic year must be 2026 or later.')
                             return
                         }
-                        setConfirmAction('save')
+                        setConfirmAction(isCurrentActive ? 'update' : 'save')
                     }}
-                    disabled={loading || isCurrentActive || !semester || !acadYear || !semStart}
+                    disabled={loading || !semester || !acadYear || !semStart || isUnchanged}
                     className="px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer">
-                Save Current Semester
+                {isCurrentActive ? 'Update Current Semester' : 'Save Current Semester'}
             </button>
 
             <button onClick={() => setConfirmAction('end')}
@@ -147,9 +149,29 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                 onCancel={() => setConfirmAction(null)}
                 title="Save this semester?"
                 message="This will set the entered term as the new current semester. Once saved, the semestral details cannot be edited unless it is ended first."
-                icon={<FiCheckCircle className="text-green-600 text-5xl" />}
+                icon={
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                        <FiCheckCircle className="text-green-600 text-4xl" />
+                    </div>
+                }
                 confirmLabel="Save"
                 confirmClassName="bg-green-600 hover:bg-green-700"
+                loading={loading}
+                onConfirm={handleSave}
+            />
+
+            <ConfirmModal
+                isOpen={confirmAction === 'update'}
+                onCancel={() => setConfirmAction(null)}
+                title="Update this semester?"
+                message="This will update the current semester's details. Make sure the term, academic year, and start date are correct before saving."
+                icon={
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                        <FiEdit3 className="text-blue-600 text-4xl" />
+                    </div>
+                }
+                confirmLabel="Update"
+                confirmClassName="bg-blue-600 hover:bg-blue-700"
                 loading={loading}
                 onConfirm={handleSave}
             />
@@ -159,7 +181,11 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                 onCancel={() => setConfirmAction(null)}
                 title="End the current semester?"
                 message="This will close the active semester until a new one is set up."
-                icon={<FiAlertTriangle className="text-red-600 text-5xl" />}
+                icon={
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                        <FiAlertTriangle className="text-red-600 text-4xl" />
+                    </div>
+                }
                 confirmLabel="End Semester"
                 confirmClassName="bg-red-600 hover:bg-red-700"
                 loading={loading}
