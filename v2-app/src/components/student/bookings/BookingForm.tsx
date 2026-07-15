@@ -6,6 +6,7 @@ import ConfirmBookingModal from './ConfirmBookingModal';
 import { toast } from 'sonner';
 import type { BookingMentor, MentorAvailability, MentorBookedSlot, MentorSubjectLink, TutorialMode } from '@/types/bookings';
 import type { Subject } from '@/types/mentor';
+import { useRouter } from 'next/router';
 
 const SESSION_MIN = '08:00';
 const SESSION_MAX = '18:00';
@@ -70,6 +71,7 @@ export default function BookingForm({
     const [showConfirm, setShowConfirm] = useState(false);
     const [submitting, setSubmitting]   = useState(false);
     const [validating, setValidating]   = useState(false);
+    const router = useRouter();
     
     // Booking form post field
     const updateField = <K extends keyof BookingFormState>(key: K, value: BookingFormState[K]) => {
@@ -219,13 +221,19 @@ export default function BookingForm({
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                ...form,
-                group_emails: form.group_emails.filter((e) => e.trim() !== ''),
+                    ...form,
+                    group_emails: form.group_emails.filter((e) => e.trim() !== ''),
                 }),
             });
             const data = await r.json();
             if (!r.ok) {
                 setErrors(data.errors ?? {});
+                if (r.status === 403) {
+                    toast.error('Bookings are currently unavailable.');
+                    router.replace(router.asPath, undefined, { scroll: false });
+                } else if (data.errors?.general) {
+                    toast.error(data.errors.general);
+                }
                 return;
             }
             setShowConfirm(true);
@@ -241,19 +249,28 @@ export default function BookingForm({
             const r = await fetch('/api/bookings/bookings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({...form, group_emails: form.group_emails.filter((e) => e.trim() !== ''),
+                body: JSON.stringify({
+                    ...form,
+                    group_emails: form.group_emails.filter((e) => e.trim() !== ''),
                 }),
             });
             if (!r.ok) {
-                const data = await r.json();
-                const errorData = data.errors ?? { general: 'Booking failed.' };
+                const data = await r.json().catch(() => null);
+                const errorData = data?.errors ?? { general: 'Booking failed.' };
                 setErrors(errorData);
                 setShowConfirm(false);
                 if (errorData.general) toast.error(errorData.general);
+
+                if (r.status === 403) {
+                    router.replace(router.asPath, undefined, { scroll: false });
+                }
                 return;
             }
             setShowConfirm(false);
             onSuccess();
+        } catch {
+            toast.error('Something went wrong. Please check your connection and try again.');
+            setShowConfirm(false);
         } finally {
             setSubmitting(false);
         }
