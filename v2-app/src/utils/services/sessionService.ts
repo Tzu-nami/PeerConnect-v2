@@ -11,6 +11,7 @@ interface RawBooking {
     schedule_start: string;
     schedule_end: string;
     mentor_id: string | null;
+    room: string;
     student_profiles: {
         student_num: string;
         year_levels: { name: string } | null;
@@ -74,6 +75,7 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       schedule_start,
       schedule_end,
       mentor_id,
+      room,
       student_profiles!student_id (
         student_num,
         year_levels ( name ),
@@ -122,7 +124,6 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       .map(bk => bk.student_profiles?.user_profiles)
       .filter((u): u is NonNullable<typeof u> => u !== null && u !== undefined);
     const mentorUser = b.mentor_profiles?.user_profiles;
-    const sp = b.student_profiles;
     return {
       id: b.id,
       group_ids: group.map(bk => bk.id),
@@ -146,6 +147,7 @@ export async function getAdminSessionsData(supabase: SupabaseClient, semesterId?
       degreeProgram: group.map(bk => bk.student_profiles?.degree_programs?.name ?? 'N/A').join(', '),
       status: derivedStatus,
       is_open: b.mentor_id === null,
+      room: b.room,
     };
   };
 

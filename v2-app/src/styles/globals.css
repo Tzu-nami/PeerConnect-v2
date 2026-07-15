@@ -126,7 +126,7 @@ select {
     border: 2px solid var(--color-white-border);
     box-shadow: 0 12px 30px #0003;
     border-radius: 12px;
-    background-color: var(--color-white-complement);
+    background-color: white;
     padding: 0.6rem;
 }
 

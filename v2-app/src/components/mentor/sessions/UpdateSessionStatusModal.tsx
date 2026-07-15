@@ -81,7 +81,7 @@ export default function UpdateSessionStatusModal({ isOpen, session, action, onCl
             onSuccess(action);
         } catch (err: any) {
             console.error(err);
-            toast(err.message || 'An error occurred while updating the session.');
+            toast.error(err.message || 'An error occurred while updating the session.');
         } finally {
             setIsSubmitting(false);
         }

@@ -71,6 +71,7 @@ export interface AdminSession {
     degreeProgram: string;
     status: SessionStatus;
     is_open: boolean;
+    room?: string;
 }
 
 export interface SessionCounts {

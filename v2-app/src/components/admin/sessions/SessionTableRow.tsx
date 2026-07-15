@@ -1,4 +1,4 @@
-import { MdCancel, MdEdit } from 'react-icons/md';
+import { MdCancel, MdEdit, MdOutlineAddLocationAlt } from 'react-icons/md';
 import type { AdminSession } from '@/types/admin';
 import StatusBadge from '@/components/ui/StatusBadge';
 
@@ -7,9 +7,10 @@ interface RowProps {
   onView: (s: AdminSession) => void;
   onEdit: (s: AdminSession) => void;
   onCancel: (s: AdminSession) => void;
+  onAssignRoom: (s: AdminSession) => void;
 }
 
-export default function SessionTableRow({ session, onView, onEdit, onCancel }: RowProps) {
+export default function SessionTableRow({ session, onView, onEdit, onCancel, onAssignRoom }: RowProps) {
   return (
     <tr onClick={() => onView(session)} className="border-t border-white-border hover:bg-white-hover transition cursor-pointer group">
       {/* Info */}
@@ -27,8 +28,16 @@ export default function SessionTableRow({ session, onView, onEdit, onCancel }: R
           {session.email}
         </p>
       </td>
-      <td className="px-5 py-4 align-middle text-sm text-text-white-light truncate" title={session.mentor}>
-        {session.mentor}
+      <td className="px-5 py-4 align-middle">
+        <p className="font-bold text-sm text-text-primary truncate" title={`${session.mentor}`}>
+          {session.mentor}
+        </p>
+        <p 
+          className="text-text-white-light text-xs truncate mt-0.5" 
+          title={session.room === 'TBA' ? 'N/A' : session.room}
+        >
+          Room: {session.room === 'TBA' ? 'N/A' : session.room}
+        </p>
       </td>
       <td className="px-5 py-4 align-middle">
         <p className="font-bold text-sm text-text-primary truncate" title={`${session.subject}`}>
@@ -58,6 +67,17 @@ export default function SessionTableRow({ session, onView, onEdit, onCancel }: R
               <MdEdit />
             </button>
           )}
+
+          {session.status === 'accepted' && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); onAssignRoom(session); }}
+              className="p-1.5 rounded-lg text-emerald-600 hover:text-emerald-700 bg-emerald-100 hover:bg-emerald-200 hover:scale-110 transition cursor-pointer" 
+              title="Assign Room"
+            >
+              <MdOutlineAddLocationAlt />
+            </button>
+          )}
+
           {/* Cancel sessions */}
           {(session.status === 'pending' || session.status === 'accepted') && (
             <button 
