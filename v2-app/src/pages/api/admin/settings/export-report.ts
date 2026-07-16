@@ -11,8 +11,8 @@ import { buildFeedbackList, buildMentorList, buildSessionSheet, buildSummaryShee
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Check if semester exists
-    const semester_id = req.query.semester_id
-    if (!semester_id || typeof  semester_id !== 'string') {
+    let semester_id = req.query.semester_id
+    if (!semester_id || typeof semester_id !== 'string') {
         return res.status(400).json({ error: 'semester_id is required'})
     }
 
@@ -29,7 +29,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return `${hours}h ${minutes}m`;
     }
 
-    const supabase = createClient({ req, res })
+    const supabase = createClient({ req, res } as any)
+
+    // Resolve "current" to the actual active semester's id
+    if (semester_id === 'current') {
+        const { data: currentSemester } = await supabase
+            .from('semesters')
+            .select('id')
+            .eq('is_current', true)
+            .single()
+
+        if (!currentSemester) {
+            return res.status(404).json({ error: 'No active semester to generate a report for.' })
+        }
+        semester_id = currentSemester.id
+    }
 
     // Fetch semesters
     const { data: semester } = await supabase
@@ -72,6 +86,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const { data: hours } = await supabase
                 .rpc('get_rendered_hours', { p_mentor_id: mentor.id , p_semester_id: semester_id })
 
+            const rawHours = Number(hours ?? 0)
+
             const sessionsCompleted = sessionRows
                 .filter((session) => session.mentor_id === mentor.id && session.booking_status === 'completed')
                 .length
@@ -89,7 +105,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 program:  mentor.program,
                 year_level: mentor.year_level,
                 sessions_completed: sessionsCompleted,
-                hours_rendered: formatHours(hours ?? 0),
+                hours_rendered: formatHours(rawHours),
+                raw_hours: rawHours,
                 average_rating: averageRatings,
             }
         })
@@ -119,7 +136,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         cancelled: sessionRows.filter((session) => session.booking_status === 'cancelled').length,
         rejected: sessionRows.filter((session) => session.booking_status === 'rejected').length,
         noShow: sessionRows.filter((session) => session.booking_status === 'no_show').length,
-        totalHours: formatHours(mentorPerformance.reduce((sum, mentor) => sum + Number(mentor.hours_rendered), 0)),
+        totalHours: formatHours(mentorPerformance.reduce((sum, mentor) => sum + mentor.raw_hours, 0)),
         feedbackCount: feedbackRows.length,
         averageRating: overallAverageRating
     }
