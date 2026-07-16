@@ -54,6 +54,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         .eq('mentor_id', mentorId)
     const subjectIds = mentorSubjects?.map(ms => ms.subject_id) || []
 
+    // Get mentor's availabilities
+    const { data: mentorAvailabilities } = await supabase
+        .from('mentor_availabilities')
+        .select('day_of_week, start_time, end_time')
+        .eq('mentor_id', mentorId)
+    const availabilities = mentorAvailabilities || []
+
     // Fetch data from server
     const [result1, result2, result3, result4, result5, result6, result7, openSessionsResult] = await Promise.all([
         // Sessions today
@@ -79,7 +86,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             .from('feedback_details')
             .select('average_rating')
             .eq('semester_id', semesterId)
-            .eq('mentor_id', mentorId),
+            .eq('mentor_id', mentorId)
+            .not('average_rating', 'is', null),
 
         // Rendered hours
         supabase.rpc('get_rendered_hours', { p_mentor_id: mentorId, p_semester_id: semesterId }),
@@ -106,7 +114,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         // ANY sessions
         subjectIds.length > 0 
         ? supabase.from('bookings').select(`
-            id, topic, date, schedule_start, schedule_end, booking_status,
+            id, topic, date, schedule_start, schedule_end, booking_status, group_id,
             subjects ( code ), tutorial_modes ( mode ),
             student_profiles!student_id ( user_profiles ( firstName, lastName ) )
             `).is('mentor_id', null).eq('booking_status', 'pending').gte('date', TODAY).in('subject_id', subjectIds)
@@ -115,17 +123,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const sessionsToday        = result1.count
     const pendingRequestsCount = result2.count
-    const rawRenderedHours = result4.data ?? 0;
-    const totalMins = Math.round(rawRenderedHours * 60);
-    const hrs = Math.floor(totalMins / 60);
-    const mins = totalMins % 60;
-    const renderedHours = `${hrs}h ${mins}m`;
 
     // Average feedback calculation
     const feedbackData = result3.data ?? []
     const validRatings = feedbackData
         .map((row) => row.average_rating)
-        .filter((rating) => rating !== null)
+        .filter((rating) => !isNaN(rating) && rating > 0)
 
     const averageRatings = validRatings.length > 0
         ? validRatings.reduce((sum, rating) => sum + rating, 0) / validRatings.length
@@ -134,6 +137,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // Booking data
     const assignedSessions = (result5.data ?? []).map((booking: any) => ({
         id: booking.id,
+        group_id: booking.group_id ?? null,
         topic: booking.topic,
         date: booking.date,
         scheduleStart: booking.schedule_start,
@@ -147,8 +151,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }))
 
     // First come first serve bookings
-    const openSessions = (openSessionsResult.data ?? []).map((booking: any) => ({
+    const openSessions = (openSessionsResult.data ?? []).filter((booking: any) => {
+            const sessionDay = new Date(booking.date + 'T00:00:00')
+                .toLocaleDateString('en-US', { weekday: 'long' })
+                .toLowerCase();
+            const sessionStartTime = booking.schedule_start.split('T')[1] || booking.schedule_start;
+            const sessionEndTime = booking.schedule_end.split('T')[1] || booking.schedule_end;
+
+            return availabilities.some((avail) => 
+                avail.day_of_week === sessionDay &&
+                avail.start_time <= sessionStartTime &&
+                avail.end_time >= sessionEndTime
+            );
+        }).map((booking: any) => ({
         id: booking.id,
+        group_id: booking.group_id ?? null,
         topic: booking.topic,
         date: booking.date,
         scheduleStart: booking.schedule_start,
@@ -162,7 +179,37 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             : 'Unknown',
         isOpen: true
     }))
-    const sessionList = [...assignedSessions, ...openSessions]
+    const rawSessionList = [...assignedSessions, ...openSessions]
+
+    const sessionMap = new Map();
+    rawSessionList.forEach((session) => {
+        const key = session.group_id || `${session.date}_${session.scheduleStart}_${session.scheduleEnd}_${session.subject}`;
+        
+        if (!sessionMap.has(key)) {
+            sessionMap.set(key, {
+                ...session,
+                group_ids: [session.id]
+            });
+        } else {
+            const existing = sessionMap.get(key);
+            existing.group_ids.push(session.id);
+            existing.studentName = `${existing.group_ids.length} Students (Group)`;
+        }
+    });
+
+    const sessionList = Array.from(sessionMap.values());
+    const completedSessions = sessionList.filter((s) => s.bookingStatus === 'completed' && !s.isOpen);
+    let totalRenderedMins = 0;
+    
+    completedSessions.forEach((session) => {
+        const start = new Date(session.scheduleStart).getTime();
+        const end = new Date(session.scheduleEnd).getTime();
+        totalRenderedMins += Math.max(0, (end - start) / 60000);
+    });
+
+    const hrs = Math.floor(totalRenderedMins / 60);
+    const mins = Math.round(totalRenderedMins % 60);
+    const renderedHours = `${hrs}h ${mins}m`;
 
     // Pending requests
     const pendingSessions = sessionList.filter((session) => session.bookingStatus === 'pending')

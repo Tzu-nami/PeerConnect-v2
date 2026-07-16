@@ -74,7 +74,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         supabase
             .from('feedback_details')
             .select('average_rating')
-            .eq('semester_id', semesterId),
+            .eq('semester_id', semesterId)
+            .not('average_rating', 'is', null),
 
         // Total students
         supabase
@@ -119,8 +120,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     ])
 
     const totalMentors = result1.count
-    const totalSessionsToday = result2.count
-    const totalPendingSessions = result3.count
     const totalStudents = result5.count
     const staffList = result7.data ?? []
     const topMentors = result10.data ?? []
@@ -137,7 +136,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     // Average feedback calculation
     const feedbackData = result4.data ?? []
-    const rowAverage = feedbackData.map((feedback) => feedback.average_rating).filter((value) => value !== null)
+    const rowAverage = feedbackData.map((feedback) => feedback.average_rating).filter((value) => !isNaN(value) && value > 0)
     const totalFeedbackAverage = rowAverage.length > 0
         ? rowAverage.reduce((total, sum) => total + sum, 0) / rowAverage.length
         : 0
@@ -151,8 +150,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const satisfactionData = Object.entries(satisfactionCounts).map(([name, value]) => ({ name, value }))
 
     // Booking data
-    const sessionList = (result6.data ?? []).map((booking) => ({
+    const assignedSessions = (result6.data ?? []).map((booking: any) => ({
         id: booking.id,
+        group_id: booking.group_id ?? null,
         topic: booking.topic,
         date: booking.date,
         scheduleStart: booking.schedule_start,
@@ -161,8 +161,47 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         subject: booking.subject_code,
         mode: booking.tutorial_mode,
         mentorName: booking.mentor_name,
-        studentName: booking.student_name
+        studentName: booking.student_name,
+        isOpen: false
     }))
+
+    const rawSessionList = (result6.data ?? []).map((booking: any) => ({
+        id: booking.id,
+        group_id: booking.group_id ?? null,
+        topic: booking.topic,
+        date: booking.date,
+        scheduleStart: booking.schedule_start,
+        scheduleEnd: booking.schedule_end,
+        bookingStatus: booking.booking_status,
+        subject: booking.subject_code,
+        mode: booking.tutorial_mode,
+        mentorName: booking.mentor_name || 'Any', 
+        studentName: booking.student_name,
+        isOpen: !booking.mentor_name
+    }))
+
+    const sessionMap = new Map();
+    rawSessionList.forEach((session) => {
+        const isGroup = session.mode?.toLowerCase().includes('group');
+        const key = session.group_id || 
+            (isGroup 
+                ? `${session.date}_${session.scheduleStart}_${session.scheduleEnd}_${session.subject}_${session.topic}_${session.bookingStatus}_${session.mentorName}`
+                : session.id);
+        if (!sessionMap.has(key)) {
+            sessionMap.set(key, {
+                ...session,
+                group_ids: [session.id]
+            });
+        } else {
+            const existing = sessionMap.get(key);
+            existing.group_ids.push(session.id);
+            existing.studentName = `${existing.group_ids.length} Students (Group)`;
+        }
+    });
+
+    const sessionList = Array.from(sessionMap.values());
+    const totalSessionsToday = sessionList.filter((s) => s.date === TODAY && s.bookingStatus === 'accepted').length;
+    const totalPendingSessions = sessionList.filter((s) => s.bookingStatus === 'pending').length;
 
     // Mentor data
     const mentorList = (result8.data ?? []).map((mentor) => ({

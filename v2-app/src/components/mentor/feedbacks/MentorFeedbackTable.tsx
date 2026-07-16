@@ -109,9 +109,9 @@ export default function MentorFeedbackTable({
                 </div>
             </div>
 
-            <div className="border-t border-white-border overflow-x-auto pr-4">
+            <div className="border-t border-white-border overflow-x-auto">
                 <table className="w-full text-left text-sm table-fixed min-w-[760px]">
-                    <thead className="border-b border-white-border bg-white">
+                    <thead className="border-b border-white-border bg-white-dark">
                     <tr>
                         <th className="px-5 py-3 w-[14%]">
                             <button

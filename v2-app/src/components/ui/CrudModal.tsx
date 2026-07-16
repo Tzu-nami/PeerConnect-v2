@@ -33,9 +33,11 @@ export default function CrudModal({
                     <h2 className="text-lg font-extrabold text-up-maroon">{title}</h2>
                     {subtitle && <p className="text-sm text-slate-500 mt-0.5">{subtitle}</p>}
                 </div>
-                <button onClick={onClose} className="text-slate-400 hover:text-red-700 text-xl font-bold transition cursor-pointer">
-                    <FaXmark className="text-xl" />
-                </button>
+                {onClose && (
+                    <button onClick={onClose} className="text-slate-400 hover:text-red-700 text-xl font-bold transition cursor-pointer">
+                        <FaXmark className="text-xl" />
+                    </button>
+                )}
             </div>
 
             {/* Body */}

@@ -76,45 +76,68 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .select('*'),
     ])
 
-    const sessionRows = sessions ?? []
+    const rawSessionRows = sessions ?? []
     const feedbackRows = feedback ?? []
     const mentorRows = mentors ?? []
 
+    // Prevent group sessions increasing session hours
+    const sessionMap = new Map();
+    rawSessionRows.forEach((row) => {
+        const isGroup = row.tutorial_mode?.toLowerCase().includes('group');
+        const key = row.group_id || 
+            (isGroup 
+                ? `${row.date}_${row.schedule_start}_${row.schedule_end}_${row.subject_code}_${row.topic}_${row.booking_status}_${row.mentor_id}`
+                : row.id);
+
+        if (!sessionMap.has(key)) {
+            sessionMap.set(key, { ...row, groupCount: 1 });
+        } else {
+            const existing = sessionMap.get(key);
+            existing.groupCount += 1;
+            existing.student_name = `${existing.groupCount} Students (Group)`;
+        }
+    });
+
+    const deduplicatedSessions = Array.from(sessionMap.values());
+
     // Construct mentor performance details
-    const mentorPerformance = await Promise.all(
-        mentorRows.map(async (mentor) => {
-            const { data: hours } = await supabase
-                .rpc('get_rendered_hours', { p_mentor_id: mentor.id , p_semester_id: semester_id })
+    const mentorPerformance = mentorRows.map((mentor) => {
+        const mentorCompletedSessions = deduplicatedSessions.filter(
+            (session) => session.mentor_id === mentor.id && session.booking_status === 'completed'
+        );
 
-            const rawHours = Number(hours ?? 0)
+        const sessionsCompleted = mentorCompletedSessions.length;
 
-            const sessionsCompleted = sessionRows
-                .filter((session) => session.mentor_id === mentor.id && session.booking_status === 'completed')
-                .length
+        let rawHours = 0;
+        mentorCompletedSessions.forEach((session) => {
+            const start = new Date(session.schedule_start).getTime();
+            const end = new Date(session.schedule_end).getTime();
+            rawHours += Math.max(0, (end - start) / 3600000);
+        });
 
-            const mentorFeedback = feedbackRows
-                .filter((feedback) => feedback.mentor_id === mentor.id)
-                .map((row) => row.average_rating)
-                .filter((rating) => rating !== null)
-            const averageRatings = mentorFeedback.length > 0
-                ? (mentorFeedback.reduce((sum, rating) => sum + rating, 0) / mentorFeedback.length)
-                : 'N/A'
+        // Calculate feedback rating
+        const mentorFeedback = feedbackRows
+            .filter((feedback) => feedback.mentor_id === mentor.id)
+            .map((row) => Number(row.average_rating))
+            .filter((rating) => !isNaN(rating) && rating > 0);
+        const averageRatings = mentorFeedback.length > 0
+            ? (mentorFeedback.reduce((sum, rating) => sum + rating, 0) / mentorFeedback.length)
+            : 'N/A'
 
-            return {
-                mentor_name: mentor.mentor_name,
-                program:  mentor.program,
-                year_level: mentor.year_level,
-                sessions_completed: sessionsCompleted,
-                hours_rendered: formatHours(rawHours),
-                raw_hours: rawHours,
-                average_rating: averageRatings,
-            }
-        })
-    )
+        return {
+            mentor_name: mentor.mentor_name,
+            program:  mentor.program,
+            year_level: mentor.year_level,
+            sessions_completed: sessionsCompleted,
+            hours_rendered: formatHours(rawHours),
+            raw_hours: rawHours,
+            average_rating: averageRatings,
+        }
+    });
 
     const validRatings = feedbackRows
-        .map((row) => row.average_rating)
-        .filter((rating) => rating !== null);
+        .map((row) => Number(row.average_rating))
+        .filter((rating) => !isNaN(rating) && rating > 0);
 
     const overallAverageRating = validRatings.length > 0
         ? (validRatings.reduce((sum, rating) => sum + rating, 0) / validRatings.length)
@@ -127,15 +150,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         semesterEnd: semester.semester_end,
 
         // Student + Mentor data
-        uniqueStudents: new Set(sessionRows.map((student) => student.student_id)).size,
+        uniqueStudents: new Set(rawSessionRows.map((student) => student.student_id)).size,
         activeMentors: mentorPerformance.filter((mentor) => mentor.sessions_completed > 0).length,
 
         // Session data
-        totalSessions: sessionRows.length,
-        completed: sessionRows.filter((session) => session.booking_status === 'completed').length,
-        cancelled: sessionRows.filter((session) => session.booking_status === 'cancelled').length,
-        rejected: sessionRows.filter((session) => session.booking_status === 'rejected').length,
-        noShow: sessionRows.filter((session) => session.booking_status === 'no_show').length,
+        totalSessions: deduplicatedSessions.length,
+        completed: deduplicatedSessions.filter((session) => session.booking_status === 'completed').length,
+        cancelled: deduplicatedSessions.filter((session) => session.booking_status === 'cancelled').length,
+        rejected: deduplicatedSessions.filter((session) => session.booking_status === 'rejected').length,
+        noShow: deduplicatedSessions.filter((session) => session.booking_status === 'no_show').length,
         totalHours: formatHours(mentorPerformance.reduce((sum, mentor) => sum + mentor.raw_hours, 0)),
         feedbackCount: feedbackRows.length,
         averageRating: overallAverageRating
@@ -144,7 +167,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Build Excel file
     const workbook = new ExcelJS.Workbook()
     buildSummarySheet(workbook, summary)
-    buildSessionSheet(workbook, sessionRows)
+    buildSessionSheet(workbook, deduplicatedSessions) 
     buildFeedbackList(workbook, feedbackRows)
     buildMentorList(workbook, mentorPerformance)
 

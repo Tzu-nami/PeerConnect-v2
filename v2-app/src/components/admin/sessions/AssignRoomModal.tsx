@@ -80,7 +80,7 @@ export default function AssignRoomModal({ isOpen, session, onClose, onSuccess }:
                         disabled={isSubmitting || !selectedRoom || !hasChanges}
                         className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-btn-gray hover:bg-btn-gray-hover rounded-lg shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition"
                     >
-                        Save Room
+                        {isSubmitting ? <>Saving... </> : 'Save Room'}
                     </button>
                 </div>
             }

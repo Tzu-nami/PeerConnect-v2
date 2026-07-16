@@ -164,7 +164,7 @@ export default function MentorSessionsTable({
                 </div>
             </div>
 
-            <div className="border-t border-white-border overflow-x-auto pr-4">
+            <div className="border-t border-white-border overflow-x-auto">
                 <table className="w-full text-left text-sm table-fixed min-w-[900px]">
                     <thead className="border-b border-white-border bg-white-dark">
                     <tr>
