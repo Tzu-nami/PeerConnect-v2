@@ -20,7 +20,7 @@ export default function MentorSessionsTableRow({ session, onView, onEdit, onCanc
       onClick={() => onView(session)}
       className="border-t border-white-border hover:bg-white-hover transition cursor-pointer group"
     >
-      <td className="px-5 py-4 align-middle">
+        <td className="px-5 py-4 align-middle sticky left-0 bg-white z-10 group-hover:bg-white-hover">
         <p className="font-bold text-sm text-text-primary truncate">
           {session.date}
         </p>
@@ -80,9 +80,9 @@ export default function MentorSessionsTableRow({ session, onView, onEdit, onCanc
 
       <td className="px-5 py-4 align-middle text-sm text-center relative">
         {!['cancelled', 'rejected', 'no_show'].includes(session.status) && (
-          <span className="w-2 h-2 rounded-full bg-text-brown-light inline-block group-hover:opacity-0 transition-all duration-150 ease-in-out" />
+            <span className="w-2 h-2 rounded-full bg-text-brown-light hidden md:inline-block md:group-hover:opacity-0 transition-all duration-150 ease-in-out" />
         )}
-        <div className="absolute inset-0 flex items-center justify-center gap-2 text-lg opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out">
+          <div className="absolute inset-0 flex items-center justify-center gap-2 text-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200 ease-in-out">
           {session.status === 'pending' && (
             <>
             {/* Pending */}

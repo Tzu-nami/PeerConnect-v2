@@ -87,201 +87,202 @@ export default function MentorSessionsTable({
     }
   }
 
-  return (
-    <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white">
-      <div className="flex flex-wrap gap-4 justify-between items-center p-5">
-        <div>
-          <h2 className="font-bold text-lg text-text-primary">All Sessions</h2>
-          <p className="text-sm text-text-muted font-medium">
-            {totalCount} Session{totalCount !== 1 ? "s" : ""} found
-          </p>
-        </div>
+    return (
+        <div className="rounded-xl shadow-md border border-white-border mt-5 bg-white grid grid-cols-1">
+            <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center p-5">
+                <div>
+                    <h2 className="font-bold text-lg text-text-primary">All Sessions</h2>
+                    <p className="text-sm text-text-muted font-medium">
+                        {totalCount} Session{totalCount !== 1 ? "s" : ""} found
+                    </p>
+                </div>
 
-        <div className="flex gap-3 items-center flex-wrap">
-          <SearchBar
-            value={searchQuery}
-            onChange={onSearch}
-            placeholder="Search sessions..."
-            className="w-56"
-          />
+                <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center w-full md:w-auto">
+                    <SearchBar
+                        value={searchQuery}
+                        onChange={onSearch}
+                        placeholder="Search sessions..."
+                        className="w-56"
+                    />
 
-            <SemesterFilter
-                semesters={semesters}
-                selected={selectedSemesterId}
-                onChange={onSemesterChange}
-            />
+                    <div className="w-full sm:w-auto">
+                        <SemesterFilter
+                            semesters={semesters}
+                            selected={selectedSemesterId}
+                            onChange={onSemesterChange}
+                        />
+                    </div>
 
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-muted focus:ring-text-muted/30 transition-shadow h-[36px] min-w-[150px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
-            >
+                    <div className="relative w-full sm:w-auto">
+                        <button
+                            type="button"
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            className="px-4 py-2 text-xs font-medium text-text-primary border border-white-border rounded-lg bg-white outline-none focus:ring-1 focus:border-text-muted focus:ring-text-muted/30 transition-shadow h-[36px] min-w-[150px] flex items-center justify-between gap-3 shadow-sm cursor-pointer"
+                        >
               <span>
                 {statusFilters.length === 0
-                  ? 'All Statuses'
-                  : statusFilters.length === 1
-                    ? getFilterLabel(statusFilters[0])
-                    : `${statusFilters.length} Selected`}
+                    ? 'All Statuses'
+                    : statusFilters.length === 1
+                        ? getFilterLabel(statusFilters[0])
+                        : `${statusFilters.length} Selected`}
               </span>
-              <MdKeyboardArrowDown
-                className={`text-xl text-slate-400 transition-transform ${
-                  isDropdownOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
+                            <MdKeyboardArrowDown
+                                className={`text-xl text-slate-400 transition-transform ${
+                                    isDropdownOpen ? "rotate-180" : ""
+                                }`}
+                            />
+                        </button>
 
-            {isDropdownOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setIsDropdownOpen(false)}
-                />
+                        {isDropdownOpen && (
+                            <>
+                                <div
+                                    className="fixed inset-0 z-40"
+                                    onClick={() => setIsDropdownOpen(false)}
+                                />
 
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
-                  {availableStatuses.map((status) => (
-                    <label
-                      key={status}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white cursor-pointer transition"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={statusFilters.includes(status)}
-                        onChange={() => toggleStatus(status)}
-                        className="w-4 h-4 text-up-maroon border-white-border rounded focus:ring-up-maroon/30 cursor-pointer"
-                      />
-                      <span className="text-sm font-bold text-slate-700">
+                                <div className="absolute md:right-0 mt-2 w-48 bg-white border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
+                                    {availableStatuses.map((status) => (
+                                        <label
+                                            key={status}
+                                            className="flex items-center gap-3 px-4 py-2.5 hover:bg-white cursor-pointer transition"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={statusFilters.includes(status)}
+                                                onChange={() => toggleStatus(status)}
+                                                className="w-4 h-4 text-up-maroon border-white-border rounded focus:ring-up-maroon/30 cursor-pointer"
+                                            />
+                                            <span className="text-sm font-bold text-slate-700">
                         {getFilterLabel(status)}
                       </span>
-                    </label>
-                  ))}
+                                        </label>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
-              </>
-            )}
-          </div>
+            </div>
+
+            <div className="border-t border-white-border overflow-x-auto pr-4">
+                <table className="w-full text-left text-sm table-fixed min-w-[900px]">
+                    <thead className="border-b border-white-border bg-white-dark">
+                    <tr>
+                        <th className="px-5 py-3 w-[20%] sticky left-0 bg-white-dark z-10">
+                            <button
+                                onClick={() => onSort("date")}
+                                className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
+                                    sortCol === "date"
+                                        ? "font-extrabold text-text-primary"
+                                        : "font-bold text-text-muted"
+                                }`}
+                            >
+                                Date & Times
+                                <SortIcon col="date" sortCol={sortCol} sortDir={sortDir} />
+                            </button>
+                        </th>
+
+                        <th className="px-5 py-3 w-[20%]">
+                            <button
+                                onClick={() => onSort("student")}
+                                className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
+                                    sortCol === "student"
+                                        ? "font-extrabold text-text-primary"
+                                        : "font-bold text-text-muted"
+                                }`}
+                            >
+                                Student
+                                <SortIcon
+                                    col="student"
+                                    sortCol={sortCol}
+                                    sortDir={sortDir}
+                                />
+                            </button>
+                        </th>
+
+                        <th className="px-5 py-3 w-[20%]">
+                            <button
+                                onClick={() => onSort("subject")}
+                                className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
+                                    sortCol === "subject"
+                                        ? "font-extrabold text-text-primary"
+                                        : "font-bold text-text-muted"
+                                }`}
+                            >
+                                Subject
+                                <SortIcon
+                                    col="subject"
+                                    sortCol={sortCol}
+                                    sortDir={sortDir}
+                                />
+                            </button>
+                        </th>
+
+                        <th className="px-5 py-3 w-[15%]">
+                            <button
+                                onClick={() => onSort("room")}
+                                className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
+                                    sortCol === "room"
+                                        ? "font-extrabold text-text-primary"
+                                        : "font-bold text-text-muted"
+                                }`}
+                            >
+                                Room
+                                <SortIcon col="room" sortCol={sortCol} sortDir={sortDir} />
+                            </button>
+                        </th>
+
+                        <th className="px-5 py-3 w-[15%] text-center">
+                            <button
+                                onClick={() => onSort("status")}
+                                className={`flex items-center justify-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer mx-auto ${
+                                    sortCol === "status"
+                                        ? "font-extrabold text-text-primary"
+                                        : "font-bold text-text-muted"
+                                }`}
+                            >
+                                Status
+                                <SortIcon col="status" sortCol={sortCol} sortDir={sortDir} />
+                            </button>
+                        </th>
+
+                        <th className="px-5 py-3 w-[10%] text-xs font-bold text-text-muted uppercase tracking-wider text-center">
+                            Actions
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {!selectedSemesterId ? (
+                        <tr>
+                            <td colSpan={6}>
+                                <EmptyState />
+                            </td>
+                        </tr>
+                    ) : sessions.length > 0 ? (
+                        sessions.map((session) => (
+                            <MentorSessionsTableRow
+                                key={session.id}
+                                session={session}
+                                onView={onView}
+                                onEdit={onEdit}
+                                onCancel={onCancel}
+                                onAccept={onAccept}
+                                onReject={onReject}
+                                onComplete={onComplete}
+                                onNoShow={onNoShow}
+                            />
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={6} className="text-center py-12 text-sm text-text-muted italic">
+                                <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
+                            </td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
-
-      <div className="border-t border-white-border overflow-x-auto">
-        <table className="w-full text-left text-sm table-fixed min-w-[900px]">
-          <thead className="border-b border-white-border bg-white-dark">
-            <tr>
-              <th className="px-5 py-3 w-[20%]">
-                <button
-                  onClick={() => onSort("date")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
-                    sortCol === "date"
-                      ? "font-extrabold text-text-primary"
-                      : "font-bold text-text-muted"
-                  }`}
-                >
-                  Date & Time
-                  <SortIcon col="date" sortCol={sortCol} sortDir={sortDir} />
-                </button>
-              </th>
-
-              <th className="px-5 py-3 w-[20%]">
-                <button
-                  onClick={() => onSort("student")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
-                    sortCol === "student"
-                      ? "font-extrabold text-text-primary"
-                      : "font-bold text-text-muted"
-                  }`}
-                >
-                  Student
-                  <SortIcon
-                    col="student"
-                    sortCol={sortCol}
-                    sortDir={sortDir}
-                  />
-                </button>
-              </th>
-
-              <th className="px-5 py-3 w-[20%]">
-                <button
-                  onClick={() => onSort("subject")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
-                    sortCol === "subject"
-                      ? "font-extrabold text-text-primary"
-                      : "font-bold text-text-muted"
-                  }`}
-                >
-                  Subject
-                  <SortIcon
-                    col="subject"
-                    sortCol={sortCol}
-                    sortDir={sortDir}
-                  />
-                </button>
-              </th>
-
-              <th className="px-5 py-3 w-[15%]">
-                <button
-                  onClick={() => onSort("room")}
-                  className={`flex items-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer ${
-                    sortCol === "room"
-                      ? "font-extrabold text-text-primary"
-                      : "font-bold text-text-muted"
-                  }`}
-                >
-                  Room
-                  <SortIcon col="room" sortCol={sortCol} sortDir={sortDir} />
-                </button>
-              </th>
-
-              <th className="px-5 py-3 w-[15%] text-center">
-                <button
-                  onClick={() => onSort("status")}
-                  className={`flex items-center justify-center gap-1 text-xs uppercase tracking-wider hover:text-text-primary transition cursor-pointer mx-auto ${
-                    sortCol === "status"
-                      ? "font-extrabold text-text-primary"
-                      : "font-bold text-text-muted"
-                  }`}
-                >
-                  Status
-                  <SortIcon col="status" sortCol={sortCol} sortDir={sortDir} />
-                </button>
-              </th>
-
-              <th className="px-5 py-3 w-[10%] text-xs font-bold text-text-muted uppercase tracking-wider text-center">
-                Actions
-              </th>
-
-            </tr>
-          </thead>
-
-            <tbody>
-            {!selectedSemesterId ? (
-                <tr>
-                    <td colSpan={5}>
-                        <EmptyState />
-                    </td>
-                </tr>
-            ) : sessions.length > 0 ? (
-                sessions.map((session) => (
-                    <MentorSessionsTableRow
-                        key={session.id}
-                        session={session}
-                        onView={onView}
-                        onEdit={onEdit}
-                        onCancel={onCancel}
-                        onAccept={onAccept}
-                        onReject={onReject}
-                        onComplete={onComplete}
-                        onNoShow={onNoShow}
-                    />
-                ))
-            ) : (
-                <tr>
-                    <td colSpan={5} className="text-center py-12 text-sm text-text-muted italic">
-                        <p className="text-sm font-semibold text-slate-500">No sessions match your filters.</p>
-                    </td>
-                </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+    );
 }

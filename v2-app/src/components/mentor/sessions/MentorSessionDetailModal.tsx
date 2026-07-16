@@ -85,7 +85,7 @@ export default function MentorSessionDetailModal({ session, onClose }: Props) {
             )}
           </div>
 
-        <div className="shrink-0 pt-4 mt-1 border-t border-white-border flex justify-end">
+          <div className="shrink-0 flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4 border-b border-white-border pb-4">
           <button
             type="button"
             onClick={onClose}
