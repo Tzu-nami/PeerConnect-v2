@@ -118,11 +118,11 @@ export default function SessionTable({
                   onClick={() => setIsDropdownOpen(false)} 
                 />
                 
-                <div className="absolute right-0 mt-2 w-48 bg-white-complement border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-white-border rounded-xl shadow-xl z-50 py-2 overflow-hidden">
                   {availableStatuses.map(status => (
                     <label 
                       key={status} 
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white-complement-hover hover:rounded-lg cursor-pointer transition"
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white-hover hover:rounded-lg cursor-pointer transition"
                     >
                       <input 
                         type="checkbox"

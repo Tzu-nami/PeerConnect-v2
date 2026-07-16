@@ -193,7 +193,7 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
             open={isOpen}
             title="Feedback Form"
             subtitle="Your enrichment session has been completed! Help us improve our tutoring services by evaluating your experience."
-            maxWidth="max-w-4xl"
+            maxWidth="max-w-xl"
             footer={renderFooter()}
         >
             <SessionSummary />
@@ -236,7 +236,7 @@ export default function FeedbackModal({ isOpen, booking, onDone }: FeedbackModal
                         <textarea
                             value={form.feedback}
                             onChange={(e) => setForm((f) => ({ ...f, feedback: e.target.value }))}
-                            placeholder="Share your thoughts about the session — what went well, what could be improved, or any other comments for your mentor..."
+                            placeholder="Share your thoughts about the session like what went well, what could be improved, or any other comments for your mentor..."
                             rows={5}
                             maxLength={2000}
                             className="w-full px-3 py-2 text-sm rounded-lg border border-white-border bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition disabled:text-slate-400 disabled:bg-gray-50 resize-y break-words overflow-y-auto"

@@ -61,7 +61,7 @@ export default function PendingRequests({ pendingSessions, onSuccess }: PendingR
                                         onClick={() => {
                                             setSelectedSession({
                                                 id: session.id,
-                                                group_ids: [session.id],
+                                                group_ids: session.group_ids || [session.id],
                                                 student: session.studentName,
                                                 subject: session.subject,
                                                 date: formattedDate,
@@ -79,7 +79,7 @@ export default function PendingRequests({ pendingSessions, onSuccess }: PendingR
                                             onClick={() => {
                                                 setSelectedSession({
                                                     id: session.id,
-                                                    group_ids: [session.id],
+                                                    group_ids: session.group_ids || [session.id],
                                                     student: session.studentName,
                                                     subject: session.subject,
                                                     date: formattedDate,

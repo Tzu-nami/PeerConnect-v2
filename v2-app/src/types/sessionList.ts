@@ -9,4 +9,5 @@ export interface SessionList {
     mode: string
     mentorName: string
     studentName: string
+    group_ids?: string[]
 }
