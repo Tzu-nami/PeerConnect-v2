@@ -79,10 +79,6 @@ export default function ModuleNavbar({ userName, userFullName, userEmail, userAv
 
             {/* Right Side */}
             <div className="flex items-center gap-4">
-                {/* Notifications */}
-                <div className="text-white text-xl md:text-2xl font-bold">
-                    <IoNotificationsSharp />
-                </div>
 
                 {/* Profile Dropdown */}
                 <div className="relative" ref={dropdownRef}>
