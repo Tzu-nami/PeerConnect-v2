@@ -16,7 +16,6 @@ import { useClickOutside } from "@/hooks/useClickOutside"
 import { moduleNavLinks } from "@/config/moduleNavLinks"
 
 // Icons
-import { IoNotificationsSharp } from "react-icons/io5"
 import { IoChevronDownOutline } from "react-icons/io5"
 import { FiLogOut } from "react-icons/fi"
 
