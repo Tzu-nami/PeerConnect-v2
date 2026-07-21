@@ -84,7 +84,7 @@ export default function WeeklyScheduleGrid({ sessionList, role }: WeeklySchedule
                         height={670}
                         eventContent={(eventInfo) => {
                             const { status, studentName, mentorName, subject } = eventInfo.event.extendedProps
-                            const colors = STATUS_COLORS[status] ?? STATUS_COLORS.closed
+                            const colors = STATUS_COLORS[status] ?? STATUS_COLORS.cancelled
                             return (
                                 <div style={{
                                     backgroundColor: colors.bg,
