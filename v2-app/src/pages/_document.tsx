@@ -4,6 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
         <Head>
+            <link rel="icon" href="https://yiwhpuvackxkdtayusgx.supabase.co/storage/v1/object/public/assets/logos/LRC_logo.png" type="image/png"/>
             <link rel="preconnect" href="https://fonts.googleapis.com"/>
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
             <link

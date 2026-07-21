@@ -466,6 +466,13 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     .map((row: any) => row.subject_id)
     .filter(Boolean);
 
+  const { data: mentorAvailabilities } = await supabase
+    .from("mentor_availabilities")
+    .select("day_of_week, start_time, end_time")
+    .eq("mentor_id", mentorProfile.id);
+  
+  const availabilities = mentorAvailabilities || [];
+
   let openRows: any[] = [];
 
   if (subjectIds.length > 0) {
@@ -497,7 +504,20 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         .eq("semester_id", selectedSemesterId)
       .in("subject_id", subjectIds);
 
-    openRows = data ?? [];
+    const rawOpenRows = data ?? [];
+    openRows = rawOpenRows.filter((booking: any) => {
+      const sessionDay = new Date(booking.date + 'T00:00:00')
+        .toLocaleDateString('en-US', { weekday: 'long' })
+        .toLowerCase();
+      const sessionStartTime = booking.schedule_start.split('T')[1] || booking.schedule_start;
+      const sessionEndTime = booking.schedule_end.split('T')[1] || booking.schedule_end;
+
+      return availabilities.some((avail) => 
+        avail.day_of_week === sessionDay &&
+        avail.start_time <= sessionStartTime &&
+        avail.end_time >= sessionEndTime
+      );
+    });
   }
 
   const groupedBookings = groupBookings([...(assignedRows ?? []), ...openRows]);

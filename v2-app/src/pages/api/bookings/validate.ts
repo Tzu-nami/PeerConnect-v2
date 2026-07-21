@@ -126,6 +126,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const isGroup = modeName.includes('small group') || modeName.includes('large group');
     if (isGroup && group_emails.length > 0) {
         const cleanEmails = group_emails.filter((e: string) => e.trim() !== '');
+        const uniqueEmails = new Set(cleanEmails);
+        if (uniqueEmails.size !== cleanEmails.length) {
+            return res.status(422).json({ errors: { group_emails: 'Duplicate emails are not allowed.' } });
+        }
+        
         const { data: currentUser } = await supabase.from('user_profiles').select('email').eq('id', userId).single();
         if (cleanEmails.includes(currentUser?.email)) {
             return res.status(422).json({ errors: { group_emails: 'You do not need to add your own email.' } });
