@@ -148,7 +148,7 @@ export default function SemesterSetup({ currentSemester, currentAcadYear, curren
                 isOpen={confirmAction === 'save'}
                 onCancel={() => setConfirmAction(null)}
                 title="Save this semester?"
-                message="This will set the entered term as the new current semester. Once saved, the semestral details cannot be edited unless it is ended first."
+                message="This will set the entered term as the new current semester. Make sure the term, academic year, and start date are correct before saving."
                 icon={
                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
                         <FiCheckCircle className="text-green-600 text-4xl" />
