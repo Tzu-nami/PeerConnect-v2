@@ -117,11 +117,11 @@ export default function AssignRoomModal({ isOpen, session, onClose, onSuccess }:
                 <div className="relative flex items-center">
                 <FaMapLocationDot className="absolute left-3 text-up-maroon/50 text-sm pointer-events-none" />
                     <select 
-                        value={selectedRoom} 
+                        value={selectedRoom}    
                         onChange={(e) => setSelectedRoom(e.target.value)} 
                         className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-white-border bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-up-maroon/30 focus:border-up-maroon transition shadow-sm appearance-none cursor-pointer"
                     >
-                        <option value="" disabled>--- Select Room ---</option>
+                        <option value="" disabled hidden>--- Select Room ---</option>
                         {AVAILABLE_ROOMS.map(room => (
                         <option key={room} value={room}>{room}</option>
                         ))}
